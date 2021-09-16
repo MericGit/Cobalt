@@ -1,0 +1,4 @@
+name: Cobalt
+version: '${project.version}'
+main: io.github.mericgit.cobalt.Cobalt
+api-version: 1.17
