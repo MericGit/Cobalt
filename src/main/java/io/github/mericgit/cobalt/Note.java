@@ -21,6 +21,22 @@ public class Note {
                 ", bank=" + bank +
                 '}';
     }
+
+    public long getTick() {
+        return tick;
+    }
+
+    public int getKey() {
+        return key;
+    }
+
+    public int getVelocity() {
+        return velocity;
+    }
+
+    public int getBank() {
+        return bank;
+    }
 }
 
 

@@ -2,3 +2,8 @@ name: Cobalt
 version: '${project.version}'
 main: io.github.mericgit.cobalt.Cobalt
 api-version: 1.17
+commands:
+  PlaySoundProcess:
+    description: Plays the specified sound process
+    usage: /PlaySoundProcess <process>
+
