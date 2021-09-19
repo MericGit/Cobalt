@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.event.EventHandler;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitScheduler;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -14,38 +15,38 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class Engine {
 
     public static void playSoundProcess(Player player, ArrayList<Note> soundProcess) {
-        final long[] masterDelay = {0};
-        for (int i = 0; i < soundProcess.size(); i++) {
-            int finalI = i;
-            BukkitRunnable task = new BukkitRunnable() {
-                @Override
-                public void run() {
-                    System.out.println(finalI);
-                    if (soundProcess.get(finalI).getVelocity() != 0) {
-                        player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT, 100, pitchConvert(soundProcess.get(finalI).getKey()));
-                        player.sendMessage(ChatColor.GREEN + "Playing sound with delay of " + (long) (soundProcess.get(finalI).getTick() * MidiUtils.getTimeConverter() / 0.05));
-                        System.out.println("Ran note play");
-                    }
-                    else {
-                        player.sendMessage(ChatColor.RED + "Note off event");
-                        System.out.println("Ran note off");
-
-                    }
-                    player.sendMessage(String.valueOf((long)((soundProcess.get(finalI).getTick() * MidiUtils.getTimeConverter()) / 0.05)));
-                    masterDelay[0] +=(long)((soundProcess.get(finalI).getTick() * MidiUtils.getTimeConverter()) / 0.05);
-                    System.out.println("MasterDelay is: " + masterDelay[0]);
-                }
-            };
-            task.runTaskLater(Cobalt.getPlugin(), masterDelay[0] );
-        }
+        BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
+        scheduler.scheduleSyncRepeatingTask(Cobalt.getPlugin(), new Runnable() {
+            @Override
+            public void run() {
+                playNote(player,soundProcess);
+            }
+        }, 60L, 1L);
     }
 
 //(long)((soundProcess.get(finalI).getTick() * MidiUtils.getTimeConverter()) / 0.05)
-    public static long pitchConvert(int key) {
-        long pitch = 2^(key-12);
+    private static long pitchConvert(int key) {
+        long pitch = 2^(key-66);
         return pitch;
+    }
 
+    private static void playNote(Player player,ArrayList<Note> soundProcess) {
+        if (soundProcess.get(0).getMcTick() <= 0) {
+            if(soundProcess.get(0).getVelocity() != 0) {
+
+                player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_HARP, 100, pitchConvert(soundProcess.get(0).getKey()));
+                System.out.println("Playing note HZ: " + pitchConvert(soundProcess.get(0).getKey()));
+            }
+            soundProcess.remove(0);
+        }
+        soundProcess.get(0).setMcTick(soundProcess.get(0).getMcTick()-1);
+
+        System.out.println("MIDI Ticks: " + soundProcess.get(0).getTick());
+        System.out.println("Mc Ticks: " +  soundProcess.get(0).getMcTick());
 
     }
+
+
+
 }
 

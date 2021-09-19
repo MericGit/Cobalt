@@ -50,21 +50,24 @@ public class MidiUtils {
                         int octave = (key / 12) - 1;
                         int note = key % 12;
                         long tick = event.getTick();
+                        long mcTick =  Math.round((tick * getTimeConverter()) / 50);
                         int bank = 1;
                         String noteName = NOTE_NAMES[note];
                         int velocity = sm.getData2();
                         //System.out.println("Note on, " + noteName + octave + " key=" + key + " velocity: " + velocity + " at ΔTick " + tick);
-                        noteSequence.add(new Note(tick,key,velocity,bank));
+                        noteSequence.add(new Note(tick,key,velocity,bank,mcTick));
                     } else if (sm.getCommand() == NOTE_OFF || sm.getData2() == 0) {
                         int key = sm.getData1();
                         int octave = (key / 12) - 1;
                         int note = key % 12;
                         long tick = event.getTick();
                         int bank = 1;
+                        long mcTick =  Math.round((tick * getTimeConverter()) / 50);
+
                         String noteName = NOTE_NAMES[note];
                         int velocity = sm.getData2();
                         //System.out.println("Note off, " + noteName + octave + " key=" + key + " at ΔTick " + tick);
-                        noteSequence.add(new Note(tick,key,velocity,bank));
+                        noteSequence.add(new Note(tick,key,velocity,bank,mcTick));
                     } else {
                         //System.out.println("Command:" + sm.getCommand());
                     }
