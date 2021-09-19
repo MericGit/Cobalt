@@ -16,3 +16,8 @@ Stretch Features:
 - Instrument scripts - Dynamic scripting language allowing you to create your own Engine for sample playback. 
 - SoundRendering - Audio mixdown of SoundProcess into an audio file, capable of being played back without MC
 - Plugin API - Integrate and playback SoundProcess with other plugins. 
+
+
+####Yes I am using my README as a TODO list:
+- Convert engine, adjust soundProcess / MDelay Queue --> RepeatingSchedulerTask. Lower first value of SoundProcess by 1 MC tick
+- NewPlayTickEvent method. 

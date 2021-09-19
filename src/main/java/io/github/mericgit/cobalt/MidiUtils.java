@@ -1,5 +1,7 @@
 package io.github.mericgit.cobalt;
 
+import org.bukkit.Bukkit;
+
 import javax.sound.midi.*;
 import javax.sound.midi.spi.MidiFileReader;
 import java.io.File;
@@ -12,10 +14,13 @@ public class MidiUtils {
     private static final int DEFAULT_TEMPO_MPQ = 500000; // 120bpm
     private static final int META_END_OF_TRACK_TYPE = 0x2F;
     private static final int META_TEMPO_TYPE = 0x51;
+    public static float timeConverter = 0;
+
+
 
     public static ArrayList<Note> midiToNoteSequence(String file) throws Exception {
-        Sequence sequence = MidiSystem.getSequence(new File("C:\\Users\\dongd\\OneDrive\\Documents\\GitHub\\MidiTesting\\src\\" + file));
-        MidiFileFormat midiFile = MidiSystem.getMidiFileFormat(new File("C:\\Users\\dongd\\OneDrive\\Documents\\GitHub\\MidiTesting\\src\\" + file));
+        Sequence sequence = MidiSystem.getSequence(new File(file));
+        MidiFileFormat midiFile = MidiSystem.getMidiFileFormat(new File(file));
 
         // Use the sequencer interface to extract the incumbent tempo of the MIDI file
         Sequencer sequencer = MidiSystem.getSequencer(false);
@@ -24,11 +29,11 @@ public class MidiUtils {
         System.out.println("Old Tempo: " + oldTempo);
         int PPQ = midiFile.getResolution();
 
-        long timeConverter = 60000 / (oldTempo * PPQ);
+        timeConverter = (float) 60000 / (oldTempo * PPQ);
         System.out.println("Milliseconds per tick = " + timeConverter);
 
         System.out.println(PPQ);
-        ArrayList<Note> noteSequence = new ArrayList<Note>();
+        ArrayList<Note> noteSequence = new ArrayList<>();
         int trackNumber = 0;
         for (Track track : sequence.getTracks()) {
             trackNumber++;
@@ -39,7 +44,7 @@ public class MidiUtils {
                 MidiMessage message = event.getMessage();
                 if (message instanceof ShortMessage) {
                     ShortMessage sm = (ShortMessage) message;
-                    System.out.print("Channel: " + sm.getChannel() + " ");
+                    //System.out.print("Channel: " + sm.getChannel() + " ");
                     if (sm.getCommand() == NOTE_ON && sm.getData2() != 0) {
                         int key = sm.getData1();
                         int octave = (key / 12) - 1;
@@ -48,7 +53,7 @@ public class MidiUtils {
                         int bank = 1;
                         String noteName = NOTE_NAMES[note];
                         int velocity = sm.getData2();
-                        System.out.println("Note on, " + noteName + octave + " key=" + key + " velocity: " + velocity + " at ΔTick " + tick);
+                        //System.out.println("Note on, " + noteName + octave + " key=" + key + " velocity: " + velocity + " at ΔTick " + tick);
                         noteSequence.add(new Note(tick,key,velocity,bank));
                     } else if (sm.getCommand() == NOTE_OFF || sm.getData2() == 0) {
                         int key = sm.getData1();
@@ -58,19 +63,23 @@ public class MidiUtils {
                         int bank = 1;
                         String noteName = NOTE_NAMES[note];
                         int velocity = sm.getData2();
-                        System.out.println("Note off, " + noteName + octave + " key=" + key + " at ΔTick " + tick);
+                        //System.out.println("Note off, " + noteName + octave + " key=" + key + " at ΔTick " + tick);
                         noteSequence.add(new Note(tick,key,velocity,bank));
                     } else {
-                        System.out.println("Command:" + sm.getCommand());
+                        //System.out.println("Command:" + sm.getCommand());
                     }
                 } else {
-                    System.out.println("Other message: " + message.getClass());
+                    //System.out.println("Other message: " + message.getClass());
                 }
             }
 
             System.out.println();
         }
-        System.out.println(noteSequence);
+        Bukkit.getServer().broadcastMessage(noteSequence.toString());
         return noteSequence;
+    }
+
+    public static float getTimeConverter() {
+        return timeConverter;
     }
 }

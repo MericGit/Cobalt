@@ -9,6 +9,7 @@ public final class Cobalt extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
+        System.out.println("Attention all Crewmates. Cobalt has been loaded");
         this.getCommand("PlaySoundProcess").setExecutor(new PlaySoundProcess());
         // Plugin startup logic
 

@@ -1,5 +1,6 @@
 package io.github.mericgit.cobalt;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -14,15 +15,14 @@ public class PlaySoundProcess implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player) {
             Player player = (Player) sender;
-            BukkitRunnable task = new BukkitRunnable() {
-                @Override
-                public void run() {
-                    System.out.print("test");
-                }
-            };
-            // Run the task on this plugin in 3 seconds (60 ticks)
-            task.runTaskLater(Cobalt.getPlugin(), 20 * 3);
-
+            //String file = args[1];
+            //System.out.println(file);
+            try {
+                Engine.playSoundProcess(player,MidiUtils.midiToNoteSequence("C:\\Users\\dongd\\OneDrive\\Documents\\GitHub\\Cobalt\\src\\main\\java\\io\\github\\mericgit\\cobalt\\test.mid"));
+            } catch (Exception e) {
+                e.printStackTrace();
+                Bukkit.getServer().broadcastMessage("Yo this bugged");
+            }
 
 
         }
