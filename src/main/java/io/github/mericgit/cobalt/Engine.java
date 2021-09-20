@@ -13,13 +13,12 @@ import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Engine {
-
     public static void playSoundProcess(Player player, ArrayList<Note> soundProcess) {
         BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
         scheduler.scheduleSyncRepeatingTask(Cobalt.getPlugin(), new Runnable() {
             @Override
             public void run() {
-                playNote(player,soundProcess);
+                playNote(player,MidiUtils.convertNonDelta(soundProcess));
             }
         }, 60L, 1L);
     }

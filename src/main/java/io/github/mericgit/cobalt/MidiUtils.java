@@ -85,4 +85,14 @@ public class MidiUtils {
     public static float getTimeConverter() {
         return timeConverter;
     }
+
+
+    public static ArrayList<Note> convertNonDelta(ArrayList<Note> soundProcess) {
+        ArrayList<Note> copy = new ArrayList<>();
+        copy.add(soundProcess.get(0));
+        for (int i = 1; i < soundProcess.size(); i++) {
+            copy.add(new Note(soundProcess.get(i).getTick(),soundProcess.get(i).getKey(),soundProcess.get(i).getVelocity(),soundProcess.get(i).getBank(),(soundProcess.get(i).getMcTick() - soundProcess.get(i-1).getMcTick())));
+        }
+        return copy;
+    }
 }
