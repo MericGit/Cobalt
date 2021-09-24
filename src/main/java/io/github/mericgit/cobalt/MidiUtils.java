@@ -93,6 +93,7 @@ public class MidiUtils {
         for (int i = 1; i < soundProcess.size(); i++) {
             copy.add(new Note(soundProcess.get(i).getTick(),soundProcess.get(i).getKey(),soundProcess.get(i).getVelocity(),soundProcess.get(i).getBank(),(soundProcess.get(i).getMcTick() - soundProcess.get(i-1).getMcTick())));
         }
+        System.out.println("DEBUG: " + copy);
         return copy;
     }
 }
