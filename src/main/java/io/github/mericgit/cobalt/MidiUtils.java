@@ -15,8 +15,8 @@ public class MidiUtils {
     private static final int META_TEMPO_TYPE = 0x51;
 
     public static ArrayList<Note> midiToNoteSequence(String file) throws Exception {
-        Sequence sequence = MidiSystem.getSequence(new File("C:\\Users\\dongd\\OneDrive\\Documents\\GitHub\\Cobalt\\src\\main\\java\\io\\github\\mericgit\\cobalt\\" + file));
-        MidiFileFormat midiFile = MidiSystem.getMidiFileFormat(new File("C:\\Users\\dongd\\OneDrive\\Documents\\GitHub\\Cobalt\\src\\main\\java\\io\\github\\mericgit\\cobalt\\" + file));
+        Sequence sequence = MidiSystem.getSequence(new File("./src/main/java/io/github/mericgit/cobalt/" + file));
+        MidiFileFormat midiFile = MidiSystem.getMidiFileFormat(new File("./src/main/java/io/github/mericgit/cobalt/" + file));
 
         // Use the sequencer interface to extract the incumbent tempo of the MIDI file
         Sequencer sequencer = MidiSystem.getSequencer(false);
