@@ -15,7 +15,7 @@ public class TempMidi {
         System.out.println("AMOOGSUS");
         File directory = new File("./");
         System.out.println(directory.getAbsolutePath());
-        MidiUtils.midiToNoteSequence("test.mid");
+        MidiUtils.midiToNoteSequence("test4.mid");
 
     }
 }

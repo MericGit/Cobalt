@@ -7,6 +7,7 @@ public class Note {
     private int velocity;
     private int bank;
     private long mcTick;
+    private int track;
 
     public Note(long tick, int key, int velocity, int bank, long mcTick) {
         this.tick = tick;
