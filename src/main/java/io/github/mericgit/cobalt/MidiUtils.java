@@ -51,7 +51,7 @@ public class MidiUtils {
                         int note = key % 12;
                         long tick = event.getTick();
                         long mcTick =  Math.round((tick * getTimeConverter()) / 50);
-                        int bank = 1;
+                        int bank = trackNumber;
                         String noteName = NOTE_NAMES[note];
                         int velocity = sm.getData2();
                         //System.out.println("Note on, " + noteName + octave + " key=" + key + " velocity: " + velocity + " at ΔTick " + tick);
@@ -61,7 +61,7 @@ public class MidiUtils {
                         int octave = (key / 12) - 1;
                         int note = key % 12;
                         long tick = event.getTick();
-                        int bank = 1;
+                        int bank = trackNumber;
                         long mcTick =  Math.round((tick * getTimeConverter()) / 50);
 
                         String noteName = NOTE_NAMES[note];
