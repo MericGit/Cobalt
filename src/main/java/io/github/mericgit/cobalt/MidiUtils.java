@@ -4,6 +4,7 @@ import javax.sound.midi.*;
 import javax.sound.midi.spi.MidiFileReader;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class MidiUtils {
@@ -77,9 +78,14 @@ public class MidiUtils {
 
             System.out.println();
         }
+        System.out.println("Original Sequence");
         System.out.println(noteSequence);
         System.out.println("-------------------------");
+        System.out.println("ConvertNonDelta");
         System.out.println(convertNonDelta(noteSequence));
+        System.out.println("-------------------------");
+        System.out.println("Quicksort + nonDelta");
+        System.out.println(convertNonDelta(quickSort(noteSequence)));
         return noteSequence;
     }
 
@@ -94,5 +100,35 @@ public class MidiUtils {
         }
         return copy;
     }
+
+
+    public static ArrayList<Note> quickSort(ArrayList<Note> soundProcess)
+    {
+        if (soundProcess.size() <= 1)
+            return soundProcess; // Already sorted
+
+        ArrayList<Note> sorted = new ArrayList<Note>();
+        ArrayList<Note> lesser = new ArrayList<Note>();
+        ArrayList<Note> greater = new ArrayList<Note>();
+        long pivot = soundProcess.get(soundProcess.size()-1).getTick(); // Use last Vehicle as pivot
+        for (int i = 0; i < soundProcess.size()-1; i++)
+        {
+            //int order = list.get(i).compareTo(pivot);
+            if (soundProcess.get(i).getTick() < pivot)
+                lesser.add(soundProcess.get(i));
+            else
+                greater.add(soundProcess.get(i));
+        }
+
+        lesser = quickSort(lesser);
+        greater = quickSort(greater);
+
+        lesser.add(soundProcess.get(soundProcess.size()-1));
+        lesser.addAll(greater);
+        sorted = lesser;
+
+        return sorted;
+    }
+
 }
-//    public Note(long tick, int key, int velocity, int bank, long mcTick) {
+
