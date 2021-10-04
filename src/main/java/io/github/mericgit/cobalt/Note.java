@@ -7,14 +7,17 @@ public class Note {
     private int velocity;
     private int bank;
     private long mcTick;
-    private int track;
+    private String sample;
+    private float freq;
 
-    public Note(long tick, int key, int velocity, int bank, long mcTick) {
+    public Note(long tick, int key, int velocity, int bank, long mcTick, String sample, float freq) {
         this.tick = tick;
         this.mcTick = mcTick;
         this.key = key;
         this.velocity = velocity;
         this.bank = bank;
+        this.sample = sample;
+        this.freq = freq;
     }
 
     @Override
@@ -66,6 +69,22 @@ public class Note {
 
     public void setMcTick(long mcTick) {
         this.mcTick = mcTick;
+    }
+
+    public String getSample() {
+        return sample;
+    }
+
+    public void setSample(String sample) {
+        this.sample = sample;
+    }
+
+    public float getFreq() {
+        return freq;
+    }
+
+    public void setFreq(float freq) {
+        this.freq = freq;
     }
 }
 
