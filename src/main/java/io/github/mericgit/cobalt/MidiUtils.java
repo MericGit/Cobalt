@@ -11,6 +11,7 @@ public class MidiUtils {
     private static final int META_END_OF_TRACK_TYPE = 0x2F;
     private static final int META_TEMPO_TYPE = 0x51;
     public static double gTempo;
+    private static ArrayList<Note> finalProcess;
 
     public static ArrayList<Note> midiToNoteSequence(String file) throws Exception {
         Sequence sequence = MidiSystem.getSequence(new File("./src/main/java/io/github/mericgit/cobalt/" + file));
@@ -91,7 +92,14 @@ public class MidiUtils {
             System.out.println("-------------------------");
             System.out.println("Quicksort + nonDelta");
             System.out.println(convertNonDelta(quickSort(noteSequence)));
-            return noteSequence;
+            finalProcess = convertNonDelta(quickSort(noteSequence));
+
+        return noteSequence;
+        }
+
+
+        public static ArrayList<Note> getFinalProcess() {
+        return finalProcess;
         }
 
 

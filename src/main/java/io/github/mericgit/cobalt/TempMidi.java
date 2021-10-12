@@ -9,6 +9,7 @@ public class TempMidi {
         File directory = new File("./");
         System.out.println(directory.getAbsolutePath());
         MidiUtils.midiToNoteSequence("test5.mid");
+        Engine.playSoundProcess(MidiUtils.getFinalProcess());
 
     }
 }
