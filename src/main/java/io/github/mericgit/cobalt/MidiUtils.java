@@ -32,8 +32,6 @@ public class MidiUtils {
         int trackNumber = 0;
         for (Track track : sequence.getTracks()) {
             trackNumber++;
-            //System.out.println("Track " + trackNumber + ": size = " + track.size());
-            //System.out.println();
             for (int i = 0; i < track.size(); i++) {
                 MidiEvent event = track.get(i);
                 MidiMessage message = event.getMessage();
@@ -59,7 +57,6 @@ public class MidiUtils {
                 }
                     if (message instanceof ShortMessage) {
                         ShortMessage sm = (ShortMessage) message;
-                        //System.out.print("Channel: " + sm.getChannel() + " ");
                         if (sm.getCommand() == NOTE_ON && sm.getData2() != 0) {
                             int key = sm.getData1();
                             int octave = (key / 12) - 1;
@@ -69,7 +66,6 @@ public class MidiUtils {
                             long mcTick = Math.round((tick * timeConverter) / 50);
                             String noteName = NOTE_NAMES[note];
                             int velocity = sm.getData2();
-                            //System.out.println("Note on, " + noteName + octave + " key=" + key + " velocity: " + velocity + " at ΔTick " + tick);
                             noteSequence.add(new Note(tick, key, velocity, bank, mcTick,calcSample(key),calcFreq(key)));
                         } else if (sm.getCommand() == NOTE_OFF || sm.getData2() == 0) {
                             int key = sm.getData1();
@@ -80,7 +76,6 @@ public class MidiUtils {
                             long mcTick = Math.round((tick * timeConverter) / 50);
                             String noteName = NOTE_NAMES[note];
                             int velocity = sm.getData2();
-                            //System.out.println("Note off, " + noteName + octave + " key=" + key + " at ΔTick " + tick);
                             noteSequence.add(new Note(tick, key, velocity, bank, mcTick,calcSample(key),calcFreq(key)));
                         }
                     }
@@ -144,7 +139,6 @@ public class MidiUtils {
             ArrayList<Note> greater = new ArrayList<Note>();
             long pivot = soundProcess.get(soundProcess.size() - 1).getTick();
             for (int i = 0; i < soundProcess.size() - 1; i++) {
-                //int order = list.get(i).compareTo(pivot);
                 if (soundProcess.get(i).getTick() < pivot)
                     lesser.add(soundProcess.get(i));
                 else

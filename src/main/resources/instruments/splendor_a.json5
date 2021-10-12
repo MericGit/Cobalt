@@ -9,6 +9,19 @@
     },
 
     {
+        "sampleMap":
+        [
+            {
+                "sample": "wav",
+                "freq": 0.445
+            },
+            {
+                "sample": "wav",
+                "freq": 0.445
+            }
+
+        ]
+
 
 
     }
