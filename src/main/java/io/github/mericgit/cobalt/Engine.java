@@ -44,8 +44,7 @@ public class Engine {
         try {
 
             if (soundProcess.get(0).getMcTick() <= 0) {
-                System.out.println("---------\n CURRENT THING:");
-                System.out.println(soundProcess.get(0));
+                System.out.print("CURRENT: " + soundProcess.get(0));
                 if(soundProcess.get(0).getVelocity() != 0) {
                     channels[channel].noteOn(soundProcess.get(0).getKey(),soundProcess.get(0).getVelocity());
                 }

@@ -3,6 +3,8 @@ package io.github.mericgit.cobalt;
 import javax.sound.midi.*;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+
 public class MidiUtils {
     private static final int NOTE_ON = 0x90;
     private static final int NOTE_OFF = 0x80;
@@ -12,7 +14,7 @@ public class MidiUtils {
     private static final int META_TEMPO_TYPE = 0x51;
     public static double gTempo;
     private static ArrayList<Note> finalProcess;
-
+    private static double timeConverter;
     public static ArrayList<Note> midiToNoteSequence(String file) throws Exception {
         Sequence sequence = MidiSystem.getSequence(new File("./src/main/java/io/github/mericgit/cobalt/" + file));
         MidiFileFormat midiFile = MidiSystem.getMidiFileFormat(new File("./src/main/java/io/github/mericgit/cobalt/" + file));
@@ -25,7 +27,7 @@ public class MidiUtils {
         int PPQ = midiFile.getResolution();
         System.out.println("PPQ IS: " + PPQ);
 
-        double timeConverter = ((double) 60000 / (gTempo * PPQ));
+         timeConverter = ((double) 60000 / (gTempo * PPQ));
         System.out.println("Milliseconds per tick = " + timeConverter);
 
 
@@ -64,7 +66,7 @@ public class MidiUtils {
                             int note = key % 12;
                             long tick = event.getTick();
                             int bank = trackNumber;
-                            long mcTick = Math.round((tick * timeConverter));
+                            long mcTick = 0;
                             //long mcTick = Math.round((tick * timeConverter) / 50);
                             String noteName = NOTE_NAMES[note];
                             int velocity = sm.getData2();
@@ -76,7 +78,7 @@ public class MidiUtils {
                             long tick = event.getTick();
                             int bank = trackNumber;
                             //long mcTick = Math.round((tick * timeConverter) / 50);
-                            long mcTick = Math.round((tick * timeConverter));
+                            long mcTick = 0;
                             String noteName = NOTE_NAMES[note];
                             int velocity = sm.getData2();
                             noteSequence.add(new Note(tick, key, velocity, bank, mcTick,calcSample(key),calcFreq(key)));
@@ -86,17 +88,18 @@ public class MidiUtils {
 
                 System.out.println();
             }
-            //System.out.println("Original Sequence");
-            //System.out.println(noteSequence);
-            //System.out.println("-------------------------");
-            //System.out.println("ConvertNonDelta");
-            //System.out.println(convertNonDelta(noteSequence));
+        /*
+            System.out.println("Original Sequence");
+            System.out.println(noteSequence);
             System.out.println("-------------------------");
-            //System.out.println("Quicksort + nonDelta");
-            //System.out.println(convertNonDelta(quickSort(noteSequence)));
+            System.out.println("Sort");
+            System.out.println(bubbleSort(noteSequence));
+            System.out.println("----------");
             System.out.println(convertNonDelta(quickSort(noteSequence)));
-            //finalProcess = convertNonDelta(quickSort(noteSequence));
-            finalProcess = convertNonDelta(quickSort(noteSequence));
+
+         */
+            System.out.println(convertNonDelta(updateMcTick(bubbleSort(noteSequence))));
+            finalProcess = convertNonDelta(updateMcTick(bubbleSort(noteSequence)));
 
         return noteSequence;
         }
@@ -104,6 +107,14 @@ public class MidiUtils {
 
         public static ArrayList<Note> getFinalProcess() {
         return finalProcess;
+        }
+
+        private static ArrayList<Note> updateMcTick(ArrayList<Note> soundProcess) {
+            for (int i =0; i < soundProcess.size(); i++) {
+                soundProcess.get(i).setMcTick(Math.round(soundProcess.get(i).getTick() * timeConverter ));
+
+            }
+            return soundProcess;
         }
 
 
@@ -167,6 +178,19 @@ public class MidiUtils {
             return sorted;
         }
 
+        private static ArrayList<Note> bubbleSort(ArrayList<Note> soundProcess) {
+            int n = soundProcess.size();
+            for (int i = 0; i < n-1; i++)
+                for (int j = 0; j < n-i-1; j++)
+                    if (soundProcess.get(j).getTick() > soundProcess.get(j+1).getTick())
+                    {
+                        // swap arr[j+1] and arr[j]
+                        Collections.swap(soundProcess,j+1,j);
+                    }
+            return soundProcess;
+        }
+
     }
+
 
 
