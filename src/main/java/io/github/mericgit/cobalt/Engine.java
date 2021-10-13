@@ -8,38 +8,61 @@ import java.util.ArrayList;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 public class Engine {
+    private static MidiChannel[] channels;
+    static {
+        Synthesizer synth = null;
+        try {
+            synth = MidiSystem.getSynthesizer();
+        } catch (MidiUnavailableException e) {
+            e.printStackTrace();
+        }
+        try {
+            assert synth != null;
+            synth.open();
+        } catch (MidiUnavailableException e) {
+            e.printStackTrace();
+        }
+         channels = synth.getChannels();
+    }
 
     private static int channel = 0; // 0 is a piano, 9 is percussion, other channels are for other instruments
     private static int duration = 200; // in milliseconds
 
 
     public static void playSoundProcess(ArrayList<Note> soundProcess) {
-        final int[] i = {0};
-        ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(2);
-        executor.schedule(new Runnable() {
+        ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
+        executor.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
-                System.out.println("Current i is: " + i[0]);
-                playSound(soundProcess.get(i[0]).getKey(),soundProcess.get(i[0]).getVelocity());
-                i[0]++;
-                System.out.println("played");
+                playSound(MidiUtils.getFinalProcess());
+                //System.out.println("played");
             }
-        }, 1, TimeUnit.MILLISECONDS);
+        }, 1,1, TimeUnit.MILLISECONDS);
     }
 
-    public static void playSound(int note, int velocity) {
+    public static void playSound(ArrayList<Note> soundProcess) {
         try {
-            Synthesizer synth = MidiSystem.getSynthesizer();
-            synth.open();
-            MidiChannel[] channels = synth.getChannels();
-            channels[channel].noteOn(note, velocity); // C note
-            channels[channel].allNotesOff();
-            synth.close();
-            System.out.println("Thread stop!");
-            return;
+
+            if (soundProcess.get(0).getMcTick() <= 0) {
+                System.out.println("---------\n CURRENT THING:");
+                System.out.println(soundProcess.get(0));
+                if(soundProcess.get(0).getVelocity() != 0) {
+                    channels[channel].noteOn(soundProcess.get(0).getKey(),soundProcess.get(0).getVelocity());
+                }
+                else if (soundProcess.get(0).getVelocity() == 0) {
+                    channels[channel].noteOff(soundProcess.get(0).getKey(),soundProcess.get(0).getVelocity());
+                }
+                soundProcess.remove(0);
+            }
+            soundProcess.get(0).setMcTick(soundProcess.get(0).getMcTick()-1);
+            //System.out.println("MIDI Ticks: " + soundProcess.get(0).getTick());
+            //System.out.println("Mc Ticks: " +  soundProcess.get(0).getMcTick());
+
+            //System.out.println("Thread stop!");
         } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
 }
+

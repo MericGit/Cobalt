@@ -64,7 +64,8 @@ public class MidiUtils {
                             int note = key % 12;
                             long tick = event.getTick();
                             int bank = trackNumber;
-                            long mcTick = Math.round((tick * timeConverter) / 50);
+                            long mcTick = Math.round((tick * timeConverter));
+                            //long mcTick = Math.round((tick * timeConverter) / 50);
                             String noteName = NOTE_NAMES[note];
                             int velocity = sm.getData2();
                             noteSequence.add(new Note(tick, key, velocity, bank, mcTick,calcSample(key),calcFreq(key)));
@@ -74,7 +75,8 @@ public class MidiUtils {
                             int note = key % 12;
                             long tick = event.getTick();
                             int bank = trackNumber;
-                            long mcTick = Math.round((tick * timeConverter) / 50);
+                            //long mcTick = Math.round((tick * timeConverter) / 50);
+                            long mcTick = Math.round((tick * timeConverter));
                             String noteName = NOTE_NAMES[note];
                             int velocity = sm.getData2();
                             noteSequence.add(new Note(tick, key, velocity, bank, mcTick,calcSample(key),calcFreq(key)));
@@ -84,14 +86,16 @@ public class MidiUtils {
 
                 System.out.println();
             }
-            System.out.println("Original Sequence");
-            System.out.println(noteSequence);
+            //System.out.println("Original Sequence");
+            //System.out.println(noteSequence);
             //System.out.println("-------------------------");
             //System.out.println("ConvertNonDelta");
             //System.out.println(convertNonDelta(noteSequence));
             System.out.println("-------------------------");
-            System.out.println("Quicksort + nonDelta");
+            //System.out.println("Quicksort + nonDelta");
+            //System.out.println(convertNonDelta(quickSort(noteSequence)));
             System.out.println(convertNonDelta(quickSort(noteSequence)));
+            //finalProcess = convertNonDelta(quickSort(noteSequence));
             finalProcess = convertNonDelta(quickSort(noteSequence));
 
         return noteSequence;
