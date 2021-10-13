@@ -8,7 +8,7 @@ public class TempMidi {
         System.out.println("AMOOGSUS");
         File directory = new File("./");
         System.out.println(directory.getAbsolutePath());
-        MidiUtils.midiToNoteSequence("test5.mid");
+        MidiUtils.midiToNoteSequence("anima.mid");
         Engine.playSoundProcess(MidiUtils.getFinalProcess());
 
     }

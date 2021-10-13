@@ -9,8 +9,9 @@ public class Note {
     private long mcTick;
     private String sample;
     private float freq;
+    private int channel;
 
-    public Note(long tick, int key, int velocity, int bank, long mcTick, String sample, float freq) {
+    public Note(long tick, int key, int velocity, int bank, long mcTick, String sample, float freq, int channel) {
         this.tick = tick;
         this.mcTick = mcTick;
         this.key = key;
@@ -18,6 +19,7 @@ public class Note {
         this.bank = bank;
         this.sample = sample;
         this.freq = freq;
+        this.channel = channel;
     }
 
     @Override
@@ -28,7 +30,18 @@ public class Note {
                 ", velocity=" + velocity +
                 ", bank=" + bank +
                 ", mcTick=" + mcTick +
-                '}' + "\n";
+                ", sample='" + sample + '\'' +
+                ", freq=" + freq +
+                ", channel=" + channel +
+                '}';
+    }
+
+    public int getChannel() {
+        return channel;
+    }
+
+    public void setChannel(int channel) {
+        this.channel = channel;
     }
 
     public long getTick() {

@@ -66,11 +66,12 @@ public class MidiUtils {
                             int note = key % 12;
                             long tick = event.getTick();
                             int bank = trackNumber;
+                            int channel = sm.getChannel();
                             long mcTick = 0;
                             //long mcTick = Math.round((tick * timeConverter) / 50);
                             String noteName = NOTE_NAMES[note];
                             int velocity = sm.getData2();
-                            noteSequence.add(new Note(tick, key, velocity, bank, mcTick,calcSample(key),calcFreq(key)));
+                            noteSequence.add(new Note(tick, key, velocity, bank, mcTick,calcSample(key),calcFreq(key),channel));
                         } else if (sm.getCommand() == NOTE_OFF || sm.getData2() == 0) {
                             int key = sm.getData1();
                             int octave = (key / 12) - 1;
@@ -78,10 +79,11 @@ public class MidiUtils {
                             long tick = event.getTick();
                             int bank = trackNumber;
                             //long mcTick = Math.round((tick * timeConverter) / 50);
+                            int channel = sm.getChannel();
                             long mcTick = 0;
                             String noteName = NOTE_NAMES[note];
                             int velocity = sm.getData2();
-                            noteSequence.add(new Note(tick, key, velocity, bank, mcTick,calcSample(key),calcFreq(key)));
+                            noteSequence.add(new Note(tick, key, velocity, bank, mcTick,calcSample(key),calcFreq(key),channel));
                         }
                     }
                 }
@@ -122,7 +124,7 @@ public class MidiUtils {
             ArrayList<Note> copy = new ArrayList<>();
             copy.add(soundProcess.get(0));
             for (int i = 1; i < soundProcess.size(); i++) {
-                copy.add(new Note(soundProcess.get(i).getTick(), soundProcess.get(i).getKey(), soundProcess.get(i).getVelocity(), soundProcess.get(i).getBank(), (soundProcess.get(i).getMcTick() - soundProcess.get(i - 1).getMcTick()),soundProcess.get(i).getSample(),soundProcess.get(i).getFreq()));
+                copy.add(new Note(soundProcess.get(i).getTick(), soundProcess.get(i).getKey(), soundProcess.get(i).getVelocity(), soundProcess.get(i).getBank(), (soundProcess.get(i).getMcTick() - soundProcess.get(i - 1).getMcTick()),soundProcess.get(i).getSample(),soundProcess.get(i).getFreq(),soundProcess.get(i).getChannel()));
             }
             return copy;
         }

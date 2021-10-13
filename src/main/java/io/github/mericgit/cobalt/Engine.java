@@ -44,12 +44,12 @@ public class Engine {
         try {
 
             if (soundProcess.get(0).getMcTick() <= 0) {
-                System.out.print("CURRENT: " + soundProcess.get(0));
+                System.out.println("CURRENT: " + soundProcess.get(0));
                 if(soundProcess.get(0).getVelocity() != 0) {
-                    channels[channel].noteOn(soundProcess.get(0).getKey(),soundProcess.get(0).getVelocity());
+                    channels[soundProcess.get(0).getChannel()].noteOn(soundProcess.get(0).getKey(),soundProcess.get(0).getVelocity());
                 }
                 else if (soundProcess.get(0).getVelocity() == 0) {
-                    channels[channel].noteOff(soundProcess.get(0).getKey(),soundProcess.get(0).getVelocity());
+                    channels[soundProcess.get(0).getChannel()].noteOff(soundProcess.get(0).getKey(),soundProcess.get(0).getVelocity());
                 }
                 soundProcess.remove(0);
             }
