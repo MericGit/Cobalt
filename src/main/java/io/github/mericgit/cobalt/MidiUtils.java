@@ -8,7 +8,6 @@ import java.util.Collections;
 public class MidiUtils {
     private static final int NOTE_ON = 0x90;
     private static final int NOTE_OFF = 0x80;
-    private static int PROGRAM_CHANGE = 0x7f; //Adjust
     private static final String[] NOTE_NAMES = {"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"};
     private static final int DEFAULT_TEMPO_MPQ = 500000; // 120bpm
     private static final int META_END_OF_TRACK_TYPE = 0x2F;
@@ -61,6 +60,10 @@ public class MidiUtils {
                 }
                     if (message instanceof ShortMessage) {
                         ShortMessage sm = (ShortMessage) message;
+                        if (sm.getCommand() == ShortMessage.PROGRAM_CHANGE) {
+                            long tick = event.getTick();
+                            noteSequence.add(new Note(tick,sm.getData1(),128,0,0,"1",0,0));
+                        }
                         if (sm.getCommand() == NOTE_ON && sm.getData2() != 0) {
                             int key = sm.getData1();
                             int octave = (key / 12) - 1;

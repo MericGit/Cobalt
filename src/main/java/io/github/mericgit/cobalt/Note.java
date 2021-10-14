@@ -33,7 +33,7 @@ public class Note {
                 ", sample='" + sample + '\'' +
                 ", freq=" + freq +
                 ", channel=" + channel +
-                '}';
+                '}' + "\n";
     }
 
     public int getChannel() {

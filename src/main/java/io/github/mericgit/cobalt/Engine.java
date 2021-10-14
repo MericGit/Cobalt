@@ -38,26 +38,24 @@ public class Engine {
         executor.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
-                if (MidiUtils.getFinalProcess().size() > 0)
+                if (MidiUtils.getFinalProcess().size() > 1  )
                     playSound(MidiUtils.getFinalProcess());
             }
-        }, 1,1, TimeUnit.MILLISECONDS);
+        }, 1000,1, TimeUnit.MILLISECONDS);
     }
 
     public static void playSound(ArrayList<Note> soundProcess) {
         try {
-            if  (soundProcess.get(0).getBank() == 1) {
+            if  (soundProcess.get(0).getBank() == 1 || soundProcess.get(0).getBank() == 3) {
                 Instrument currentInstrument = synth.getAvailableInstruments()[40];
-                System.out.println("Switching instrument to #" + 40 + ": " + currentInstrument.getName());
                 synth.loadInstrument(currentInstrument);
                 midiChannel.programChange(currentInstrument.getPatch().getBank(), currentInstrument.getPatch().getProgram());            }
             else if  (soundProcess.get(0).getBank() != 1) {
                     Instrument currentInstrument = synth.getAvailableInstruments()[0];
-                    System.out.println("Switching instrument to #" + 0 + ": " + currentInstrument.getName());
                     synth.loadInstrument(currentInstrument);
                     midiChannel.programChange(currentInstrument.getPatch().getBank(), currentInstrument.getPatch().getProgram());              }
             if (soundProcess.get(0).getMcTick() <= 0) {
-                System.out.println("CURRENT: " + soundProcess.get(0));
+                //System.out.println("CURRENT: " + soundProcess.get(0));
                 if(soundProcess.get(0).getVelocity() != 0) {
                     channels[soundProcess.get(0).getChannel()].noteOn(soundProcess.get(0).getKey(),soundProcess.get(0).getVelocity());
                 }
