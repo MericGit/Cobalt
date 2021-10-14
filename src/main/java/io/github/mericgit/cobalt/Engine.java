@@ -52,8 +52,8 @@ public class Engine {
                 synth.loadInstrument(currentInstrument);
                 midiChannel.programChange(currentInstrument.getPatch().getBank(), currentInstrument.getPatch().getProgram());            }
             else if  (soundProcess.get(0).getBank() != 1) {
-                    Instrument currentInstrument = synth.getAvailableInstruments()[2];
-                    System.out.println("Switching instrument to #" + 2 + ": " + currentInstrument.getName());
+                    Instrument currentInstrument = synth.getAvailableInstruments()[0];
+                    System.out.println("Switching instrument to #" + 0 + ": " + currentInstrument.getName());
                     synth.loadInstrument(currentInstrument);
                     midiChannel.programChange(currentInstrument.getPatch().getBank(), currentInstrument.getPatch().getProgram());              }
             if (soundProcess.get(0).getMcTick() <= 0) {
