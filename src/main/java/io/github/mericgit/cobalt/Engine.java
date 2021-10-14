@@ -6,14 +6,24 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 public class Engine {
     private static MidiChannel[] channels;
+    private static Synthesizer synth;
+    private static MidiChannel midiChannel;
 
 
-    private static void startSynth() throws MidiUnavailableException {
-        Synthesizer synth = MidiSystem.getSynthesizer();
-        synth.open();
+    static {
+        try {
+            synth = MidiSystem.getSynthesizer();
+        } catch (MidiUnavailableException e) {
+            e.printStackTrace();
+        }
+        try {
+            synth.open();
+        } catch (MidiUnavailableException e) {
+            e.printStackTrace();
+        }
         channels = synth.getChannels();
-        MidiChannel midiChannel = synth.getChannels()[0];
-        Instrument currentInstrument = synth.getAvailableInstruments()[46];
+        midiChannel = synth.getChannels()[0];
+        Instrument currentInstrument = synth.getAvailableInstruments()[1];
         System.out.println("Switching instrument to #" + 4 + ": " + currentInstrument.getName());
         synth.loadInstrument(currentInstrument);
         midiChannel.programChange(currentInstrument.getPatch().getBank(), currentInstrument.getPatch().getProgram());
@@ -24,7 +34,6 @@ public class Engine {
 
 
     public static void playSoundProcess(ArrayList<Note> soundProcess) throws MidiUnavailableException {
-        startSynth();
         ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
         executor.scheduleAtFixedRate(new Runnable() {
             @Override
@@ -37,7 +46,16 @@ public class Engine {
 
     public static void playSound(ArrayList<Note> soundProcess) {
         try {
-
+            if  (soundProcess.get(0).getBank() == 1) {
+                Instrument currentInstrument = synth.getAvailableInstruments()[40];
+                System.out.println("Switching instrument to #" + 40 + ": " + currentInstrument.getName());
+                synth.loadInstrument(currentInstrument);
+                midiChannel.programChange(currentInstrument.getPatch().getBank(), currentInstrument.getPatch().getProgram());            }
+            else if  (soundProcess.get(0).getBank() != 1) {
+                    Instrument currentInstrument = synth.getAvailableInstruments()[2];
+                    System.out.println("Switching instrument to #" + 2 + ": " + currentInstrument.getName());
+                    synth.loadInstrument(currentInstrument);
+                    midiChannel.programChange(currentInstrument.getPatch().getBank(), currentInstrument.getPatch().getProgram());              }
             if (soundProcess.get(0).getMcTick() <= 0) {
                 System.out.println("CURRENT: " + soundProcess.get(0));
                 if(soundProcess.get(0).getVelocity() != 0) {
