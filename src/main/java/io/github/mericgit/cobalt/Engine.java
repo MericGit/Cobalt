@@ -1,41 +1,36 @@
 package io.github.mericgit.cobalt;
 
-import javax.sound.midi.MidiChannel;
-import javax.sound.midi.MidiSystem;
-import javax.sound.midi.MidiUnavailableException;
-import javax.sound.midi.Synthesizer;
+import javax.sound.midi.*;
 import java.util.ArrayList;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 public class Engine {
     private static MidiChannel[] channels;
-    static {
-        Synthesizer synth = null;
-        try {
-            synth = MidiSystem.getSynthesizer();
-        } catch (MidiUnavailableException e) {
-            e.printStackTrace();
-        }
-        try {
-            assert synth != null;
-            synth.open();
-        } catch (MidiUnavailableException e) {
-            e.printStackTrace();
-        }
-         channels = synth.getChannels();
+
+
+    private static void startSynth() throws MidiUnavailableException {
+        Synthesizer synth = MidiSystem.getSynthesizer();
+        synth.open();
+        channels = synth.getChannels();
+        MidiChannel midiChannel = synth.getChannels()[0];
+        Instrument currentInstrument = synth.getAvailableInstruments()[46];
+        System.out.println("Switching instrument to #" + 4 + ": " + currentInstrument.getName());
+        synth.loadInstrument(currentInstrument);
+        midiChannel.programChange(currentInstrument.getPatch().getBank(), currentInstrument.getPatch().getProgram());
     }
 
     private static int channel = 0; // 0 is a piano, 9 is percussion, other channels are for other instruments
     private static int duration = 200; // in milliseconds
 
 
-    public static void playSoundProcess(ArrayList<Note> soundProcess) {
+    public static void playSoundProcess(ArrayList<Note> soundProcess) throws MidiUnavailableException {
+        startSynth();
         ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
         executor.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
-                playSound(MidiUtils.getFinalProcess());
-                //System.out.println("played");
+                if (MidiUtils.getFinalProcess().size() > 0)
+                    playSound(MidiUtils.getFinalProcess());
             }
         }, 1,1, TimeUnit.MILLISECONDS);
     }
