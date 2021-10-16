@@ -111,7 +111,12 @@ public class MidiUtils {
         return noteSequence;
     }
 
-
+    public static String fileBuilder(String file) {
+        System.out.println("AMOOGSUS");
+        File directory = new File("./");
+        System.out.println(directory);
+        return  "C:\\Users\\dongd\\Documents\\MC Server\\plugins\\Cobalt\\midi" + file;
+    }
     public static ArrayList<Note> getFinalProcess() {
         return finalProcess;
     }
@@ -134,28 +139,7 @@ public class MidiUtils {
         return copy;
     }
 
-    private static String calcSample(int key) {
-        int relKey = (key-20) % 12;
-        int octaveMod = (key-20) / 12;
-        if (relKey <=4) {
-            return "1";
-        }
-        if (relKey < 1) {
-            return "0";
-        }
-        if (relKey <=11 ) {
-            return "2";
-        }
-        return "";
-    }
 
-    private static float calcFreq(int key) {
-        int rel = (key-20) % 12;
-
-
-
-        return 1F;
-    }
 //C, G, D, A, E, B (=C♭), F♯ (=G♭), C♯ (=D♭), A♭, E♭, B♭, F
 
 

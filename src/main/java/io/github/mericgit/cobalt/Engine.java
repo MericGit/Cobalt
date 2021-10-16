@@ -1,51 +1,43 @@
 package io.github.mericgit.cobalt;
+
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
-import org.bukkit.event.EventHandler;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitScheduler;
 
-import java.lang.reflect.Array;
+import javax.sound.midi.*;
 import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicInteger;
-
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 public class Engine {
+
     public static void playSoundProcess(Player player, ArrayList<Note> soundProcess) {
-        BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
-        scheduler.scheduleSyncRepeatingTask(Cobalt.getPlugin(), new Runnable() {
+        Bukkit.getScheduler().scheduleAsyncRepeatingTask(Cobalt.getPlugin(), new Runnable() {
             @Override
             public void run() {
-                playNote(player,MidiUtils.convertNonDelta(soundProcess));
+                if (MidiUtils.getFinalProcess().size() > 1  )
+                    playSound(player, MidiUtils.getFinalProcess());
             }
-        }, 60L, 1L);
+        }, 1000, 1);
     }
+    private static void playSound(Player player, ArrayList<Note> soundProcess) {
 
-//(long)((soundProcess.get(finalI).getTick() * MidiUtils.getTimeConverter()) / 0.05)
-    private static long pitchConvert(int key) {
-        long pitch = 2^(key-66);
-        return pitch;
-    }
-
-    private static void playNote(Player player,ArrayList<Note> soundProcess) {
         if (soundProcess.get(0).getMcTick() <= 0) {
-            if(soundProcess.get(0).getVelocity() != 0) {
-
-                player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_HARP, 100, pitchConvert(soundProcess.get(0).getKey()));
-                System.out.println("Playing note HZ: " + pitchConvert(soundProcess.get(0).getKey()));
+            //System.out.println("CURRENT: " + soundProcess.get(0));
+            if (soundProcess.get(0).getVelocity() != 0 || soundProcess.get(0).getVelocity() != 128) {
+                player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_HARP, 1, calcFreq(soundProcess.get(0).getKey()));
+            } else if (soundProcess.get(0).getVelocity() == 0) {
             }
             soundProcess.remove(0);
         }
-        soundProcess.get(0).setMcTick(soundProcess.get(0).getMcTick()-1);
-
-        System.out.println("MIDI Ticks: " + soundProcess.get(0).getTick());
-        System.out.println("Mc Ticks: " +  soundProcess.get(0).getMcTick());
-
+        soundProcess.get(0).setMcTick(soundProcess.get(0).getMcTick() - 1);
     }
 
+    private static float calcFreq(int key) {
+        int rel = (key-20) % 12;
 
 
+
+        return 1F;
+    }
 }
 

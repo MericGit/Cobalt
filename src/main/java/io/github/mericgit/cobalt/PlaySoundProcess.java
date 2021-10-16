@@ -18,7 +18,7 @@ public class PlaySoundProcess implements CommandExecutor {
             //String file = args[1];
             //System.out.println(file);
             try {
-                Engine.playSoundProcess(player,MidiUtils.midiToNoteSequence("C:\\Users\\dongd\\OneDrive\\Documents\\GitHub\\Cobalt\\src\\main\\java\\io\\github\\mericgit\\cobalt\\test3.mid"));
+                Engine.playSoundProcess(player,MidiUtils.midiToNoteSequence(MidiUtils.fileBuilder("test4.mid")));
             } catch (Exception e) {
                 e.printStackTrace();
                 Bukkit.getServer().broadcastMessage("Yo this bugged");
