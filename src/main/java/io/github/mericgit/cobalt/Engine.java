@@ -44,19 +44,11 @@ public class Engine {
         }, 1000,1, TimeUnit.MILLISECONDS);
     }
 
-    public static void playSound(ArrayList<Note> soundProcess) {
+    private static void playSound(ArrayList<Note> soundProcess) {
         try {
-            if  (soundProcess.get(0).getBank() == 1 || soundProcess.get(0).getBank() == 3) {
-                Instrument currentInstrument = synth.getAvailableInstruments()[40];
-                synth.loadInstrument(currentInstrument);
-                midiChannel.programChange(currentInstrument.getPatch().getBank(), currentInstrument.getPatch().getProgram());            }
-            else if  (soundProcess.get(0).getBank() != 1) {
-                    Instrument currentInstrument = synth.getAvailableInstruments()[0];
-                    synth.loadInstrument(currentInstrument);
-                    midiChannel.programChange(currentInstrument.getPatch().getBank(), currentInstrument.getPatch().getProgram());              }
             if (soundProcess.get(0).getMcTick() <= 0) {
                 //System.out.println("CURRENT: " + soundProcess.get(0));
-                if(soundProcess.get(0).getVelocity() != 0) {
+                if(soundProcess.get(0).getVelocity() != 0 || soundProcess.get(0).getVelocity() != 128) {
                     channels[soundProcess.get(0).getChannel()].noteOn(soundProcess.get(0).getKey(),soundProcess.get(0).getVelocity());
                 }
                 else if (soundProcess.get(0).getVelocity() == 0) {
