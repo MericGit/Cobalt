@@ -16,9 +16,9 @@ public class MidiUtils {
     public static double gTempo;
     private static ArrayList<Note> finalProcess;
     private static double timeConverter;
-    public static ArrayList<Note> midiToNoteSequence(String file) throws Exception {
-        Sequence sequence = MidiSystem.getSequence(new File("./src/main/java/io/github/mericgit/cobalt/" + file));
-        MidiFileFormat midiFile = MidiSystem.getMidiFileFormat(new File("./src/main/java/io/github/mericgit/cobalt/" + file));
+    public static ArrayList<Note> midiToNoteSequence(File file) throws Exception {
+        Sequence sequence = MidiSystem.getSequence(file);
+        MidiFileFormat midiFile = MidiSystem.getMidiFileFormat(file);
 
         // Use the sequencer interface to extract the incumbent tempo of the MIDI file
         Sequencer sequencer = MidiSystem.getSequencer(false);
@@ -76,7 +76,7 @@ public class MidiUtils {
                         //long mcTick = Math.round((tick * timeConverter) / 50);
                         String noteName = NOTE_NAMES[note];
                         int velocity = sm.getData2();
-                        //noteSequence.add(new Note(tick, key, velocity, bank, mcTick,calcSample(key),calcFreq(key),channel));
+                        noteSequence.add(new Note(tick, key, velocity, bank, mcTick,calcSample(key),calcFreq(key),channel));
                     } else if (sm.getCommand() == NOTE_OFF || sm.getData2() == 0) {
                         int key = sm.getData1();
                         int octave = (key / 12) - 1;
@@ -88,7 +88,7 @@ public class MidiUtils {
                         long mcTick = 0;
                         String noteName = NOTE_NAMES[note];
                         int velocity = sm.getData2();
-                        //noteSequence.add(new Note(tick, key, velocity, bank, mcTick,calcSample(key),calcFreq(key),channel));
+                        noteSequence.add(new Note(tick, key, velocity, bank, mcTick,calcSample(key),calcFreq(key),channel));
                     }
                 }
             }
@@ -105,18 +105,21 @@ public class MidiUtils {
             System.out.println(convertNonDelta(quickSort(noteSequence)));
 
          */
+        System.out.println("Note Sequence");
         System.out.println(convertNonDelta(updateMcTick(bubbleSort(noteSequence))));
         finalProcess = convertNonDelta(updateMcTick(bubbleSort(noteSequence)));
 
         return noteSequence;
     }
 
-    public static String fileBuilder(String file) {
-        System.out.println("AMOOGSUS");
-        File directory = new File("./");
-        System.out.println(directory);
-        return  "C:\\Users\\dongd\\Documents\\MC Server\\plugins\\Cobalt\\midi" + file;
+    private static String calcSample(int key) {
+        return "TBD";
     }
+
+    private static float calcFreq(int key) {
+        return 1F;
+    }
+
     public static ArrayList<Note> getFinalProcess() {
         return finalProcess;
     }

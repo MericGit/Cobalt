@@ -9,6 +9,8 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
+
 public class PlaySoundProcess implements CommandExecutor {
     // This method is called, when somebody uses our command
     @Override
@@ -18,10 +20,11 @@ public class PlaySoundProcess implements CommandExecutor {
             //String file = args[1];
             //System.out.println(file);
             try {
-                Engine.playSoundProcess(player,MidiUtils.midiToNoteSequence("/Users/lawrence.zhang/Documents/GitHub/Cobalt/src/main/java/io/github/mericgit/cobalt/test4.mid"));
+                File target = new File("/Users/lawrence.zhang/Documents/MC Server/plugins/songs/lamb.mid");
+                Engine.playSoundProcess(player,MidiUtils.midiToNoteSequence(target));
             } catch (Exception e) {
                 e.printStackTrace();
-                Bukkit.getServer().broadcastMessage("Yo this bugged");
+                Bukkit.getServer().broadcastMessage("!!!Yo this bugged!!! sheesh");
             }
 
 
