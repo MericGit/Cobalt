@@ -32,10 +32,10 @@ public class Engine {
             //System.out.println("CURRENT: " + soundProcess.get(0));
             if (soundProcess.get(0).getVelocity() != 0 || soundProcess.get(0).getVelocity() != 128) {
                 soundProcess.get(0).setSample(String.valueOf(soundProcess.get(0).getKey() - 48));
-                soundProcess.get(0).setFreq(Note.getFreq(soundProcess.get(0)));
+                soundProcess.get(0).setFreq(Note.advFreq(soundProcess.get(0)));
 
-                player.sendMessage(ChatColor.GOLD + "Playing note: " + ChatColor.AQUA + soundProcess.get(0));
-                player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_HARP, 1, soundProcess.get(0).getFreq());
+                player.sendMessage(ChatColor.GOLD + "Playing note: " + ChatColor.AQUA + soundProcess.get(0) + " At sample " + Note.advSample2(soundProcess.get(0)) + " At freq " + Note.advFreq(soundProcess.get(0)));
+                player.playSound(player.getLocation(), Note.advSample2(soundProcess.get(0)), 1, Note.advFreq(soundProcess.get(0)));
             } else if (soundProcess.get(0).getVelocity() == 0) {
             }
             soundProcess.remove(0);
