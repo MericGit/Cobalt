@@ -17,10 +17,10 @@ public class PlaySoundProcess implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player) {
             Player player = (Player) sender;
-            //String file = args[1];
-            //System.out.println(file);
+            String file = args[1];
+            System.out.println(file);
             try {
-                File target = new File("/Users/lawrence.zhang/Documents/MC Server/plugins/songs/lamb.mid");
+                File target = new File("/Users/lawrence.zhang/Documents/MC Server/plugins/songs/" + file);
                 Engine.playSoundProcess(player,MidiUtils.midiToNoteSequence(target));
             } catch (Exception e) {
                 e.printStackTrace();
