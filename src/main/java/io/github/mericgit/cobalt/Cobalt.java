@@ -11,12 +11,17 @@ public final class Cobalt extends JavaPlugin {
         instance = this;
         System.out.println("Attention all Crewmates. Cobalt has been loaded");
         this.getCommand("PlaySoundProcess").setExecutor(new PlaySoundProcess());
+        this.getCommand("KillSoundProcess").setExecutor(new KillSoundProcess());
         // Plugin startup logic
 
     }
 
     @Override
     public void onDisable() {
+        if (MidiUtils.getFinalProcess().size() > 1){
+            MidiUtils.getFinalProcess().clear();
+            System.out.println("Cleared all converted SoundProcesses");
+        }
         // Plugin shutdown logic
     }
 

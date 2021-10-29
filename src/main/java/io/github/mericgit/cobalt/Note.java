@@ -125,32 +125,32 @@ public class Note {
     public static String advSample2(Note note) {
 
         if (note.getKey() <= 36) {
-            return "block.note_block.piano_-3";
+            return "block.note_block.splendor_a_1";
         }
         else if (note.getKey() <= 48) {
-            return "block.note_block.piano_-2";
+            return "block.note_block.splendor_a_2";
         }
         else if (note.getKey() <= 60) {
-            return "block.note_block.piano_-1";
+            return "block.note_block.splendor_a_3";
         }
         else if (note.getKey() <= 72) {
-            return "block.note_block.piano";
+            return "block.note_block.splendor_a_4";
         }
         else if (note.getKey() <= 84) {
-            return "block.note_block.piano_1";
+            return "block.note_block.splendor_a_5";
         }
         else if (note.getKey() <= 96) {
-            return "block.note_block.piano_2";
+            return "block.note_block.splendor_a_6";
         }
         else if (note.getKey() <= 108) {
-            return "block.note_block.piano_3";
+            return "block.note_block.splendor_a_7";
         }
         return "null";
     }
     public static float advFreq(Note note) {
         int pitch = (note.getKey() % 12 - 6);
-        System.out.println("Final pitch: " + pitch);
-        System.out.println("Resulting pitch math: " + Float.toString((float) Math.pow(2,((double) pitch / 12))));
+        //System.out.println("Final pitch: " + pitch);
+        //System.out.println("Resulting pitch math: " + Float.toString((float) Math.pow(2,((double) pitch / 12))));
             return (float) Math.pow(2,((double) pitch / 12));
         }
 

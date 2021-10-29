@@ -6,4 +6,6 @@ commands:
   PlaySoundProcess:
     description: Plays the specified sound process
     usage: /PlaySoundProcess <process>
-
+  KillSoundProcess:
+    description: Kills the specified sound process
+    usage: /KillSoundProcess <process>

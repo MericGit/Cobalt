@@ -1,6 +1,7 @@
 package io.github.mericgit.cobalt;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -17,10 +18,11 @@ public class PlaySoundProcess implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player) {
             Player player = (Player) sender;
-            String file = args[1];
+            String file = args[0];
             System.out.println(file);
+            player.sendMessage(ChatColor.GOLD + "Running! " + ChatColor.AQUA + " Found file: " + ChatColor.GRAY + file);
             try {
-                File target = new File("/Users/lawrence.zhang/Documents/MC Server/plugins/songs/" + file);
+                File target = new File("C:\\Users\\dongd\\Documents\\MC Server\\plugins\\Cobalt\\songs\\" + file);
                 Engine.playSoundProcess(player,MidiUtils.midiToNoteSequence(target));
             } catch (Exception e) {
                 e.printStackTrace();

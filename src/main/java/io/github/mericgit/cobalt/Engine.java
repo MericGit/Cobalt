@@ -19,7 +19,7 @@ public class Engine {
                 if (MidiUtils.getFinalProcess().size() > 1  )
                     playSound(player, MidiUtils.getFinalProcess());
             }
-        }, 1000,1, TimeUnit.MILLISECONDS);
+        }, 1500,1, TimeUnit.MILLISECONDS);
     }
 
 
@@ -33,9 +33,8 @@ public class Engine {
             if (soundProcess.get(0).getVelocity() != 0 || soundProcess.get(0).getVelocity() != 128) {
                 soundProcess.get(0).setSample(String.valueOf(soundProcess.get(0).getKey() - 48));
                 soundProcess.get(0).setFreq(Note.advFreq(soundProcess.get(0)));
-
-                player.sendMessage(ChatColor.GOLD + "Playing note: " + ChatColor.AQUA + soundProcess.get(0) + " At sample " + Note.advSample2(soundProcess.get(0)) + " At freq " + Note.advFreq(soundProcess.get(0)));
-                player.playSound(player.getLocation(), Note.advSample2(soundProcess.get(0)), 1, Note.advFreq(soundProcess.get(0)));
+                player.sendMessage(ChatColor.RED + " Current tick: " + ChatColor.GREEN + soundProcess.get(0).getTick() + ChatColor.GOLD + " Playing note: " + ChatColor.AQUA + soundProcess.get(0).getKey() + " At sample " + Note.advSample2(soundProcess.get(0)) + " At freq " + Note.advFreq(soundProcess.get(0)) + " At Velocity " + soundProcess.get(0).getVelocity() + " Accuracy: " + soundProcess.get(0).getMcTick());
+                player.playSound(player.getLocation(), Note.advSample2(soundProcess.get(0)), ( (float) soundProcess.get(0).getVelocity() / 127), Note.advFreq(soundProcess.get(0)));
             } else if (soundProcess.get(0).getVelocity() == 0) {
             }
             soundProcess.remove(0);
