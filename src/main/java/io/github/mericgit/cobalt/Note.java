@@ -12,6 +12,7 @@ public class Note {
     private String sample;
     private float freq;
     private int channel;
+    private double timeConv;
 
     private static String S1 = "Sample";
     private static String S2 = "Sample";
@@ -30,13 +31,7 @@ public class Note {
     public static String advSample(Note note) {
         return switch (note.getKey()) {
             case 0 -> "Undf"; // Extra Range Capabilities?
-            case 1 -> S1;
-            case 2 -> S1;
-            case 3 -> S1;
-            case 4 -> S1;   // CORE sample  C1
-            case 5 -> S1;
-            case 6 -> S1;
-            case 7 -> S1;
+            case 1,2,3,4,5,6,7 -> S1; //4 Is CORE
             case 8 -> S2;
             case 9 -> S2;
             case 10 -> S2;
@@ -123,27 +118,27 @@ public class Note {
     }
 
     public static String advSample2(Note note) {
-
+        String temp = "block.note_block.splendor" + "_r_";
         if (note.getKey() <= 36) {
-            return "block.note_block.splendor_a_1";
+            return temp + "1";
         }
         else if (note.getKey() <= 48) {
-            return "block.note_block.splendor_a_2";
+            return  temp + "2";
         }
         else if (note.getKey() <= 60) {
-            return "block.note_block.splendor_a_3";
+            return  temp + "3";
         }
         else if (note.getKey() <= 72) {
-            return "block.note_block.splendor_a_4";
+            return  temp + "4";
         }
         else if (note.getKey() <= 84) {
-            return "block.note_block.splendor_a_5";
+            return  temp + "5";
         }
         else if (note.getKey() <= 96) {
-            return "block.note_block.splendor_a_6";
+            return  temp + "6";
         }
         else if (note.getKey() <= 108) {
-            return "block.note_block.splendor_a_7";
+            return  temp + "7";
         }
         return "null";
     }
@@ -155,8 +150,7 @@ public class Note {
         }
 
 //pitch = 2^((((note_key - 33) + (note_pitch / 100)) - 12) / 12)
-
-    public Note(long tick, int key, int velocity, int bank, long mcTick, String sample, float freq, int channel) {
+    public Note(long tick, int key, int velocity, int bank, long mcTick, String sample, float freq, int channel,double timeConv) {
         this.tick = tick;
         this.mcTick = mcTick;
         this.key = key;
@@ -165,6 +159,7 @@ public class Note {
         this.sample = sample;
         this.freq = freq;
         this.channel = channel;
+        this.timeConv = timeConv;
     }
 
     @Override
@@ -178,6 +173,7 @@ public class Note {
                 ", sample='" + sample + '\'' +
                 ", freq=" + freq +
                 ", channel=" + channel +
+                ", timeConv=" + timeConv +
                 '}' + "\n";
     }
 
@@ -243,6 +239,12 @@ public class Note {
 
     public void setFreq(float freq) {
         this.freq = freq;
+    }
+    public void setTimeConv(float timeConv) {
+        this.timeConv = timeConv;
+    }
+    public double getTimeConv() {
+        return timeConv;
     }
 }
 

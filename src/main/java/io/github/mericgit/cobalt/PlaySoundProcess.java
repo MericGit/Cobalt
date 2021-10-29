@@ -22,7 +22,7 @@ public class PlaySoundProcess implements CommandExecutor {
             System.out.println(file);
             player.sendMessage(ChatColor.GOLD + "Running! " + ChatColor.AQUA + " Found file: " + ChatColor.GRAY + file);
             try {
-                File target = new File("C:\\Users\\dongd\\Documents\\MC Server\\plugins\\Cobalt\\songs\\" + file);
+                File target = new File("/Users/lawrence.zhang/Documents/MC Server/plugins/songs/" + file);
                 Engine.playSoundProcess(player,MidiUtils.midiToNoteSequence(target));
             } catch (Exception e) {
                 e.printStackTrace();
