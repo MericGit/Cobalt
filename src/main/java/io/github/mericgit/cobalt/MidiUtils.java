@@ -19,8 +19,6 @@ public class MidiUtils {
     public static ArrayList<Note> midiToNoteSequence(File file) throws Exception {
         Sequence sequence = MidiSystem.getSequence(file);
         MidiFileFormat midiFile = MidiSystem.getMidiFileFormat(file);
-
-        // Use the sequencer interface to extract the incumbent tempo of the MIDI file
         Sequencer sequencer = MidiSystem.getSequencer(false);
         sequencer.setSequence(sequence);
         gTempo = (int) sequencer.getTempoInBPM();
@@ -29,8 +27,7 @@ public class MidiUtils {
         System.out.println("PPQ IS: " + PPQ);
 
         timeConverter = ((double) 60000 / (gTempo * PPQ));
-        System.out.println("Milliseconds per tick = " + timeConverter);
-
+        System.out.println("Ms per tick = " + timeConverter);
 
         ArrayList<Note> noteSequence = new ArrayList<Note>();
         int trackNumber = 0;
@@ -47,7 +44,7 @@ public class MidiUtils {
                     {
                         int nTempo = ((data[0] & 0xFF) << 16)
                                 | ((data[1] & 0xFF) << 8)
-                                | (data[2] & 0xFF);           // tempo in microseconds per beat
+                                | (data[2] & 0xFF);
                         if (nTempo <= 0) {
                             gTempo = 60000000.0 / nTempo;
                         }
