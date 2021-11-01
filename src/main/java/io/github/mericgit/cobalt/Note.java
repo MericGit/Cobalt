@@ -13,6 +13,7 @@ public class Note {
     private float freq;
     private int channel;
     private double timeConv;
+    private static String targetSample;
 
     private static String S1 = "Sample";
     private static String S2 = "Sample";
@@ -117,8 +118,16 @@ public class Note {
         };
     }
 
+    public static String getTargetSample() {
+        return targetSample;
+    }
+
+    public static void setTargetSample(String t) {
+        targetSample = t;
+    }
     public static String advSample2(Note note) {
-        String temp = "block.note_block.splendor" + "_r_";
+
+        String temp = "block.note_block." +getTargetSample() + "_";
         if (note.getKey() <= 36) {
             return temp + "1";
         }

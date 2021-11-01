@@ -12,6 +12,14 @@ public final class Cobalt extends JavaPlugin {
         System.out.println("Attention all Crewmates. Cobalt has been loaded");
         this.getCommand("PlaySoundProcess").setExecutor(new PlaySoundProcess());
         this.getCommand("KillSoundProcess").setExecutor(new KillSoundProcess());
+
+        if(!this.getDataFolder().exists()) {
+            try {
+                this.getDataFolder().mkdir();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         // Plugin startup logic
 
     }

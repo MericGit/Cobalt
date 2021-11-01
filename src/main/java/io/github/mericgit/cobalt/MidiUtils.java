@@ -50,7 +50,7 @@ public class MidiUtils {
                         }
                         else {
                             gTempo = 60000000.0 / nTempo;
-                            timeConverter = ((double) 60000 / (gTempo * PPQ));
+                            //timeConverter = ((double) 60000 / (gTempo * PPQ));
                             System.out.println("gTempo is: " + gTempo);
                             System.out.println("TimeConverter has been updated. New TC is: " + timeConverter);
                         }
@@ -103,8 +103,8 @@ public class MidiUtils {
 
          */
         System.out.println("Note Sequence");
-        System.out.println(convertNonDelta(updateMcTick(bubbleSort(noteSequence))));
-        finalProcess = convertNonDelta(updateMcTick(bubbleSort(noteSequence)));
+        System.out.println(convertNonDelta(updateMcTick(quickSort(noteSequence))));
+        finalProcess = convertNonDelta(updateMcTick(quickSort(noteSequence)));
 
         return noteSequence;
     }

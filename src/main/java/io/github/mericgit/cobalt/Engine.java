@@ -30,10 +30,10 @@ public class Engine {
 
         if (soundProcess.get(0).getMcTick() <= 0) {
             //System.out.println("CURRENT: " + soundProcess.get(0));
-            if (soundProcess.get(0).getVelocity() != 0 || soundProcess.get(0).getVelocity() != 128) {
+            if (soundProcess.get(0).getVelocity() != 0 && soundProcess.get(0).getVelocity() != 128) {
                 soundProcess.get(0).setSample(String.valueOf(soundProcess.get(0).getKey() - 48));
                 soundProcess.get(0).setFreq(Note.advFreq(soundProcess.get(0)));
-                player.sendMessage(ChatColor.RED + " Current tick: " + ChatColor.GREEN + soundProcess.get(0).getTick() + ChatColor.GOLD + " Playing note: " + ChatColor.AQUA + soundProcess.get(0).getKey() + " At sample " + Note.advSample2(soundProcess.get(0)) + " At freq " + Note.advFreq(soundProcess.get(0)) + " At Velocity " + soundProcess.get(0).getVelocity() + " Accuracy: " + soundProcess.get(0).getMcTick());
+                player.sendMessage(ChatColor.RED + " Current tick: " + ChatColor.GREEN + soundProcess.get(0).getTick() + ChatColor.GOLD + " Playing note: " + ChatColor.AQUA + soundProcess.get(0).getKey() + " At sample " + Note.advSample2(soundProcess.get(0)) + " At freq " + Note.advFreq(soundProcess.get(0)) + " At Volume " + ( (float) soundProcess.get(0).getVelocity() / 127) + " Accuracy: " + soundProcess.get(0).getMcTick());
                 player.playSound(player.getLocation(), Note.advSample2(soundProcess.get(0)), ( (float) soundProcess.get(0).getVelocity() / 127), Note.advFreq(soundProcess.get(0)));
             } else if (soundProcess.get(0).getVelocity() == 0) {
             }
