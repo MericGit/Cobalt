@@ -18,6 +18,4 @@ Stretch Features:
 - Plugin API - Integrate and playback SoundProcess with other plugins. 
 
 
-####Yes I am using my README as a TODO list:
-- Convert engine, adjust soundProcess / MDelay Queue --> RepeatingSchedulerTask. Lower first value of SoundProcess by 1 MC tick
-- NewPlayTickEvent method. 
+Created for the Congressional App Challenge 
