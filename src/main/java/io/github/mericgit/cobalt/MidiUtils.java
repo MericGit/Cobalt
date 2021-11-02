@@ -76,7 +76,8 @@ public class MidiUtils {
                             //long mcTick = Math.round((tick * timeConverter) / 50);
                             String noteName = NOTE_NAMES[note];
                             int velocity = sm.getData2();
-                            //noteSequence.add(new Note(tick, key, velocity, bank, mcTick,calcSample(key),calcFreq(key),channel));
+                            noteSequence.add(new Note(tick, key, velocity, bank, mcTick,calcSample(key),calcFreq(key),channel));
+                            System.out.println("Note Added");
                         } else if (sm.getCommand() == NOTE_OFF || sm.getData2() == 0) {
                             int key = sm.getData1();
                             int octave = (key / 12) - 1;
