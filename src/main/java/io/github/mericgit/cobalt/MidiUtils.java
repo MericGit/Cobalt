@@ -78,7 +78,7 @@ public class MidiUtils {
                             String noteName = NOTE_NAMES[note];
                             int velocity = sm.getData2();
                             noteSequence.add(new Note(tick, key, velocity, bank, mcTick,calcSample(key), (float) timeConverter,channel));
-                            System.out.println(new Note(tick, key, velocity, bank, mcTick,calcSample(key), (float) timeConverter,channel));
+                            System.out.print(new Note(tick, key, velocity, bank, mcTick,calcSample(key), (float) timeConverter,channel));
 
                         } else if (sm.getCommand() == NOTE_OFF || sm.getData2() == 0) {
                             int key = sm.getData1();
