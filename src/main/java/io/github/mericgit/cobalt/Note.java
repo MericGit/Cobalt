@@ -184,8 +184,8 @@ public class Note {
                 ", sample='" + sample + '\'' +
                 ", freq=" + freq +
                 ", channel=" + channel +
-                ", dataF1=" + dataF1 +
                 ", timeConv=" + timeConv +
+                ", dataF1=" + dataF1 +
                 '}' + "\n";
     }
 

@@ -48,7 +48,6 @@ public class MidiUtils {
                                 | (data[2] & 0xFF);
                         if (nTempo <= 0) {
                             gTempo = 60000000.0 / nTempo;
-
                         }
                         else {
                             gTempo = 60000000.0 / nTempo;
@@ -56,14 +55,15 @@ public class MidiUtils {
                             System.out.println("gTempo is: " + gTempo);
                             System.out.println("TimeConverter has been updated. New TC is: " + timeConverter);
                             noteSequence.add(new Note(currentTick+1,0,0,0,0,"TEMPO_CHANGE", (float) gTempo,0,timeConverter, (float) ((60000 / (gTempo * PPQ)))));
+                            System.out.println((new Note(currentTick+1,0,0,0,0,"TEMPO_CHANGE", (float) gTempo,0,timeConverter, (float) ((60000 / (gTempo * PPQ))))));
+
                         }
                     }
                 }
                 if (message instanceof ShortMessage) {
                     ShortMessage sm = (ShortMessage) message;
                     if (sm.getCommand() ==PROGRAM_CHANGE) {
-                        long tick = event.getTick();
-                        noteSequence.add(new Note(currentTick+1,0,0,0,0,"PROGRAM_CHANGE",0,0,timeConverter,sm.getData1()));
+                        noteSequence.add(new Note(currentTick+1,sm.getData1(),0,0,0,"PROGRAM_CHANGE",0,0,timeConverter, 1));
                         System.out.println("Program Change");
                     }
                     if (sm.getCommand() == NOTE_ON && sm.getData2() != 0) {
@@ -79,7 +79,7 @@ public class MidiUtils {
                         String noteName = NOTE_NAMES[note];
                         int velocity = sm.getData2();
                         noteSequence.add(new Note(tick, key, velocity, bank, mcTick,calcSample(key),calcFreq(key),channel,timeConverter,0));
-                        System.out.println("note add");
+                        System.out.println((new Note(tick, key, velocity, bank, mcTick,calcSample(key),calcFreq(key),channel,timeConverter,0)));
                     } else if (sm.getCommand() == NOTE_OFF || sm.getData2() == 0) {
                         int key = sm.getData1();
                         int octave = (key / 12) - 1;
@@ -140,7 +140,7 @@ public class MidiUtils {
         ArrayList<Note> copy = new ArrayList<>();
         copy.add(soundProcess.get(0));
         for (int i = 1; i < soundProcess.size(); i++) {
-            copy.add(new Note(soundProcess.get(i).getTick(), soundProcess.get(i).getKey(), soundProcess.get(i).getVelocity(), soundProcess.get(i).getBank(), (soundProcess.get(i).getMcTick() - soundProcess.get(i - 1).getMcTick()),soundProcess.get(i).getSample(),soundProcess.get(i).getFreq(),soundProcess.get(i).getChannel(),soundProcess.get(i).getTimeConv(),0));
+            copy.add(new Note(soundProcess.get(i).getTick(), soundProcess.get(i).getKey(), soundProcess.get(i).getVelocity(), soundProcess.get(i).getBank(), (soundProcess.get(i).getMcTick() - soundProcess.get(i - 1).getMcTick()),soundProcess.get(i).getSample(),soundProcess.get(i).getFreq(),soundProcess.get(i).getChannel(),soundProcess.get(i).getTimeConv(),soundProcess.get(i).getDataF1()));
         }
         return copy;
     }

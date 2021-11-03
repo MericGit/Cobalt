@@ -8,6 +8,7 @@ public class TestEngine {
     private static MidiChannel[] channels;
     private static Synthesizer synth;
     private static MidiChannel midiChannel;
+    private static Instrument currentInstrument;
 
 
     static {
@@ -23,7 +24,7 @@ public class TestEngine {
         }
         channels = synth.getChannels();
         midiChannel = synth.getChannels()[0];
-        Instrument currentInstrument = synth.getAvailableInstruments()[1];
+        currentInstrument = synth.getAvailableInstruments()[0];
         System.out.println("Switching instrument to #" + 4 + ": " + currentInstrument.getName());
         synth.loadInstrument(currentInstrument);
         midiChannel.programChange(currentInstrument.getPatch().getBank(), currentInstrument.getPatch().getProgram());
@@ -46,10 +47,18 @@ public class TestEngine {
 
     private static void playSound(ArrayList<Note> soundProcess) {
         try {
+
+            if (soundProcess.get(0).getDataF1() == 1) {
+                currentInstrument = synth.getAvailableInstruments()[soundProcess.get(0).getKey()];
+                System.out.println("Switching instrument to #" + soundProcess.get(0).getKey() + ": " + currentInstrument.getName());
+                synth.loadInstrument(currentInstrument);
+                midiChannel.programChange(currentInstrument.getPatch().getBank(), currentInstrument.getPatch().getProgram());
+            }
             if (soundProcess.get(0).getMcTick() <= 0) {
                 //System.out.println("CURRENT: " + soundProcess.get(0));
                 if(soundProcess.get(0).getVelocity() != 0 || soundProcess.get(0).getVelocity() != 128) {
                     channels[soundProcess.get(0).getChannel()].noteOn(soundProcess.get(0).getKey(),soundProcess.get(0).getVelocity());
+                    //System.out.println("Current INSTR: " + currentInstrument.getName());
                 }
                 else if (soundProcess.get(0).getVelocity() == 0) {
                     channels[soundProcess.get(0).getChannel()].noteOff(soundProcess.get(0).getKey(),soundProcess.get(0).getVelocity());
