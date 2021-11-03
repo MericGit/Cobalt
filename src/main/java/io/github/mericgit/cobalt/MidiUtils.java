@@ -48,14 +48,14 @@ public class MidiUtils {
                                 | (data[2] & 0xFF);
                         if (nTempo <= 0) {
                             gTempo = 60000000.0 / nTempo;
-                            noteSequence.add(new Note(currentTick+1,0,0,0,0,"TEMPO_CHANGE", (float) gTempo,0,timeConverter, (float) gTempo));
 
                         }
                         else {
                             gTempo = 60000000.0 / nTempo;
-                           // timeConverter = ((double) 60000 / (gTempo * PPQ));
+                           // timeConverter = ((float) 60000 / (gTempo * PPQ));
                             System.out.println("gTempo is: " + gTempo);
                             System.out.println("TimeConverter has been updated. New TC is: " + timeConverter);
+                            noteSequence.add(new Note(currentTick+1,0,0,0,0,"TEMPO_CHANGE", (float) gTempo,0,timeConverter, (float) ((60000 / (gTempo * PPQ)))));
                         }
                     }
                 }

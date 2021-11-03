@@ -1,6 +1,7 @@
 
 import io.github.mericgit.cobalt.Engine;
 import io.github.mericgit.cobalt.MidiUtils;
+import io.github.mericgit.cobalt.TestEngine;
 
 import java.io.File;
 
@@ -10,7 +11,7 @@ public class TempMidi {
         System.out.println("AMOOGSUS");
         File directory = new File("./");
         System.out.println(directory.getAbsolutePath());
-        MidiUtils.midiToNoteSequence("run_lads.mid");
+        MidiUtils.midiToNoteSequence(new File("/Users/lawrence.zhang/Documents/MC Server/plugins/Cobalt/songs/" +"runlads.mid"));
         TestEngine.playSoundProcess(MidiUtils.getFinalProcess());
 
     }
