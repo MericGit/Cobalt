@@ -64,6 +64,7 @@ public class MidiUtils {
                         if (sm.getCommand() ==PROGRAM_CHANGE) {
                             long tick = event.getTick();
                             noteSequence.add(new Note(event.getTick(),sm.getData1(),128,0,0,"1",0,0));
+                            System.out.println("PRogram Change!");
                         }
                         if (sm.getCommand() == NOTE_ON && sm.getData2() != 0) {
                             int key = sm.getData1();
@@ -76,8 +77,9 @@ public class MidiUtils {
                             //long mcTick = Math.round((tick * timeConverter) / 50);
                             String noteName = NOTE_NAMES[note];
                             int velocity = sm.getData2();
-                            noteSequence.add(new Note(tick, key, velocity, bank, mcTick,calcSample(key),calcFreq(key),channel));
-                            System.out.println("Note Added");
+                            noteSequence.add(new Note(tick, key, velocity, bank, mcTick,calcSample(key), (float) timeConverter,channel));
+                            System.out.println(new Note(tick, key, velocity, bank, mcTick,calcSample(key), (float) timeConverter,channel));
+
                         } else if (sm.getCommand() == NOTE_OFF || sm.getData2() == 0) {
                             int key = sm.getData1();
                             int octave = (key / 12) - 1;
