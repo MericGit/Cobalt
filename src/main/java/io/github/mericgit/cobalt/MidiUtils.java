@@ -40,7 +40,6 @@ public class MidiUtils {
                 if (message instanceof MetaMessage) {
                     MetaMessage mm = (MetaMessage) message;
                     byte[] data = mm.getData();
-
                     if ((mm.getType() & 0xff) == 0x51 && data != null && data.length > 2)
                     {
                         int nTempo = ((data[0] & 0xFF) << 16)
@@ -51,11 +50,12 @@ public class MidiUtils {
                         }
                         else {
                             gTempo = 60000000.0 / nTempo;
-                           // timeConverter = ((float) 60000 / (gTempo * PPQ));
+                            timeConverter = ((double) 60000 / (gTempo * PPQ));
+                            // timeConverter = ((float) 60000 / (gTempo * PPQ));
                             System.out.println("gTempo is: " + gTempo);
                             System.out.println("TimeConverter has been updated. New TC is: " + timeConverter);
                             noteSequence.add(new Note(currentTick+1,0,0,0,0,"TEMPO_CHANGE", (float) gTempo,0,timeConverter, (float) ((60000 / (gTempo * PPQ)))));
-                            System.out.println((new Note(currentTick+1,0,0,0,0,"TEMPO_CHANGE", (float) gTempo,0,timeConverter, (float) ((60000 / (gTempo * PPQ))))));
+                            System.out.print((new Note(currentTick+1,0,0,0,0,"TEMPO_CHANGE", (float) gTempo,0,timeConverter, (float) ((60000 / (gTempo * PPQ))))));
 
                         }
                     }
@@ -79,7 +79,7 @@ public class MidiUtils {
                         String noteName = NOTE_NAMES[note];
                         int velocity = sm.getData2();
                         noteSequence.add(new Note(tick, key, velocity, bank, mcTick,calcSample(key),calcFreq(key),channel,timeConverter,0));
-                        System.out.println((new Note(tick, key, velocity, bank, mcTick,calcSample(key),calcFreq(key),channel,timeConverter,0)));
+                        System.out.print((new Note(tick, key, velocity, bank, mcTick,calcSample(key),calcFreq(key),channel,timeConverter,0)));
                     } else if (sm.getCommand() == NOTE_OFF || sm.getData2() == 0) {
                         int key = sm.getData1();
                         int octave = (key / 12) - 1;
@@ -109,7 +109,7 @@ public class MidiUtils {
 
          */
         System.out.println("Note Sequence");
-        System.out.println(convertNonDelta(updateMcTick(quickSort(noteSequence))));
+        //System.out.println(convertNonDelta(updateMcTick(quickSort(noteSequence))));
         finalProcess = convertNonDelta(updateMcTick(quickSort(noteSequence)));
 
         return noteSequence;
