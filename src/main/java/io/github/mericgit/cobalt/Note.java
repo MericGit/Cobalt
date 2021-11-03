@@ -14,6 +14,7 @@ public class Note {
     private int channel;
     private double timeConv;
     private static String targetSample;
+    private float dataF1;
 
     private static String S1 = "Sample";
     private static String S2 = "Sample";
@@ -159,7 +160,7 @@ public class Note {
         }
 
 //pitch = 2^((((note_key - 33) + (note_pitch / 100)) - 12) / 12)
-    public Note(long tick, int key, int velocity, int bank, long mcTick, String sample, float freq, int channel,double timeConv) {
+    public Note(long tick, int key, int velocity, int bank, long mcTick, String sample, float freq, int channel,double timeConv,float dataF1) {
         this.tick = tick;
         this.mcTick = mcTick;
         this.key = key;
@@ -169,6 +170,7 @@ public class Note {
         this.freq = freq;
         this.channel = channel;
         this.timeConv = timeConv;
+        this.dataF1 = dataF1;
     }
 
     @Override
@@ -182,6 +184,7 @@ public class Note {
                 ", sample='" + sample + '\'' +
                 ", freq=" + freq +
                 ", channel=" + channel +
+                ", dataF1=" + dataF1 +
                 ", timeConv=" + timeConv +
                 '}' + "\n";
     }
@@ -244,6 +247,18 @@ public class Note {
 
     public float getFreq() {
         return freq;
+    }
+
+    public void setTimeConv(double timeConv) {
+        this.timeConv = timeConv;
+    }
+
+    public float getDataF1() {
+        return dataF1;
+    }
+
+    public void setDataF1(int dataF1) {
+        this.dataF1 = dataF1;
     }
 
     public void setFreq(float freq) {
