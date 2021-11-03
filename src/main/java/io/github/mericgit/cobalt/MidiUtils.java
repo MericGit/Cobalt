@@ -16,6 +16,7 @@ public class MidiUtils {
     public static double gTempo;
     private static ArrayList<Note> finalProcess;
     private static double timeConverter;
+    private static long currentTick = 0;
     public static ArrayList<Note> midiToNoteSequence(File file) throws Exception {
         Sequence sequence = MidiSystem.getSequence(file);
         MidiFileFormat midiFile = MidiSystem.getMidiFileFormat(file);
@@ -50,7 +51,7 @@ public class MidiUtils {
                         }
                         else {
                             gTempo = 60000000.0 / nTempo;
-                            //timeConverter = ((double) 60000 / (gTempo * PPQ));
+                           // timeConverter = ((double) 60000 / (gTempo * PPQ));
                             System.out.println("gTempo is: " + gTempo);
                             System.out.println("TimeConverter has been updated. New TC is: " + timeConverter);
                         }
@@ -60,13 +61,15 @@ public class MidiUtils {
                     ShortMessage sm = (ShortMessage) message;
                     if (sm.getCommand() ==PROGRAM_CHANGE) {
                         long tick = event.getTick();
-                        noteSequence.add(new Note(event.getTick(),sm.getData1(),128,0,0,"1",0,0,timeConverter));
+                        noteSequence.add(new Note(currentTick+1,sm.getData1(),128,0,0,"1",0,0,timeConverter));
+                        System.out.println("Program Change");
                     }
                     if (sm.getCommand() == NOTE_ON && sm.getData2() != 0) {
                         int key = sm.getData1();
                         int octave = (key / 12) - 1;
                         int note = key % 12;
                         long tick = event.getTick();
+                        currentTick = event.getTick();
                         int bank = trackNumber;
                         int channel = sm.getChannel();
                         long mcTick = 0;
@@ -74,6 +77,7 @@ public class MidiUtils {
                         String noteName = NOTE_NAMES[note];
                         int velocity = sm.getData2();
                         noteSequence.add(new Note(tick, key, velocity, bank, mcTick,calcSample(key),calcFreq(key),channel,timeConverter));
+                        System.out.println("note add");
                     } else if (sm.getCommand() == NOTE_OFF || sm.getData2() == 0) {
                         int key = sm.getData1();
                         int octave = (key / 12) - 1;

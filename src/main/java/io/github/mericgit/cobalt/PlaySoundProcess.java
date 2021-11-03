@@ -28,7 +28,7 @@ public class PlaySoundProcess implements CommandExecutor {
                 System.out.println(file);
                 player.sendMessage(ChatColor.GOLD + "Running! " + ChatColor.AQUA + " Found file: " + ChatColor.GRAY + file);
                 try {
-                    File target = new File( path +"\\songs\\" + file);
+                    File target = new File( path +"/songs/" + file);
                     Engine.playSoundProcess(player, MidiUtils.midiToNoteSequence(target));
                 } catch (Exception e) {
                     e.printStackTrace();
