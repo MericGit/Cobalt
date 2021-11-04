@@ -160,7 +160,7 @@ public class Note {
         }
 
 //pitch = 2^((((note_key - 33) + (note_pitch / 100)) - 12) / 12)
-    public Note(long tick, int key, int velocity, int bank, long mcTick, String sample, float freq, int channel,double timeConv,float dataF1) {
+    public Note(long tick, int key, int velocity, int bank, long mcTick, String sample, float freq, int channel,float dataF1) {
         this.tick = tick;
         this.mcTick = mcTick;
         this.key = key;
@@ -169,7 +169,6 @@ public class Note {
         this.sample = sample;
         this.freq = freq;
         this.channel = channel;
-        this.timeConv = timeConv;
         this.dataF1 = dataF1;
     }
 
@@ -184,7 +183,6 @@ public class Note {
                 ", sample='" + sample + '\'' +
                 ", freq=" + freq +
                 ", channel=" + channel +
-                ", timeConv=" + timeConv +
                 ", dataF1=" + dataF1 +
                 '}' + "\n";
     }

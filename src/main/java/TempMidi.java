@@ -11,7 +11,7 @@ public class TempMidi {
         System.out.println("AMOOGSUS");
         File directory = new File("./");
         System.out.println(directory.getAbsolutePath());
-        MidiUtils.midiToNoteSequence(new File("C:\\Users\\dongd\\Documents\\MC Server\\plugins\\Cobalt\\songs\\" +"runlads.mid"));
+        MidiUtils.midiToNoteSequence(new File("C:\\Users\\dongd\\Documents\\MC Server\\plugins\\Cobalt\\songs\\" +"swordland.mid"));
         TestEngine.playSoundProcess(MidiUtils.getFinalProcess());
 
     }

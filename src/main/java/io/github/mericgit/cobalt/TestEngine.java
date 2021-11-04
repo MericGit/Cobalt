@@ -35,6 +35,8 @@ public class TestEngine {
 
 
     public static void playSoundProcess(ArrayList<Note> soundProcess) throws MidiUnavailableException {
+        System.out.println("REAL FINAL ");
+        System.out.println(soundProcess);
         ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
         executor.scheduleAtFixedRate(new Runnable() {
             @Override
@@ -47,18 +49,10 @@ public class TestEngine {
 
     private static void playSound(ArrayList<Note> soundProcess) {
         try {
-
-            if (soundProcess.get(0).getDataF1() == 1) {
-                currentInstrument = synth.getAvailableInstruments()[soundProcess.get(0).getKey()];
-                System.out.println("Switching instrument to #" + soundProcess.get(0).getKey() + ": " + currentInstrument.getName());
-                synth.loadInstrument(currentInstrument);
-                midiChannel.programChange(currentInstrument.getPatch().getBank(), currentInstrument.getPatch().getProgram());
-            }
             if (soundProcess.get(0).getMcTick() <= 0) {
                 //System.out.println("CURRENT: " + soundProcess.get(0));
-                if(soundProcess.get(0).getVelocity() != 0 || soundProcess.get(0).getVelocity() != 128) {
+                if(soundProcess.get(0).getVelocity() != 0 && soundProcess.get(0).getVelocity() != 128 && soundProcess.get(0).getDataF1() != 1 && soundProcess.get(0).getDataF1() != 2) {
                     channels[soundProcess.get(0).getChannel()].noteOn(soundProcess.get(0).getKey(),soundProcess.get(0).getVelocity());
-                    //System.out.println("Current INSTR: " + currentInstrument.getName());
                 }
                 else if (soundProcess.get(0).getVelocity() == 0) {
                     channels[soundProcess.get(0).getChannel()].noteOff(soundProcess.get(0).getKey(),soundProcess.get(0).getVelocity());

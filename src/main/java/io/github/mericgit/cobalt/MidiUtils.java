@@ -13,6 +13,7 @@ public class MidiUtils {
     private static final int DEFAULT_TEMPO_MPQ = 500000; // 120bpm
     private static final int META_END_OF_TRACK_TYPE = 0x2F;
     private static final int META_TEMPO_TYPE = 0x51;
+    private static int PPQ;
     public static double gTempo;
     private static ArrayList<Note> finalProcess;
     private static double timeConverter;
@@ -24,7 +25,7 @@ public class MidiUtils {
         sequencer.setSequence(sequence);
         gTempo = (int) sequencer.getTempoInBPM();
         System.out.println("Old Tempo: " + gTempo);
-        int PPQ = midiFile.getResolution();
+        PPQ = midiFile.getResolution();
         System.out.println("PPQ IS: " + PPQ);
 
         timeConverter = ((double) 60000 / (gTempo * PPQ));
@@ -50,36 +51,36 @@ public class MidiUtils {
                         }
                         else {
                             gTempo = 60000000.0 / nTempo;
-                            timeConverter = ((double) 60000 / (gTempo * PPQ));
+                            //timeConverter = ((double) 60000 / (gTempo * PPQ));
                             // timeConverter = ((float) 60000 / (gTempo * PPQ));
                             System.out.println("gTempo is: " + gTempo);
                             System.out.println("TimeConverter has been updated. New TC is: " + timeConverter);
-                            noteSequence.add(new Note(currentTick+1,0,0,0,0,"TEMPO_CHANGE", (float) gTempo,0,timeConverter, (float) ((60000 / (gTempo * PPQ)))));
-                            System.out.print((new Note(currentTick+1,0,0,0,0,"TEMPO_CHANGE", (float) gTempo,0,timeConverter, (float) ((60000 / (gTempo * PPQ))))));
+                            noteSequence.add(new Note(currentTick + 1,0,0,0,0,"TEMPO_CHANGE", (float) gTempo,0, 1));
+                            //System.out.print((new Note(currentTick + 1,0,0,0,0,"TEMPO_CHANGE", (float) gTempo,0, 1)));
 
                         }
                     }
                 }
                 if (message instanceof ShortMessage) {
+                    currentTick = event.getTick();
                     ShortMessage sm = (ShortMessage) message;
                     if (sm.getCommand() ==PROGRAM_CHANGE) {
-                        noteSequence.add(new Note(currentTick+1,sm.getData1(),0,0,0,"PROGRAM_CHANGE",0,0,timeConverter, 1));
-                        System.out.println("Program Change");
+                        noteSequence.add(new Note(currentTick+1,sm.getData1(),0,0,0,"PROGRAM_CHANGE",0,0, 2));
+                        //System.out.println("Program Change");
                     }
                     if (sm.getCommand() == NOTE_ON && sm.getData2() != 0) {
                         int key = sm.getData1();
                         int octave = (key / 12) - 1;
                         int note = key % 12;
                         long tick = event.getTick();
-                        currentTick = event.getTick();
                         int bank = trackNumber;
                         int channel = sm.getChannel();
                         long mcTick = 0;
                         //long mcTick = Math.round((tick * timeConverter) / 50);
                         String noteName = NOTE_NAMES[note];
                         int velocity = sm.getData2();
-                        noteSequence.add(new Note(tick, key, velocity, bank, mcTick,calcSample(key),calcFreq(key),channel,timeConverter,0));
-                        System.out.print((new Note(tick, key, velocity, bank, mcTick,calcSample(key),calcFreq(key),channel,timeConverter,0)));
+                        noteSequence.add(new Note(tick, key, velocity, bank, mcTick,calcSample(key),calcFreq(key),channel,0));
+                        //System.out.print((new Note(tick, key, velocity, bank, mcTick,calcSample(key),calcFreq(key),channel,0)));
                     } else if (sm.getCommand() == NOTE_OFF || sm.getData2() == 0) {
                         int key = sm.getData1();
                         int octave = (key / 12) - 1;
@@ -91,7 +92,7 @@ public class MidiUtils {
                         long mcTick = 0;
                         String noteName = NOTE_NAMES[note];
                         int velocity = sm.getData2();
-                        noteSequence.add(new Note(tick, key, velocity, bank, mcTick,calcSample(key),calcFreq(key),channel,timeConverter,0));
+                        noteSequence.add(new Note(tick, key, 0, bank, mcTick,calcSample(key),calcFreq(key),channel,0));
                     }
                 }
             }
@@ -109,8 +110,9 @@ public class MidiUtils {
 
          */
         System.out.println("Note Sequence");
-        //System.out.println(convertNonDelta(updateMcTick(quickSort(noteSequence))));
-        finalProcess = convertNonDelta(updateMcTick(quickSort(noteSequence)));
+        System.out.println(calculateTimeConverter(bubbleSort(noteSequence)));
+        //System.out.println(convertNonDelta(updateMcTick(bubbleSort(noteSequence))));
+        finalProcess = calculateTimeConverter(convertNonDelta(bubbleSort(noteSequence)));
 
         return noteSequence;
     }
@@ -135,12 +137,22 @@ public class MidiUtils {
         return soundProcess;
     }
 
-
+    private static ArrayList<Note> calculateTimeConverter(ArrayList<Note> soundProcess) {
+        float tempo = (float) timeConverter;
+        for (int i = 0; i < soundProcess.size(); i++) {
+            if (soundProcess.get(i).getDataF1() == 1.0){
+                tempo = soundProcess.get(i).getFreq();
+                System.out.println("VAL" + ((float) 60000 / (tempo*PPQ)));
+            }
+            soundProcess.get(i).setMcTick(Math.round(  soundProcess.get(i).getMcTick() * ((float) 60000 / (tempo*PPQ)) ));
+        }
+        return soundProcess;
+    }
     private static ArrayList<Note> convertNonDelta(ArrayList<Note> soundProcess) {
         ArrayList<Note> copy = new ArrayList<>();
         copy.add(soundProcess.get(0));
         for (int i = 1; i < soundProcess.size(); i++) {
-            copy.add(new Note(soundProcess.get(i).getTick(), soundProcess.get(i).getKey(), soundProcess.get(i).getVelocity(), soundProcess.get(i).getBank(), (soundProcess.get(i).getMcTick() - soundProcess.get(i - 1).getMcTick()),soundProcess.get(i).getSample(),soundProcess.get(i).getFreq(),soundProcess.get(i).getChannel(),soundProcess.get(i).getTimeConv(),soundProcess.get(i).getDataF1()));
+            copy.add(new Note(soundProcess.get(i).getTick(), soundProcess.get(i).getKey(), soundProcess.get(i).getVelocity(), soundProcess.get(i).getBank(), (soundProcess.get(i).getTick() - soundProcess.get(i - 1).getTick()),soundProcess.get(i).getSample(),soundProcess.get(i).getFreq(),soundProcess.get(i).getChannel(),soundProcess.get(i).getDataF1()));
         }
         return copy;
     }
