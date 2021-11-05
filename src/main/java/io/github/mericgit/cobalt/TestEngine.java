@@ -36,7 +36,8 @@ public class TestEngine {
 
     public static void playSoundProcess(ArrayList<Note> soundProcess) throws MidiUnavailableException {
         System.out.println("REAL FINAL ");
-        System.out.println(soundProcess);
+        //System.out.println(soundProcess);
+        Note.initPool();
         ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
         executor.scheduleAtFixedRate(new Runnable() {
             @Override
@@ -53,6 +54,8 @@ public class TestEngine {
                 //System.out.println("CURRENT: " + soundProcess.get(0));
                 if(soundProcess.get(0).getVelocity() != 0 && soundProcess.get(0).getVelocity() != 128 && soundProcess.get(0).getDataF1() != 1 && soundProcess.get(0).getDataF1() != 2) {
                     channels[soundProcess.get(0).getChannel()].noteOn(soundProcess.get(0).getKey(),soundProcess.get(0).getVelocity());
+                    Note.rrPoolInterface(Note.advSample2(soundProcess.get(0)),soundProcess.get(0).getKey(),soundProcess.get(0).getTick());
+                    System.out.println("tick " + soundProcess.get(0).getTick());
                 }
                 else if (soundProcess.get(0).getVelocity() == 0) {
                     channels[soundProcess.get(0).getChannel()].noteOff(soundProcess.get(0).getKey(),soundProcess.get(0).getVelocity());

@@ -2,6 +2,9 @@ package io.github.mericgit.cobalt;
 
 import org.bukkit.Bukkit;
 
+import java.util.Arrays;
+import java.util.HashMap;
+
 public class Note {
 
     private long tick;
@@ -15,117 +18,33 @@ public class Note {
     private double timeConv;
     private static String targetSample;
     private float dataF1;
+    private static HashMap<String, int[]> rrPool =new HashMap<String, int[]>();
 
-    private static String S1 = "Sample";
-    private static String S2 = "Sample";
-    private static String S3 = "Sample";
-    private static String S4 = "Sample";  // Lower 3 ( 1st Octave)
-    private static String S5 = "Sample";
-    private static String S6 = "Sample";
-    private static String S7 = "Sample";  // Genshin Piano
-    private static String S8 = "Sample";
-    private static String S9 = "Sample";
-    private static String S10 = "Sample"; // Boost 3 (7th Octave)
-    private static String S11 = "Sample";
-    private static String S12 = "Sample";
-    private static String S13 = "Sample";
 
-    public static String advSample(Note note) {
-        return switch (note.getKey()) {
-            case 0 -> "Undf"; // Extra Range Capabilities?
-            case 1,2,3,4,5,6,7 -> S1; //4 Is CORE
-            case 8 -> S2;
-            case 9 -> S2;
-            case 10 -> S2;
-            case 11 -> S2; // CORE sample 2 G1
-            case 12 -> S2;
-            case 13 -> S2;
-            case 14 -> S2;
-            case 15 -> S3;
-            case 16 -> S3;
-            case 17 -> S3;
-            case 18 -> S3; // CORE sample 3 D2
-            case 19 -> S3;
-            case 20 -> S3;
-            case 21 -> S3;
-            case 22 -> S4;
-            case 23 -> S4;
-            case 24 -> S4;
-            case 25 -> S4; // CORE sample 4 A2
-            case 26 -> S4;
-            case 27 -> S4;
-            case 28 -> S4;
-            case 29 -> S5;
-            case 30 -> S5;
-            case 31 -> S5;
-            case 32 -> S5; // CORE sample 5 E3
-            case 33 -> S5;
-            case 34 -> S5;
-            case 35 -> S5;
-            case 36 -> S6;
-            case 37 -> S6;
-            case 38 -> S6;
-            case 39 -> S6; // CORE sample 6 B3
-            case 40 -> S6;
-            case 41 -> S6;
-            case 42 -> S6;
-            case 43 -> S7;
-            case 44 -> S7;
-            case 45 -> S7;
-            case 46 -> S7; // CORE sample 7 F#4
-            case 47 -> S7;
-            case 48 -> S7;
-            case 49 -> S7;
-            case 50 -> S8;
-            case 51 -> S8;
-            case 52 -> S8;
-            case 53 -> S8; // CORE sample 8 C#5
-            case 54 -> S8;
-            case 55 -> S8;
-            case 56 -> S8;
-            case 57 -> S9;
-            case 58 -> S9;
-            case 59 -> S9;
-            case 60 -> S9; // CORE sample 9 G#5
-            case 61 -> S9;
-            case 62 -> S9;
-            case 63 -> S9;
-            case 64 -> S10;
-            case 65 -> S10;
-            case 66 -> S10;
-            case 67 -> S10; // CORE sample 10 D#6
-            case 68 -> S10;
-            case 69 -> S10;
-            case 70 -> S10;
-            case 71 -> S11;
-            case 72 -> S11;
-            case 73 -> S11;
-            case 74 -> S11;  // CORE sample 11 A#6
-            case 75 -> S11;
-            case 76 -> S11;
-            case 77 -> S11;
-            case 78 -> S12;
-            case 79 -> S12;
-            case 80 -> S12;
-            case 81 -> S12; // CORE sample 12 F7
-            case 82 -> S12;
-            case 83 -> S12;
-            case 84 -> S12;
-            case 85 -> S13;
-            case 86 -> S13;
-            case 87 -> S13;
-            case 88 -> S13; // CORE sample 13 C8
-            default -> throw new IllegalStateException("Unexpected value: " + note.getKey());
-        };
+    public static void initPool() {
+        for (int i = 1; i < 8; i++) {
+            int[] temp = new int[]{0,0};
+            rrPool.put("block.note_block.splendor_a_" + i, temp);
+        }
+        System.out.println("LOADING POOL");
+        rrPool.entrySet().forEach(entry -> {
+            System.out.println(entry.getKey() + " " +Arrays.toString(entry.getValue()));
+        });
     }
 
-    public static String getTargetSample() {
-        return targetSample;
+
+    public static void rrPoolInterface(String sample, int key, long tick) {
+        int[] temp = rrPool.get(sample);
+        System.out.println("SAMPLE PASSED IN IS: ");
+        temp[0] = temp[0] + 1;
+        temp[1] = (int) tick;
+        rrPool.put(sample,temp);
+        rrPool.entrySet().forEach(entry -> {
+            System.out.println(entry.getKey() + " " +Arrays.toString(entry.getValue()));
+        });
     }
 
-    public static void setTargetSample(String t) {
-        targetSample = t;
-    }
+
     public static String advSample2(Note note) {
 
         String temp = "block.note_block." +getTargetSample() + "_";
@@ -152,6 +71,8 @@ public class Note {
         }
         return "null";
     }
+
+
     public static float advFreq(Note note) {
         int pitch = (note.getKey() % 12 - 6);
         //System.out.println("Final pitch: " + pitch);
@@ -159,8 +80,7 @@ public class Note {
             return (float) Math.pow(2,((double) pitch / 12));
         }
 
-//pitch = 2^((((note_key - 33) + (note_pitch / 100)) - 12) / 12)
-    public Note(long tick, int key, int velocity, int bank, long mcTick, String sample, float freq, int channel,float dataF1) {
+        public Note(long tick, int key, int velocity, int bank, long mcTick, String sample, float freq, int channel,float dataF1) {
         this.tick = tick;
         this.mcTick = mcTick;
         this.key = key;
@@ -187,6 +107,15 @@ public class Note {
                 '}' + "\n";
     }
 
+
+    public static String getTargetSample() {
+        return targetSample;
+    }
+
+    public static void setTargetSample(String t) {
+        targetSample = t;
+    }
+
     public int getChannel() {
         return channel;
     }
@@ -199,7 +128,7 @@ public class Note {
         return tick;
     }
 
-    public void setTick(long tick) {
+    public void setTick(int tick) {
         this.tick = tick;
     }
 

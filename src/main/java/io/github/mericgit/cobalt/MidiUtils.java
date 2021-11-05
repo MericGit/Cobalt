@@ -110,7 +110,7 @@ public class MidiUtils {
 
          */
         System.out.println("Note Sequence");
-        System.out.println(calculateTimeConverter(bubbleSort(noteSequence)));
+        //System.out.println(calculateTimeConverter(bubbleSort(noteSequence)));
         //System.out.println(convertNonDelta(updateMcTick(bubbleSort(noteSequence))));
         finalProcess = calculateTimeConverter(convertNonDelta(bubbleSort(noteSequence)));
 
