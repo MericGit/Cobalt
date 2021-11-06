@@ -15,15 +15,20 @@ public class Note {
     private String sample;
     private float freq;
     private int channel;
-    private double timeConv;
+    private static float timeConv;
     private static String targetSample;
     private float dataF1;
     private static HashMap<String, int[]> rrPool =new HashMap<String, int[]>();
 
 
+    public static void updateRRTimeConv(float tempo, int PPQ) {
+        System.out.println("RR TIME CONV WAS UPDATED!");
+        timeConv = ((float) 60000 / (tempo * PPQ));
+    }
+
     public static void initPool() {
         for (int i = 1; i < 8; i++) {
-            int[] temp = new int[]{0,0};
+            int[] temp = new int[]{1,0};
             rrPool.put("block.note_block.splendor_a_" + i, temp);
         }
         System.out.println("LOADING POOL");
@@ -35,13 +40,21 @@ public class Note {
 
     public static void rrPoolInterface(String sample, int key, long tick) {
         int[] temp = rrPool.get(sample);
-        System.out.println("SAMPLE PASSED IN IS: ");
-        temp[0] = temp[0] + 1;
+        //System.out.println("SAMPLE PASSED IN IS: ");
+        //System.out.println("DIFF IS: " + String.valueOf((tick * timeConv) - (temp[1] * timeConv)));
+        //System.out.println("timeConv is: " + timeConv);
+        if (temp[0] > 14 || (tick * timeConv) - (temp[1] * timeConv) > 1000) {
+            temp[0] = 1;
+        }
+        else {
+            temp[0] = temp[0] + 1;
+        }
         temp[1] = (int) tick;
         rrPool.put(sample,temp);
         rrPool.entrySet().forEach(entry -> {
-            System.out.println(entry.getKey() + " " +Arrays.toString(entry.getValue()));
+            System.out.print("SAMPLE: " + entry.getKey().substring(28) + " | " +Arrays.toString(entry.getValue()) + " | ");
         });
+        System.out.println();
     }
 
 
@@ -175,11 +188,6 @@ public class Note {
     public float getFreq() {
         return freq;
     }
-
-    public void setTimeConv(double timeConv) {
-        this.timeConv = timeConv;
-    }
-
     public float getDataF1() {
         return dataF1;
     }
@@ -191,12 +199,7 @@ public class Note {
     public void setFreq(float freq) {
         this.freq = freq;
     }
-    public void setTimeConv(float timeConv) {
-        this.timeConv = timeConv;
-    }
-    public double getTimeConv() {
-        return timeConv;
-    }
+
 }
 
 

@@ -14,7 +14,7 @@ public class MidiUtils {
     private static final int META_END_OF_TRACK_TYPE = 0x2F;
     private static final int META_TEMPO_TYPE = 0x51;
     private static int PPQ;
-    public static double gTempo;
+    private static double gTempo;
     private static ArrayList<Note> finalProcess;
     private static double timeConverter;
     private static long currentTick = 0;
@@ -23,7 +23,7 @@ public class MidiUtils {
         MidiFileFormat midiFile = MidiSystem.getMidiFileFormat(file);
         Sequencer sequencer = MidiSystem.getSequencer(false);
         sequencer.setSequence(sequence);
-        gTempo = (int) sequencer.getTempoInBPM();
+        gTempo = sequencer.getTempoInBPM();
         System.out.println("Old Tempo: " + gTempo);
         PPQ = midiFile.getResolution();
         System.out.println("PPQ IS: " + PPQ);
@@ -112,9 +112,17 @@ public class MidiUtils {
         System.out.println("Note Sequence");
         //System.out.println(calculateTimeConverter(bubbleSort(noteSequence)));
         //System.out.println(convertNonDelta(updateMcTick(bubbleSort(noteSequence))));
+        //System.out.print(calculateTimeConverter(convertNonDelta(bubbleSort(noteSequence))));
         finalProcess = calculateTimeConverter(convertNonDelta(bubbleSort(noteSequence)));
 
-        return noteSequence;
+        return finalProcess;
+    }
+
+    public static int getPPQ() {
+        return PPQ;
+    }
+    public static float getTempo() {
+        return (float) gTempo;
     }
 
     private static String calcSample(int key) {
@@ -127,14 +135,6 @@ public class MidiUtils {
 
     public static ArrayList<Note> getFinalProcess() {
         return finalProcess;
-    }
-
-    private static ArrayList<Note> updateMcTick(ArrayList<Note> soundProcess) {
-        for (int i =0; i < soundProcess.size(); i++) {
-            soundProcess.get(i).setMcTick(Math.round(soundProcess.get(i).getTick() * soundProcess.get(i).getTimeConv() ));
-
-        }
-        return soundProcess;
     }
 
     private static ArrayList<Note> calculateTimeConverter(ArrayList<Note> soundProcess) {
