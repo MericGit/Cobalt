@@ -14,8 +14,8 @@ public class TempMidi {
         File directory = new File("./");
         System.out.println(directory.getAbsolutePath());
         Note.setTargetSample("splendor_a");
-        MidiUtils.midiToNoteSequence(new File("C:\\Users\\dongd\\Documents\\MC Server\\plugins\\Cobalt\\songs\\" +"wedding.mid"));
-        //MidiUtils.midiToNoteSequence(new File("/Users/lawrence.zhang/Documents/MC Server/plugins/Cobalt/songs/" +"runlads.mid"));
+        //MidiUtils.midiToNoteSequence(new File("C:\\Users\\dongd\\Documents\\MC Server\\plugins\\Cobalt\\songs\\" +"wedding.mid"));
+        MidiUtils.midiToNoteSequence(new File("/Users/lawrence.zhang/Documents/MC Server/plugins/Cobalt/songs/" +"clair.mid"));
 
         TestEngine.playSoundProcess(MidiUtils.getFinalProcess());
 

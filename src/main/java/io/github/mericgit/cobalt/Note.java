@@ -22,8 +22,10 @@ public class Note {
 
 
     public static void updateRRTimeConv(float tempo, int PPQ) {
-        System.out.println("RR TIME CONV WAS UPDATED!");
+        System.out.print("RR TIME CONV WAS UPDATED! OLD: " + timeConv);
         timeConv = ((float) 60000 / (tempo * PPQ));
+        System.out.println("| NEW + " + timeConv);
+
     }
 
     public static void initPool() {
@@ -51,6 +53,7 @@ public class Note {
         }
         temp[1] = (int) tick;
         rrPool.put(sample,temp);
+        System.out.print("TIMECONV " + timeConv + " | ");
         rrPool.entrySet().forEach(entry -> {
             System.out.print("SAMPLE: " + entry.getKey().substring(28) + " | " +Arrays.toString(entry.getValue()) + " | ");
         });
