@@ -40,7 +40,7 @@ public class Note {
     }
 
 
-    public static void rrPoolInterface(String sample, int key, long tick) {
+    public static int rrPoolInterface(String sample, int key, long tick) {
         int[] temp = rrPool.get(sample);
         //System.out.println("SAMPLE PASSED IN IS: ");
         //System.out.println("DIFF IS: " + String.valueOf((tick * timeConv) - (temp[1] * timeConv)));
@@ -54,10 +54,14 @@ public class Note {
         temp[1] = (int) tick;
         rrPool.put(sample,temp);
         System.out.print("TIMECONV " + timeConv + " | ");
+        /*
         rrPool.entrySet().forEach(entry -> {
             System.out.print("SAMPLE: " + entry.getKey().substring(28) + " | " +Arrays.toString(entry.getValue()) + " | ");
         });
+         */
         System.out.println();
+        return rrPool.get(sample)[0];
+
     }
 
 
