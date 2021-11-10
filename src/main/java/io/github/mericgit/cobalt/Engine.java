@@ -1,11 +1,8 @@
 package io.github.mericgit.cobalt;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
-import javax.sound.midi.*;
 import java.util.ArrayList;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -14,16 +11,18 @@ public class Engine {
     public static void playSoundProcess(Player player, ArrayList<Note> soundProcess) {
         ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
         Note.updateRRTimeConv(MidiUtils.getTempo(),MidiUtils.getPPQ());
-        System.out.println("TEMPO: " + MidiUtils.getTempo());
-        System.out.println("PPQ" + MidiUtils.getPPQ());
         System.out.println(MidiUtils.getFinalProcess());
         executor.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
                 if (MidiUtils.getFinalProcess().size() > 1  )
                     playSound(player, MidiUtils.getFinalProcess());
+                else {
+                    executor.shutdown();
+                    System.out.print("TERMINATED THREAD");
+                }
             }
-        }, 1500,1, TimeUnit.MILLISECONDS);
+        }, 1000,1, TimeUnit.MILLISECONDS);
     }
 
 
@@ -32,7 +31,6 @@ public class Engine {
 
     private static void playSound(Player player, ArrayList<Note> soundProcess) {
         if (soundProcess.get(0).getMcTick() <= 0 ) {
-            //System.out.println("CURRENT: " + soundProcess.get(0));
             if (soundProcess.get(0).getVelocity() != 0 && soundProcess.get(0).getDataF1() == 0 && !soundProcess.get(0).getSample().equals("TBD")) {
                 player.sendMessage(ChatColor.GOLD + " Current tick: " + ChatColor.WHITE + soundProcess.get(0).getTick() + ChatColor.GREEN + " Playing note: " + ChatColor.AQUA + soundProcess.get(0).getKey() + " At sample " + soundProcess.get(0).getSample() + " At Volume " + ( (float) soundProcess.get(0).getVelocity() / 127) + " Accuracy: " + soundProcess.get(0).getMcTick());
                 player.playSound(player.getLocation(),soundProcess.get(0).getSample(), ( (float) soundProcess.get(0).getVelocity() / 127), Note.advFreq(soundProcess.get(0)));

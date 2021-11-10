@@ -32,7 +32,7 @@ public class Note {
     public static void initPool() {
         for (int i = 1; i < 8; i++) {
             int[] temp = new int[]{1,0};
-            rrPool.put("block.note_block.splendor_b_" + i, temp);
+            rrPool.put("block.note_block." + targetSample + "_" + i, temp);
         }
         System.out.println("LOADING POOL");
         rrPool.entrySet().forEach(entry -> {

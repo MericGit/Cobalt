@@ -37,7 +37,6 @@ public class TestEngine {
     public static void playSoundProcess(ArrayList<Note> soundProcess) throws MidiUnavailableException {
         System.out.println("REAL FINAL ");
         //System.out.println(soundProcess);
-        Note.initPool();
         Note.updateRRTimeConv(MidiUtils.getTempo(),MidiUtils.getPPQ());
         System.out.println("TEMPO: " + MidiUtils.getTempo());
         System.out.println("PPQ" + MidiUtils.getPPQ());
@@ -47,22 +46,24 @@ public class TestEngine {
             public void run() {
                 if (MidiUtils.getFinalProcess().size() > 1  )
                     playSound(MidiUtils.getFinalProcess());
+                else {
+                    executor.shutdown();
+                    System.out.print("TERMINATED THREAD");
+                }
+
             }
         }, 1000,1, TimeUnit.MILLISECONDS);
+
     }
 
     private static void playSound(ArrayList<Note> soundProcess) {
         try {
             if (soundProcess.get(0).getMcTick() <= 0) {
-                //System.out.println("CURRENT: " + soundProcess.get(0));
                 if(soundProcess.get(0).getVelocity() != 0 && soundProcess.get(0).getDataF1() == 0) {
                     channels[soundProcess.get(0).getChannel()].noteOn(soundProcess.get(0).getKey(),soundProcess.get(0).getVelocity());
-                    //Note.rrPoolInterface(Note.advSample2(soundProcess.get(0)),soundProcess.get(0).getTick());
-                   //System.out.println("tick " + soundProcess.get(0).getTick());
+
                 }
                 else if (soundProcess.get(0).getDataF1() == 1) {
-                    //Note.updateRRTimeConv(soundProcess.get(0).getFreq(),MidiUtils.getPPQ());
-
                 }
                 else if (soundProcess.get(0).getVelocity() == 0) {
                     channels[soundProcess.get(0).getChannel()].noteOff(soundProcess.get(0).getKey(),soundProcess.get(0).getVelocity());
@@ -70,10 +71,6 @@ public class TestEngine {
                 soundProcess.remove(0);
             }
             soundProcess.get(0).setMcTick(soundProcess.get(0).getMcTick()-1);
-            //System.out.println("MIDI Ticks: " + soundProcess.get(0).getTick());
-            //System.out.println("Mc Ticks: " +  soundProcess.get(0).getMcTick());
-
-            //System.out.println("Thread stop!");
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -4,7 +4,6 @@ package io.github.mericgit.cobalt;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import java.io.File;
 import java.util.ArrayList;
 
 
@@ -33,11 +32,6 @@ public class ResourcePackBuilder {
     }
 
     public static void generateSoundsJson() {
-        System.out.println("AMOOGSUS");
-        File directory = new File("./");
-        System.out.println(directory.getAbsolutePath());
-
-
 
         for (int i = 1; i <= 7; i++) {
             eventNames.add(sample + i);
@@ -55,7 +49,6 @@ public class ResourcePackBuilder {
                 JSONArray sounds = new JSONArray();
                 sounds.add(fileNames.get(i));
                 soundEvent.put("sounds",sounds);
-                soundEvent.put("subtitle","subtitles.block.note_block.note");
                 soundEventsMaster.put(eventNames.get(i)+"_"+j,soundEvent);
             }
         }

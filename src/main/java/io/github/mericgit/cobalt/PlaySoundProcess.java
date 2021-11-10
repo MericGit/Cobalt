@@ -1,20 +1,15 @@
 package io.github.mericgit.cobalt;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.jetbrains.annotations.NotNull;
-
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+
 public class PlaySoundProcess implements CommandExecutor {
-    // This method is called, when somebody uses our command
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player) {
@@ -33,7 +28,7 @@ public class PlaySoundProcess implements CommandExecutor {
                     Engine.playSoundProcess(player, MidiUtils.midiToNoteSequence(target));
                 } catch (Exception e) {
                     e.printStackTrace();
-                    Bukkit.getServer().broadcastMessage("!!!Yo this bugged!!! sheesh");
+                    player.sendMessage(ChatColor.RED +"!!!Yo this bugged!!! Sus!");
                 }
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
