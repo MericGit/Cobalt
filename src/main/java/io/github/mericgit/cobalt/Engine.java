@@ -16,6 +16,7 @@ public class Engine {
         Note.updateRRTimeConv(MidiUtils.getTempo(),MidiUtils.getPPQ());
         System.out.println("TEMPO: " + MidiUtils.getTempo());
         System.out.println("PPQ" + MidiUtils.getPPQ());
+        System.out.println(MidiUtils.getFinalProcess());
         executor.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
@@ -30,23 +31,21 @@ public class Engine {
 
 
     private static void playSound(Player player, ArrayList<Note> soundProcess) {
-
-        if (soundProcess.get(0).getMcTick() <= 0) {
+        if (soundProcess.get(0).getMcTick() <= 0 ) {
             //System.out.println("CURRENT: " + soundProcess.get(0));
-            if (soundProcess.get(0).getVelocity() != 0 && soundProcess.get(0).getDataF1() == 0) {
-                soundProcess.get(0).setSample(String.valueOf(soundProcess.get(0).getKey() - 48));
-                soundProcess.get(0).setFreq(Note.advFreq(soundProcess.get(0)));
-                player.sendMessage(ChatColor.RED + " Current tick: " + ChatColor.GREEN + soundProcess.get(0).getTick() + ChatColor.GOLD + " Playing note: " + ChatColor.AQUA + soundProcess.get(0).getKey() + " At sample " + Note.advSample2(soundProcess.get(0)) + " At freq " + Note.advFreq(soundProcess.get(0)) + " At Volume " + ( (float) soundProcess.get(0).getVelocity() / 127) + " Accuracy: " + soundProcess.get(0).getMcTick());
-                player.playSound(player.getLocation(), Note.advSample2(soundProcess.get(0)), ( (float) soundProcess.get(0).getVelocity() / 127), Note.advFreq(soundProcess.get(0)));
-            } else if (soundProcess.get(0).getDataF1() == 1) {
-                Note.updateRRTimeConv(soundProcess.get(0).getFreq(),MidiUtils.getPPQ());
+            if (soundProcess.get(0).getVelocity() != 0 && soundProcess.get(0).getDataF1() == 0 && !soundProcess.get(0).getSample().equals("TBD")) {
+                player.sendMessage(ChatColor.GOLD + " Current tick: " + ChatColor.WHITE + soundProcess.get(0).getTick() + ChatColor.GREEN + " Playing note: " + ChatColor.AQUA + soundProcess.get(0).getKey() + " At sample " + soundProcess.get(0).getSample() + " At Volume " + ( (float) soundProcess.get(0).getVelocity() / 127) + " Accuracy: " + soundProcess.get(0).getMcTick());
+                player.playSound(player.getLocation(),soundProcess.get(0).getSample(), ( (float) soundProcess.get(0).getVelocity() / 127), Note.advFreq(soundProcess.get(0)));
+            }
+            else if (soundProcess.get(0).getVelocity() == 0 && soundProcess.get(0).getDataF1() == 0 && !soundProcess.get(0).getSample().equals("TBD")) {
+                player.stopSound(soundProcess.get(0).getSample());
+                player.sendMessage(ChatColor.GOLD + " Current tick: " + ChatColor.WHITE + soundProcess.get(0).getTick() + ChatColor.RED + " Stopping note: " + ChatColor.AQUA + soundProcess.get(0).getKey() + " At sample " + soundProcess.get(0).getSample()  + " At Volume " + ( (float) soundProcess.get(0).getVelocity() / 127) + " Accuracy: " + soundProcess.get(0).getMcTick());
+
             }
             soundProcess.remove(0);
         }
         soundProcess.get(0).setMcTick(soundProcess.get(0).getMcTick() - 1);
     }
-
-
 }
 
 

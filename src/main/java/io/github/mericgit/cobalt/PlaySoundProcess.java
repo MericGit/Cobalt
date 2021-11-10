@@ -18,6 +18,7 @@ public class PlaySoundProcess implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player) {
+            Note.initPool();
             String path = Cobalt.getPlugin().getDataFolder().getAbsolutePath();
             String decodedPath;
             try {

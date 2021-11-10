@@ -37,18 +37,15 @@ public class ResourcePackBuilder {
         File directory = new File("./");
         System.out.println(directory.getAbsolutePath());
 
-        ArrayList<String> eventName = new ArrayList<>();
-        ArrayList<String> fileName = new ArrayList<>();
-         sample = "block.note_block.splendor_a_";
-         file = "block/note_block/splendor_a_";
+
 
         for (int i = 1; i <= 7; i++) {
-            eventName.add(sample + i);
-            fileName.add(file + i);
+            eventNames.add(sample + i);
+            fileNames.add(file + i);
         }
 
-        System.out.println(eventName);
-        System.out.println(fileName);
+        System.out.println(eventNames);
+        System.out.println(fileNames);
 
 
         JSONObject soundEventsMaster = new JSONObject();
@@ -56,10 +53,10 @@ public class ResourcePackBuilder {
             for (int j = 1; j<16; j++) {
                 JSONObject soundEvent = new JSONObject();
                 JSONArray sounds = new JSONArray();
-                sounds.add(fileName.get(i));
+                sounds.add(fileNames.get(i));
                 soundEvent.put("sounds",sounds);
                 soundEvent.put("subtitle","subtitles.block.note_block.note");
-                soundEventsMaster.put(eventName.get(i)+"_"+j,soundEvent);
+                soundEventsMaster.put(eventNames.get(i)+"_"+j,soundEvent);
             }
         }
         System.out.println(soundEventsMaster);
