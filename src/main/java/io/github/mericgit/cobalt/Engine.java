@@ -36,7 +36,11 @@ public class Engine {
                 player.playSound(player.getLocation(),soundProcess.get(0).getSample(), ( (float) soundProcess.get(0).getVelocity() / 127), Note.advFreq(soundProcess.get(0)));
             }
             else if (soundProcess.get(0).getVelocity() == 0 && soundProcess.get(0).getDataF1() == 0 && !soundProcess.get(0).getSample().equals("TBD")) {
+                String sample = soundProcess.get(0).getSample().substring(0, soundProcess.get(0).getSample().lastIndexOf('_')).replaceFirst("_s_","_r_");
+                //System.out.println(sample);
+                player.playSound(player.getLocation(),sample, ( (float) 1), Note.advFreq(soundProcess.get(0)));
                 player.stopSound(soundProcess.get(0).getSample());
+
                 player.sendMessage(ChatColor.GOLD + " Current tick: " + ChatColor.WHITE + soundProcess.get(0).getTick() + ChatColor.RED + " Stopping note: " + ChatColor.AQUA + soundProcess.get(0).getKey() + " At sample " + soundProcess.get(0).getSample()  + " At Volume " + ( (float) soundProcess.get(0).getVelocity() / 127) + " Accuracy: " + soundProcess.get(0).getMcTick());
 
             }

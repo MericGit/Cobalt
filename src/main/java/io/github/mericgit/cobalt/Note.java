@@ -19,7 +19,7 @@ public class Note {
     private static float timeConv;
     private static String targetSample;
     private float dataF1;
-    private static HashMap<String, int[]> rrPool =new HashMap<String, int[]>();
+    private static final HashMap<String, int[]> rrPool =new HashMap<String, int[]>();
 
 
     public static void updateRRTimeConv(float tempo, int PPQ) {
@@ -29,17 +29,17 @@ public class Note {
 
     }
 
-    public static void initPool() {
-        for (int i = 1; i < 8; i++) {
-            int[] temp = new int[]{1,0};
-            rrPool.put("block.note_block." + targetSample + "_" + i, temp);
-        }
-        System.out.println("LOADING POOL");
+    public static void updatePool(String sample, int[] data) {
+        rrPool.put(sample, data);
+    }
+    public static HashMap<String, int[]> getRRPool() {
+        return rrPool;
+    }
+    public static void RRPoolToString() {
         rrPool.entrySet().forEach(entry -> {
-            System.out.println(entry.getKey() + " " +Arrays.toString(entry.getValue()));
+            System.out.println("SAMPLE: " + entry.getKey() + " | " +Arrays.toString(entry.getValue()) + " | ");
         });
     }
-
 
     public static int rrPoolInterface(String sample, long tick) {
         int[] temp = rrPool.get(sample);
@@ -90,36 +90,57 @@ public class Note {
     public static String advSample2(Note note) {
 
         String temp = "block.note_block." +getTargetSample() + "_";
-        if (note.getKey() <= 36) {
-            return temp + "1";
+        if (note.getKey() <= 24) {
+            return temp + "01";
         }
-        else if (note.getKey() <= 48) {
-            return  temp + "2";
+        else if (note.getKey() <= 31) {
+            return  temp + "02";
         }
-        else if (note.getKey() <= 60) {
-            return  temp + "3";
+        else if (note.getKey() <= 38) {
+            return  temp + "03";
         }
-        else if (note.getKey() <= 72) {
-            return  temp + "4";
+        else if (note.getKey() <= 45) {
+            return  temp + "04";
         }
-        else if (note.getKey() <= 84) {
-            return  temp + "5";
+        else if (note.getKey() <= 52) {
+            return  temp + "05";
         }
-        else if (note.getKey() <= 96) {
-            return  temp + "6";
+        else if (note.getKey() <= 59) {
+            return  temp + "06";
         }
-        else if (note.getKey() <= 108) {
-            return  temp + "7";
+        else if (note.getKey() <= 66) {
+            return  temp + "07";
+        }
+        else if (note.getKey() <= 73) {
+            return  temp + "08";
+        }
+        else if (note.getKey() <= 80) {
+            return  temp + "09";
+        }
+        else if (note.getKey() <= 87) {
+            return  temp + "10";
+        }
+        else if (note.getKey() <= 94) {
+            return  temp + "11";
+        }
+        else if (note.getKey() <= 101) {
+            return  temp + "12";
         }
         return "null";
     }
 
 
     public static float advFreq(Note note) {
-        int pitch = (note.getKey() % 12 - 6);
+        int interval = 0;
+        for (int i = 0; i < 12; i++) {
+            if (note.getKey() - (24 + 7*i) <= 0)
+                interval +=i;
+        }
+        int root = 24 + interval * 7;
+
         //System.out.println("Final pitch: " + pitch);
         //System.out.println("Resulting pitch math: " + Float.toString((float) Math.pow(2,((double) pitch / 12))));
-            return (float) Math.pow(2,((double) pitch / 12));
+            return (float) Math.pow(2,((double) (-1 * (root - note.getKey())) / 12));
         }
 
         public Note(long tick, int key, int velocity, int bank, long mcTick, String sample, float freq, int channel,float dataF1) {

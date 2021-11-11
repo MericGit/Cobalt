@@ -5,10 +5,10 @@ import java.util.ArrayList;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 public class TestEngine {
-    private static MidiChannel[] channels;
+    private static final MidiChannel[] channels;
     private static Synthesizer synth;
-    private static MidiChannel midiChannel;
-    private static Instrument currentInstrument;
+    private static final MidiChannel midiChannel;
+    private static final Instrument currentInstrument;
 
 
     static {
@@ -30,8 +30,8 @@ public class TestEngine {
         midiChannel.programChange(currentInstrument.getPatch().getBank(), currentInstrument.getPatch().getProgram());
     }
 
-    private static int channel = 0; // 0 is a piano, 9 is percussion, other channels are for other instruments
-    private static int duration = 200; // in milliseconds
+    private static final int channel = 0; // 0 is a piano, 9 is percussion, other channels are for other instruments
+    private static final int duration = 200; // in milliseconds
 
 
     public static void playSoundProcess(ArrayList<Note> soundProcess) throws MidiUnavailableException {
