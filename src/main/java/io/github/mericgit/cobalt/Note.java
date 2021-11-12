@@ -1,13 +1,10 @@
 package io.github.mericgit.cobalt;
 
-import org.bukkit.Bukkit;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
 public class Note {
-
     private long tick;
     private int key;
     private int velocity;
@@ -19,14 +16,24 @@ public class Note {
     private static float timeConv;
     private static String targetSample;
     private float dataF1;
+    private float duration;
     private static final HashMap<String, int[]> rrPool =new HashMap<String, int[]>();
 
-
+    public Note(long tick, int key, int velocity, int bank, long mcTick, String sample, float freq, int channel,float duration, float dataF1) {
+        this.tick = tick;
+        this.mcTick = mcTick;
+        this.key = key;
+        this.velocity = velocity;
+        this.bank = bank;
+        this.sample = sample;
+        this.freq = freq;
+        this.channel = channel;
+        this.dataF1 = dataF1;
+    }
     public static void updateRRTimeConv(float tempo, int PPQ) {
         //System.out.print("RR TIME CONV WAS UPDATED! OLD: " + timeConv);
         timeConv = ((float) 60000 / (tempo * PPQ));
         //System.out.println("| NEW + " + timeConv);
-
     }
 
     public static void updatePool(String sample, int[] data) {
@@ -40,7 +47,6 @@ public class Note {
             System.out.println("SAMPLE: " + entry.getKey() + " | " +Arrays.toString(entry.getValue()) + " | ");
         });
     }
-
     public static int rrPoolInterface(String sample, long tick) {
         int[] temp = rrPool.get(sample);
         //System.out.println("SAMPLE PASSED IN IS: ");
@@ -63,7 +69,6 @@ public class Note {
         System.out.println();
          */
         return rrPool.get(sample)[0];
-
     }
 
     public static ArrayList<Note> calcRR(ArrayList<Note> soundProcess) {
@@ -74,6 +79,7 @@ public class Note {
                 for (int j = i; j < soundProcess.size(); j++) {
                     if (soundProcess.get(j).getKey() == soundProcess.get(i).getKey() && soundProcess.get(j).getVelocity() == 0) {
                         soundProcess.get(j).setSample(eventName);
+                        soundProcess.get(i).setDuration((soundProcess.get(i).getTick() * timeConv) - (soundProcess.get(j).getTick() * timeConv));
                         break;
                     }
                 }
@@ -81,14 +87,10 @@ public class Note {
             else if (soundProcess.get(i).getDataF1() == 1) {
                 Note.updateRRTimeConv(soundProcess.get(i).getFreq(),MidiUtils.getPPQ());
             }
-
         }
         return soundProcess;
     }
-
-
     public static String advSample2(Note note) {
-
         String temp = "block.note_block." +getTargetSample() + "_";
         if (note.getKey() <= 24) {
             return temp + "01";
@@ -126,9 +128,8 @@ public class Note {
         else if (note.getKey() <= 101) {
             return  temp + "12";
         }
-        return "null";
+        return temp + "01";
     }
-
 
     public static float advFreq(Note note) {
         int interval = 0;
@@ -137,22 +138,7 @@ public class Note {
                 interval +=i;
         }
         int root = 24 + interval * 7;
-
-        //System.out.println("Final pitch: " + pitch);
-        //System.out.println("Resulting pitch math: " + Float.toString((float) Math.pow(2,((double) pitch / 12))));
-            return (float) Math.pow(2,((double) (-1 * (root - note.getKey())) / 12));
-        }
-
-        public Note(long tick, int key, int velocity, int bank, long mcTick, String sample, float freq, int channel,float dataF1) {
-        this.tick = tick;
-        this.mcTick = mcTick;
-        this.key = key;
-        this.velocity = velocity;
-        this.bank = bank;
-        this.sample = sample;
-        this.freq = freq;
-        this.channel = channel;
-        this.dataF1 = dataF1;
+        return (float) Math.pow(2,((double) (-1 * (root - note.getKey())) / 12));
     }
 
     @Override
@@ -169,7 +155,6 @@ public class Note {
                 ", dataF1=" + dataF1 +
                 '}' + "\n";
     }
-
 
     public static String getTargetSample() {
         return targetSample;
@@ -238,8 +223,17 @@ public class Note {
     public float getFreq() {
         return freq;
     }
+
     public float getDataF1() {
         return dataF1;
+    }
+
+    public float getDuration() {
+        return duration;
+    }
+
+    public void setDuration(float duration) {
+        this.duration = duration;
     }
 
     public void setDataF1(int dataF1) {
@@ -249,7 +243,6 @@ public class Note {
     public void setFreq(float freq) {
         this.freq = freq;
     }
-
 }
 
 

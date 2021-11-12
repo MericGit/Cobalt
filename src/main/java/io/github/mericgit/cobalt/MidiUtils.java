@@ -49,11 +49,11 @@ public class MidiUtils {
                         }
                         else {
                             gTempo = 60000000.0 / nTempo;
-                            noteSequence.add(new Note(currentTick + 1,0,0,0,0,"TEMPO_CHANGE", (float) gTempo,0, 1));
+                            noteSequence.add(new Note(currentTick + 1,0,0,0,0,"TEMPO_CHANGE", (float) gTempo,0, 0,1));
                         }
                     }
                     else if ((mm.getType() & 0xff) == META_END_OF_TRACK_TYPE && data !=null) {
-                        noteSequence.add(new Note(currentTick + 1,0,0,0,0,"TRACK_END", (float) gTempo,0, 3));
+                        noteSequence.add(new Note(currentTick + 1,0,0,0,0,"TRACK_END", (float) gTempo,0,0, 3));
                         System.out.println("End of track");
                     }
                 }
@@ -61,7 +61,7 @@ public class MidiUtils {
                     currentTick = event.getTick();
                     ShortMessage sm = (ShortMessage) message;
                     if (sm.getCommand() ==PROGRAM_CHANGE) {
-                        noteSequence.add(new Note(currentTick+1,sm.getData1(),0,0,0,"PROGRAM_CHANGE",0,0, 2));
+                        noteSequence.add(new Note(currentTick+1,sm.getData1(),0,0,0,"PROGRAM_CHANGE",0,0,0, 2));
                     }
                     if (sm.getCommand() == NOTE_ON && sm.getData2() != 0) {
                         int key = sm.getData1();
@@ -70,7 +70,7 @@ public class MidiUtils {
                         int channel = sm.getChannel();
                         long mcTick = 0;
                         int velocity = sm.getData2();
-                        noteSequence.add(new Note(tick, key, velocity, bank, mcTick,"TBD",1F,channel,0));
+                        noteSequence.add(new Note(tick, key, velocity, bank, mcTick,"TBD",1F,channel,0,0));
                         //System.out.print((new Note(tick, key, velocity, bank, mcTick,calcSample(key),calcFreq(key),channel,0)));
                     } else if (sm.getCommand() == NOTE_OFF || sm.getData2() == 0) {
                         int key = sm.getData1();
@@ -78,7 +78,7 @@ public class MidiUtils {
                         int bank = trackNumber;
                         int channel = sm.getChannel();
                         long mcTick = 0;
-                        noteSequence.add(new Note(tick, key, 0, bank, mcTick,"TBD",1F,channel,0));
+                        noteSequence.add(new Note(tick, key, 0, bank, mcTick,"TBD",1F,channel,0,0));
                     }
                 }
             }
@@ -105,15 +105,37 @@ public class MidiUtils {
         ArrayList<Note> copy = new ArrayList<>();
         copy.add(soundProcess.get(0));
         for (int i = 1; i < soundProcess.size(); i++) {
-            copy.add(new Note(soundProcess.get(i).getTick(), soundProcess.get(i).getKey(), soundProcess.get(i).getVelocity(), soundProcess.get(i).getBank(), (soundProcess.get(i).getTick() - soundProcess.get(i - 1).getTick()),soundProcess.get(i).getSample(),soundProcess.get(i).getFreq(),soundProcess.get(i).getChannel(),soundProcess.get(i).getDataF1()));
+            copy.add(new Note(soundProcess.get(i).getTick(), soundProcess.get(i).getKey(), soundProcess.get(i).getVelocity(), soundProcess.get(i).getBank(), (soundProcess.get(i).getTick() - soundProcess.get(i - 1).getTick()),soundProcess.get(i).getSample(),soundProcess.get(i).getFreq(),soundProcess.get(i).getChannel(),soundProcess.get(i).getDuration(), soundProcess.get(i).getDataF1()));
         }
         return copy;
     }
-    private static ArrayList<Note> quickSort (ArrayList < Note > soundProcess)
+
+    public void quickSort(ArrayList<Note> soundProcess, int begin, int end) {
+        if (begin < end) {
+            int partitionIndex = partition(soundProcess, begin, end);
+            quickSort(soundProcess, begin, partitionIndex-1);
+            quickSort(soundProcess, partitionIndex+1, end);
+        }
+    }
+
+    private int partition(ArrayList<Note> soundProcess, int begin, int end) {
+        long pivot = soundProcess.get(soundProcess.size() - 1).getTick();
+        int i = (begin-1);
+        for (int j = begin; j < end; j++) {
+            if (soundProcess.get(j).getTick() <= pivot) {
+                i++;
+                Collections.swap(soundProcess,i,j);
+            }
+        }
+        Collections.swap(soundProcess,(i+1),soundProcess.size() - 1);
+        return i+1;
+    }
+
+
+    private static ArrayList<Note> quickSort2 (ArrayList < Note > soundProcess)
     {
         if (soundProcess.size() <= 1)
             return soundProcess; // Already sorted
-
         ArrayList<Note> sorted = new ArrayList<Note>();
         ArrayList<Note> lesser = new ArrayList<Note>();
         ArrayList<Note> greater = new ArrayList<Note>();
@@ -124,14 +146,11 @@ public class MidiUtils {
             else
                 greater.add(soundProcess.get(i));
         }
-
-        lesser = quickSort(lesser);
-        greater = quickSort(greater);
-
+        lesser = quickSort2(lesser);
+        greater = quickSort2(greater);
         lesser.add(soundProcess.get(soundProcess.size() - 1));
         lesser.addAll(greater);
         sorted = lesser;
-
         return sorted;
     }
 

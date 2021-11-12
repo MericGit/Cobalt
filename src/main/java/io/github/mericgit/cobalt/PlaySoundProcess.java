@@ -14,20 +14,20 @@ public class PlaySoundProcess implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player) {
+            String filepath = "C:\\Users\\dongd\\Downloads\\Temp\\songTest.json";
             System.out.println("This ran");
-            ResourcePackBuilder.registerFiles("C:\\Users\\dongd\\Downloads\\Temp\\songTest.json");
+            ResourcePackBuilder.registerFiles(filepath);
             System.out.println("Same here");
             Note.RRPoolToString();
             String path = Cobalt.getPlugin().getDataFolder().getAbsolutePath();
-            String decodedPath;
-            decodedPath = URLDecoder.decode(path, StandardCharsets.UTF_8);
+            String decodedPath = URLDecoder.decode(path, StandardCharsets.UTF_8);
             Player player = (Player) sender;
             String file = args[0];
             Note.setTargetSample(args[1]);
             System.out.println(file);
             player.sendMessage(ChatColor.GOLD + "Running! " + ChatColor.AQUA + " Found file: " + ChatColor.GRAY + file);
             try {
-                File target = new File( path +"/songs/" + file);
+                File target = new File( path + "/songs/" + file);
                 Engine.playSoundProcess(player, MidiUtils.midiToNoteSequence(target));
             } catch (Exception e) {
                 e.printStackTrace();

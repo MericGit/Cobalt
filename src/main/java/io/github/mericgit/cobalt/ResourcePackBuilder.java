@@ -84,7 +84,7 @@ public class ResourcePackBuilder {
             }
         }
         System.out.println(songsSampleList);
-        try (FileWriter file = new FileWriter("C:\\Users\\dongd\\Downloads\\titan\\songTest.json")) {
+        try (FileWriter file = new FileWriter("/Users/lawrence.zhang/Documents/MC Server/plugins/Cobalt/samplepool/songTest.json")) {
             //We can write any JSONArray or JSONObject instance to the file
             file.write(songsSampleList.toJSONString());
             file.flush();
