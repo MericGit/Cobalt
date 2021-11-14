@@ -79,7 +79,7 @@ public class Note {
                 for (int j = i; j < soundProcess.size(); j++) {
                     if (soundProcess.get(j).getKey() == soundProcess.get(i).getKey() && soundProcess.get(j).getVelocity() == 0) {
                         soundProcess.get(j).setSample(eventName);
-                        soundProcess.get(i).setDuration((soundProcess.get(i).getTick() * timeConv) - (soundProcess.get(j).getTick() * timeConv));
+                        soundProcess.get(i).setDuration((soundProcess.get(j).getTick() * timeConv) - (soundProcess.get(i).getTick() * timeConv));
                         break;
                     }
                 }
@@ -125,7 +125,7 @@ public class Note {
         else if (note.getKey() <= 94) {
             return  temp + "11";
         }
-        else if (note.getKey() <= 101) {
+        else if (note.getKey() <= 127) {
             return  temp + "12";
         }
         return temp + "01";
@@ -134,8 +134,10 @@ public class Note {
     public static float advFreq(Note note) {
         int interval = 0;
         for (int i = 0; i < 12; i++) {
-            if (note.getKey() - (24 + 7*i) <= 0)
-                interval +=i;
+            if (note.getKey() - (24 + 7*i) <= 0) {
+                interval = i;
+                break;
+            }
         }
         int root = 24 + interval * 7;
         return (float) Math.pow(2,((double) (-1 * (root - note.getKey())) / 12));
@@ -152,6 +154,7 @@ public class Note {
                 ", sample='" + sample + '\'' +
                 ", freq=" + freq +
                 ", channel=" + channel +
+                ", duration=" + duration +
                 ", dataF1=" + dataF1 +
                 '}' + "\n";
     }

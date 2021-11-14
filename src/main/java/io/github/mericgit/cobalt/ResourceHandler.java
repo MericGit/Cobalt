@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ResourcePackBuilder {
+public class ResourceHandler {
 
     private static String sample;
     private static String file;

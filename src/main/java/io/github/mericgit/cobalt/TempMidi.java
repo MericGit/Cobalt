@@ -7,14 +7,14 @@ public class TempMidi {
 
     public static void main(String[] args) throws Exception {
         //ResourcePackBuilder.generateRPack("C:\\Users\\dongd\\Downloads\\titan");
-        //ResourcePackBuilder.generateSongJson("/Users/lawrence.zhang/Documents/MC Server/plugins/Cobalt/samplepool");
-        ResourcePackBuilder.registerFiles("/Users/lawrence.zhang/Documents/MC Server/plugins/Cobalt/samplepool/songTest.json");
+        //ResourcePackBuilder.generateSongJson("C:\\Users\\dongd\\Downloads\\titan");
+        ResourceHandler.registerFiles("C:\\Users\\dongd\\Downloads\\Temp\\songTest.json");
         Note.RRPoolToString();
         System.out.println("AMOOGSUS");
         File directory = new File("./");
         System.out.println(directory.getAbsolutePath());
-        Note.setTargetSample("genshin_piano");
-        MidiUtils.midiToNoteSequence(new File("/Users/lawrence.zhang/Documents/MC Server/plugins/Cobalt/songs/" + "clair.mid"));
+        Note.setTargetSample("titan_s");
+        MidiUtils.midiToNoteSequence(new File("C:\\Users\\dongd\\Documents\\MC Server\\plugins\\Cobalt\\songs\\" +"aquarium.mid"));
         TestEngine.playSoundProcess(MidiUtils.getFinalProcess());
     }
 }

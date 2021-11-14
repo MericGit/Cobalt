@@ -6,7 +6,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import java.io.File;
-import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 
@@ -16,7 +15,7 @@ public class PlaySoundProcess implements CommandExecutor {
         if (sender instanceof Player) {
             String filepath = "C:\\Users\\dongd\\Downloads\\Temp\\songTest.json";
             System.out.println("This ran");
-            ResourcePackBuilder.registerFiles(filepath);
+            ResourceHandler.registerFiles(filepath);
             System.out.println("Same here");
             Note.RRPoolToString();
             String path = Cobalt.getPlugin().getDataFolder().getAbsolutePath();
