@@ -40,7 +40,7 @@ public class ResourceHandler {
         JSONObject sampleObject = (JSONObject) sample.get("sample");
         if (sampleObject.get("type").equals("sus")) {
             int[] temp = new int[]{1, 0};
-            Note.updatePool("block.note_block." + sampleObject.get("name"), temp);
+            Mapper.updatePool("block.note_block." + sampleObject.get("name"), temp);
         }
     }
 

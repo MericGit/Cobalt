@@ -84,7 +84,7 @@ public class MidiUtils {
             }
         }
         System.out.println("Note Sequence");
-        finalProcess = Note.calcRR(calculateTimeConverter(convertNonDelta(bubbleSort(noteSequence))));
+        finalProcess = Mapper.calcRR(calculateTimeConverter(convertNonDelta(bubbleSort(noteSequence))));
         System.out.println(finalProcess);
         return finalProcess;
     }

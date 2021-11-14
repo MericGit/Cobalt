@@ -10,7 +10,7 @@ public class Engine {
 
     public static void playSoundProcess(Player player, ArrayList<Note> soundProcess) {
         ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
-        Note.updateRRTimeConv(MidiUtils.getTempo(),MidiUtils.getPPQ());
+        Mapper.updateRRTimeConv(MidiUtils.getTempo(),MidiUtils.getPPQ());
         System.out.println(MidiUtils.getFinalProcess());
         executor.scheduleAtFixedRate(new Runnable() {
             @Override

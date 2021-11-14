@@ -37,7 +37,7 @@ public class TestEngine {
     public static void playSoundProcess(ArrayList<Note> soundProcess) throws MidiUnavailableException {
         System.out.println("REAL FINAL ");
         //System.out.println(soundProcess);
-        Note.updateRRTimeConv(MidiUtils.getTempo(),MidiUtils.getPPQ());
+        Mapper.updateRRTimeConv(MidiUtils.getTempo(),MidiUtils.getPPQ());
         System.out.println("TEMPO: " + MidiUtils.getTempo());
         System.out.println("PPQ" + MidiUtils.getPPQ());
         ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);

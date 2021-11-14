@@ -17,7 +17,7 @@ public class PlaySoundProcess implements CommandExecutor {
             System.out.println("This ran");
             ResourceHandler.registerFiles(filepath);
             System.out.println("Same here");
-            Note.RRPoolToString();
+            Mapper.RRPoolToString();
             String path = Cobalt.getPlugin().getDataFolder().getAbsolutePath();
             String decodedPath = URLDecoder.decode(path, StandardCharsets.UTF_8);
             Player player = (Player) sender;
