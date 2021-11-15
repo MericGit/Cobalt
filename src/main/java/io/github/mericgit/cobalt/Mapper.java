@@ -20,6 +20,7 @@ public class Mapper {
     private float duration;
     private static final HashMap<String, int[]> rrPool =new HashMap<String, int[]>();
     private static final HashMap<Integer, String[]> instrumentPool = new HashMap<Integer, String[]>();
+    private static HashMap<Integer, Integer> midiInstrMap = new HashMap<>();
 
 
     public static void updateRRTimeConv(float tempo, int PPQ) {
@@ -81,6 +82,25 @@ public class Mapper {
             }
         }
         return soundProcess;
+    }
+
+    public static void initInstrMap(ArrayList<Note> soundProcess) {
+        for (int i = soundProcess.size() - 1; i >= 0; i--) {
+            if (soundProcess.get(i).getDataF1() == 2) {
+                midiInstrMap.put(soundProcess.get(i).getBank(),soundProcess.get(i).getKey());
+            }
+        }
+        midiInstrMap.entrySet().forEach(entry -> {
+            System.out.println("Instr Bank: " + entry.getKey() + " ID: " + entry.getValue() + " String val " + GmMapper(entry.getValue()));
+        });
+    }
+
+    public static void updateInstrMap(Note note) {
+        midiInstrMap.put(note.getBank(),note.getKey());
+    }
+
+    public static HashMap<Integer, Integer> getMidiInstrMap() {
+        return midiInstrMap;
     }
 
 

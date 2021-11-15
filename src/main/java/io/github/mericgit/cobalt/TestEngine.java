@@ -8,7 +8,7 @@ public class TestEngine {
     private static final MidiChannel[] channels;
     private static Synthesizer synth;
     private static final MidiChannel midiChannel;
-    private static final Instrument currentInstrument;
+    private static Instrument currentInstrument;
 
 
     static {
@@ -58,12 +58,23 @@ public class TestEngine {
 
     private static void playSound(ArrayList<Note> soundProcess) {
         try {
+            if (soundProcess.get(0).getDataF1() == 2) {
+                Mapper.updateInstrMap(soundProcess.get(0));
+            }
             if (soundProcess.get(0).getMcTick() <= 0) {
                 if(soundProcess.get(0).getVelocity() != 0 && soundProcess.get(0).getDataF1() == 0) {
+                    if (Mapper.getMidiInstrMap().get(soundProcess.get(0).getBank()) != null) {
+                        currentInstrument = synth.getAvailableInstruments()[Mapper.getMidiInstrMap().get(soundProcess.get(0).getBank())];
+                    }
+                    else {
+                        currentInstrument = synth.getAvailableInstruments()[40];
+                        System.out.println(soundProcess.get(0).getBank());
+                        System.out.println("No registered INSTR");
+                    }
+                    synth.loadInstrument(currentInstrument);
+                    midiChannel.programChange(currentInstrument.getPatch().getBank(), currentInstrument.getPatch().getProgram());
                     channels[soundProcess.get(0).getChannel()].noteOn(soundProcess.get(0).getKey(),soundProcess.get(0).getVelocity());
 
-                }
-                else if (soundProcess.get(0).getDataF1() == 1) {
                 }
                 else if (soundProcess.get(0).getVelocity() == 0) {
                     channels[soundProcess.get(0).getChannel()].noteOff(soundProcess.get(0).getKey(),soundProcess.get(0).getVelocity());

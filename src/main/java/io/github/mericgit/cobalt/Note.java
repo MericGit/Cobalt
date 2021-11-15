@@ -86,12 +86,11 @@ public class Note {
 
     public static String calcArtic(Note note) {
         float duration = note.getDuration();
-        if (duration < 250) {
+        if (duration <= 250 && note.getBank() > 5) {
             return "_s";
-        } else if (duration > 250) {
+        } else {
             return "_a";
         }
-        return note.getSample();
     }
 
     @Override

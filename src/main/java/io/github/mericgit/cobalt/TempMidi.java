@@ -8,13 +8,14 @@ public class TempMidi {
     public static void main(String[] args) throws Exception {
         //ResourcePackBuilder.generateRPack("C:\\Users\\dongd\\Downloads\\titan");
         //ResourcePackBuilder.generateSongJson("C:\\Users\\dongd\\Downloads\\titan");
-        ResourceHandler.registerFiles("C:\\Users\\dongd\\Downloads\\Temp\\songTest.json");
+        ResourceHandler.registerFiles("/Users/lawrence.zhang/Downloads/songTest.json");
         Mapper.RRPoolToString();
         System.out.println("AMOOGSUS");
         File directory = new File("./");
         System.out.println(directory.getAbsolutePath());
         Note.setTargetSample("titan_s");
-        MidiUtils.midiToNoteSequence(new File("C:\\Users\\dongd\\Documents\\MC Server\\plugins\\Cobalt\\songs\\" +"asweetsmile.mid"));
+        MidiUtils.midiToNoteSequence(new File("/Users/lawrence.zhang/Documents/MC Server/plugins/Cobalt/songs/" + "octopath.mid"));
+        Mapper.initInstrMap(MidiUtils.getFinalProcess());
         TestEngine.playSoundProcess(MidiUtils.getFinalProcess());
     }
 }

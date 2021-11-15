@@ -54,14 +54,13 @@ public class MidiUtils {
                     }
                     else if ((mm.getType() & 0xff) == META_END_OF_TRACK_TYPE && data !=null) {
                         noteSequence.add(new Note(currentTick + 1,0,0,0,0,"TRACK_END", (float) gTempo,0,0, 3));
-                        System.out.println("End of track");
                     }
                 }
                 if (message instanceof ShortMessage) {
                     currentTick = event.getTick();
                     ShortMessage sm = (ShortMessage) message;
                     if (sm.getCommand() ==PROGRAM_CHANGE) {
-                        noteSequence.add(new Note(currentTick+1,sm.getData1(),0,0,0,"PROGRAM_CHANGE",0,0,0, 2));
+                        noteSequence.add(new Note(currentTick+1,sm.getData1(),0,trackNumber,0,"PROGRAM_CHANGE",0,0,0, 2));
                     }
                     if (sm.getCommand() == NOTE_ON && sm.getData2() != 0) {
                         int key = sm.getData1();
