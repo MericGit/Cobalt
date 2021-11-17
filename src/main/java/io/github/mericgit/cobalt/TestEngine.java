@@ -2,6 +2,7 @@ package io.github.mericgit.cobalt;
 
 import javax.sound.midi.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 public class TestEngine {
@@ -25,8 +26,10 @@ public class TestEngine {
         channels = synth.getChannels();
         midiChannel = synth.getChannels()[0];
         currentInstrument = synth.getAvailableInstruments()[0];
+        long latency = synth.getLatency();
+        System.out.println("latency is: " + latency);
         System.out.println("Switching instrument to #" + 4 + ": " + currentInstrument.getName());
-        synth.loadInstrument(currentInstrument);
+        synth.loadAllInstruments(synth.getDefaultSoundbank());
         midiChannel.programChange(currentInstrument.getPatch().getBank(), currentInstrument.getPatch().getProgram());
     }
 
@@ -59,22 +62,25 @@ public class TestEngine {
     private static void playSound(ArrayList<Note> soundProcess) {
         try {
             if (soundProcess.get(0).getDataF1() == 2) {
-                Mapper.updateInstrMap(soundProcess.get(0));
+                //Mapper.updateInstrMap(soundProcess.get(0));
             }
             if (soundProcess.get(0).getMcTick() <= 0) {
                 if(soundProcess.get(0).getVelocity() != 0 && soundProcess.get(0).getDataF1() == 0) {
                     if (Mapper.getMidiInstrMap().get(soundProcess.get(0).getBank()) != null) {
                         currentInstrument = synth.getAvailableInstruments()[Mapper.getMidiInstrMap().get(soundProcess.get(0).getBank())];
+                        System.out.println(currentInstrument);
+                        System.out.println(soundProcess.get(0).getBank());
                     }
                     else {
                         currentInstrument = synth.getAvailableInstruments()[40];
-                        System.out.println(soundProcess.get(0).getBank());
-                        System.out.println("No registered INSTR");
+                        System.out.println("No registered INSTR" + soundProcess.get(0).getBank());
                     }
-                    synth.loadInstrument(currentInstrument);
-                    midiChannel.programChange(currentInstrument.getPatch().getBank(), currentInstrument.getPatch().getProgram());
+                    int bank = currentInstrument.getPatch().getBank(), program = currentInstrument.getPatch().getProgram();
+                    program |= (bank&1)<<7; bank >>>= 1; // correction:
+                    channels[soundProcess.get(0).getChannel()].programChange(bank, program);
+                    //midiChannel.programChange(currentInstrument.getPatch().getBank(),currentInstrument.getPatch().getProgram());
                     channels[soundProcess.get(0).getChannel()].noteOn(soundProcess.get(0).getKey(),soundProcess.get(0).getVelocity());
-
+                    //System.out.print(soundProcess.get(0));
                 }
                 else if (soundProcess.get(0).getVelocity() == 0) {
                     channels[soundProcess.get(0).getChannel()].noteOff(soundProcess.get(0).getKey(),soundProcess.get(0).getVelocity());

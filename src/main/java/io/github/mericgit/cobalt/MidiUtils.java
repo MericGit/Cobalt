@@ -20,6 +20,7 @@ public class MidiUtils {
         Sequence sequence = MidiSystem.getSequence(file);
         MidiFileFormat midiFile = MidiSystem.getMidiFileFormat(file);
         Sequencer sequencer = MidiSystem.getSequencer(false);
+
         sequencer.setSequence(sequence);
         gTempo = sequencer.getTempoInBPM();
         System.out.println("Old Tempo: " + gTempo);
@@ -53,7 +54,7 @@ public class MidiUtils {
                         }
                     }
                     else if ((mm.getType() & 0xff) == META_END_OF_TRACK_TYPE && data !=null) {
-                        noteSequence.add(new Note(currentTick + 1,0,0,0,0,"TRACK_END", (float) gTempo,0,0, 3));
+                        noteSequence.add(new Note(currentTick + 1,0,0,trackNumber,0,"TRACK_END", (float) gTempo,0,0, 3));
                     }
                 }
                 if (message instanceof ShortMessage) {
@@ -84,7 +85,7 @@ public class MidiUtils {
         }
         System.out.println("Note Sequence");
         finalProcess = Mapper.calcRR(calculateTimeConverter(convertNonDelta(bubbleSort(noteSequence))));
-        System.out.println(finalProcess);
+        //System.out.println(finalProcess);
         return finalProcess;
     }
 
