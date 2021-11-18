@@ -91,7 +91,7 @@ public class Mapper {
             }
         }
         midiInstrMap.entrySet().forEach(entry -> {
-            System.out.println("Instr Bank: " + entry.getKey() + " ID: " + entry.getValue() + " String val " + GmMapper(entry.getValue()));
+            System.out.println("Instr Bank: " + entry.getKey() + " ID: " + entry.getValue() + " " + gmMapper(entry.getValue()));
         });
     }
 
@@ -104,7 +104,7 @@ public class Mapper {
     }
 
 
-    public static String GmMapper(int bank) {
+    public static String gmMapper(int bank) {
         return switch (bank) {
             case 0, 1, 2, 3, 4, 5 -> "titan";
             case 6 -> "harpsichord";

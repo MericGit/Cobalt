@@ -1,6 +1,8 @@
 package io.github.mericgit.cobalt;
 
 import javax.sound.midi.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -25,11 +27,21 @@ public class TestEngine {
         }
         channels = synth.getChannels();
         midiChannel = synth.getChannels()[0];
+        Soundbank soundfont = synth.getDefaultSoundbank();
+        File file = new File("/Users/lawrence.zhang/Downloads/MuseScore_General.sf2");
+        try {
+            soundfont = MidiSystem.getSoundbank(file);
+        } catch (InvalidMidiDataException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         currentInstrument = synth.getAvailableInstruments()[0];
         long latency = synth.getLatency();
         System.out.println("latency is: " + latency);
         System.out.println("Switching instrument to #" + 4 + ": " + currentInstrument.getName());
-        synth.loadAllInstruments(synth.getDefaultSoundbank());
+        synth.loadAllInstruments(soundfont);
+        //synth.loadAllInstruments(synth.getDefaultSoundbank());
         midiChannel.programChange(currentInstrument.getPatch().getBank(), currentInstrument.getPatch().getProgram());
     }
 
@@ -62,18 +74,18 @@ public class TestEngine {
     private static void playSound(ArrayList<Note> soundProcess) {
         try {
             if (soundProcess.get(0).getDataF1() == 2) {
-                //Mapper.updateInstrMap(soundProcess.get(0));
+                Mapper.updateInstrMap(soundProcess.get(0));
+                System.out.println("Updated instruments - ID: " + Mapper.getMidiInstrMap().get(soundProcess.get(0).getBank()) + " " + Mapper.gmMapper(Mapper.getMidiInstrMap().get(soundProcess.get(0).getBank())));
             }
             if (soundProcess.get(0).getMcTick() <= 0) {
                 if(soundProcess.get(0).getVelocity() != 0 && soundProcess.get(0).getDataF1() == 0) {
                     if (Mapper.getMidiInstrMap().get(soundProcess.get(0).getBank()) != null) {
                         currentInstrument = synth.getAvailableInstruments()[Mapper.getMidiInstrMap().get(soundProcess.get(0).getBank())];
-                        System.out.println(currentInstrument);
-                        System.out.println(soundProcess.get(0).getBank());
+                        //System.out.println(currentInstrument);
                     }
                     else {
-                        currentInstrument = synth.getAvailableInstruments()[40];
-                        System.out.println("No registered INSTR" + soundProcess.get(0).getBank());
+                        currentInstrument = synth.getAvailableInstruments()[0];
+                        //System.out.println("No registered INSTR for TRACK: " + soundProcess.get(0).getBank() + "Instr: " + Mapper.gmMapper(soundProcess.get(0).getKey()));
                     }
                     int bank = currentInstrument.getPatch().getBank(), program = currentInstrument.getPatch().getProgram();
                     program |= (bank&1)<<7; bank >>>= 1; // correction:
