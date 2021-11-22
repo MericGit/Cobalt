@@ -39,7 +39,6 @@ public class TestEngine {
         currentInstrument = synth.getAvailableInstruments()[0];
         long latency = synth.getLatency();
         System.out.println("latency is: " + latency);
-        System.out.println("Switching instrument to #" + 4 + ": " + currentInstrument.getName());
         synth.loadAllInstruments(soundfont);
         //synth.loadAllInstruments(synth.getDefaultSoundbank());
         midiChannel.programChange(currentInstrument.getPatch().getBank(), currentInstrument.getPatch().getProgram());
@@ -75,7 +74,7 @@ public class TestEngine {
         try {
             if (soundProcess.get(0).getDataF1() == 2) {
                 Mapper.updateInstrMap(soundProcess.get(0));
-                System.out.println("Updated instruments for Bank: " + soundProcess.get(0).getBank() + "- ID: " + Mapper.getMidiInstrMap().get(soundProcess.get(0).getBank()) + " " + Mapper.gmMapper(Mapper.getMidiInstrMap().get(soundProcess.get(0).getBank())));
+                System.out.println("Updated instruments for Bank: " + soundProcess.get(0).getBank() + " ID: " + Mapper.getMidiInstrMap().get(soundProcess.get(0).getBank()) + " " + Mapper.gmMapper(Mapper.getMidiInstrMap().get(soundProcess.get(0).getBank())));
             }
             if (soundProcess.get(0).getMcTick() <= 0) {
                 if(soundProcess.get(0).getVelocity() != 0 && soundProcess.get(0).getDataF1() == 0) {
