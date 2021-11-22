@@ -104,9 +104,15 @@ public class Mapper {
     }
 
 
+    public static String sampleBuilder(Note note) {
+
+        return "SHEESH";
+    }
+
+
     public static String gmMapper(int bank) {
         return switch (bank) {
-            case 0, 1, 2, 3, 4, 5 -> "titan";
+            case 0, 1, 2, 3, 4, 5 -> "piano";
             case 6 -> "harpsichord";
             case 7 -> "clavinet";
             case 8 -> "celesta";

@@ -75,22 +75,21 @@ public class TestEngine {
         try {
             if (soundProcess.get(0).getDataF1() == 2) {
                 Mapper.updateInstrMap(soundProcess.get(0));
-                System.out.println("Updated instruments - ID: " + Mapper.getMidiInstrMap().get(soundProcess.get(0).getBank()) + " " + Mapper.gmMapper(Mapper.getMidiInstrMap().get(soundProcess.get(0).getBank())));
+                System.out.println("Updated instruments for Bank: " + soundProcess.get(0).getBank() + "- ID: " + Mapper.getMidiInstrMap().get(soundProcess.get(0).getBank()) + " " + Mapper.gmMapper(Mapper.getMidiInstrMap().get(soundProcess.get(0).getBank())));
             }
             if (soundProcess.get(0).getMcTick() <= 0) {
                 if(soundProcess.get(0).getVelocity() != 0 && soundProcess.get(0).getDataF1() == 0) {
                     if (Mapper.getMidiInstrMap().get(soundProcess.get(0).getBank()) != null) {
                         currentInstrument = synth.getAvailableInstruments()[Mapper.getMidiInstrMap().get(soundProcess.get(0).getBank())];
-                        //System.out.println(currentInstrument);
                     }
                     else {
+                        System.out.println("Amoogus moment: Missing Instrument at track ID: " + soundProcess.get(0).getBank());
                         currentInstrument = synth.getAvailableInstruments()[0];
                         //System.out.println("No registered INSTR for TRACK: " + soundProcess.get(0).getBank() + "Instr: " + Mapper.gmMapper(soundProcess.get(0).getKey()));
                     }
                     int bank = currentInstrument.getPatch().getBank(), program = currentInstrument.getPatch().getProgram();
                     program |= (bank&1)<<7; bank >>>= 1; // correction:
                     channels[soundProcess.get(0).getChannel()].programChange(bank, program);
-                    //midiChannel.programChange(currentInstrument.getPatch().getBank(),currentInstrument.getPatch().getProgram());
                     channels[soundProcess.get(0).getChannel()].noteOn(soundProcess.get(0).getKey(),soundProcess.get(0).getVelocity());
                     //System.out.print(soundProcess.get(0));
                 }

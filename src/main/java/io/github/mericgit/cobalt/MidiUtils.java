@@ -84,7 +84,7 @@ public class MidiUtils {
             }
         }
         System.out.println("Note Sequence");
-        finalProcess = Mapper.calcRR(calculateTimeConverter(convertNonDelta(bubbleSort(noteSequence))));
+        finalProcess = Mapper.calcRR(calculateTimeConverter(convertNonDelta(quickSort2(noteSequence))));
         //System.out.println(finalProcess);
         return finalProcess;
     }
@@ -94,7 +94,7 @@ public class MidiUtils {
         for (int i = 0; i < soundProcess.size(); i++) {
             if (soundProcess.get(i).getDataF1() == 1.0){
                 tempo = soundProcess.get(i).getFreq();
-                //System.out.println("VAL" + ((float) 60000 / (tempo*PPQ)));
+                System.out.println("VAL" + ((float) 60000 / (tempo*PPQ)));
             }
             soundProcess.get(i).setMcTick(Math.round(  soundProcess.get(i).getMcTick() * ((float) 60000 / (tempo*PPQ)) ));
         }
