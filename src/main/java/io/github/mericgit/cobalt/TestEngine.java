@@ -8,11 +8,11 @@ import java.util.Arrays;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 public class TestEngine {
+
     private static final MidiChannel[] channels;
     private static Synthesizer synth;
     private static final MidiChannel midiChannel;
     private static Instrument currentInstrument;
-
 
     static {
         try {
@@ -39,14 +39,11 @@ public class TestEngine {
         currentInstrument = synth.getAvailableInstruments()[0];
         long latency = synth.getLatency();
         System.out.println("latency is: " + latency);
-        synth.loadAllInstruments(soundfont);
+        //synth.loadAllInstruments(soundfont);
         //synth.loadAllInstruments(synth.getDefaultSoundbank());
+        synth.loadInstrument(currentInstrument);
         midiChannel.programChange(currentInstrument.getPatch().getBank(), currentInstrument.getPatch().getProgram());
     }
-
-    private static final int channel = 0; // 0 is a piano, 9 is percussion, other channels are for other instruments
-    private static final int duration = 200; // in milliseconds
-
 
     public static void playSoundProcess(ArrayList<Note> soundProcess) throws MidiUnavailableException {
         System.out.println("REAL FINAL ");
@@ -64,12 +61,9 @@ public class TestEngine {
                     executor.shutdown();
                     System.out.print("TERMINATED THREAD");
                 }
-
             }
         }, 1000,1, TimeUnit.MILLISECONDS);
-
     }
-
     private static void playSound(ArrayList<Note> soundProcess) {
         try {
             if (soundProcess.get(0).getDataF1() == 2) {
@@ -87,6 +81,7 @@ public class TestEngine {
                         //System.out.println("No registered INSTR for TRACK: " + soundProcess.get(0).getBank() + "Instr: " + Mapper.gmMapper(soundProcess.get(0).getKey()));
                     }
                     int bank = currentInstrument.getPatch().getBank(), program = currentInstrument.getPatch().getProgram();
+                    synth.loadInstrument(currentInstrument);
                     program |= (bank&1)<<7; bank >>>= 1; // correction:
                     channels[soundProcess.get(0).getChannel()].programChange(bank, program);
                     channels[soundProcess.get(0).getChannel()].noteOn(soundProcess.get(0).getKey(),soundProcess.get(0).getVelocity());
@@ -101,7 +96,6 @@ public class TestEngine {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 }
 
