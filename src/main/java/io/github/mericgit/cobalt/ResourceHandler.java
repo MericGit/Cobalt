@@ -44,6 +44,19 @@ public class ResourceHandler {
         }
     }
 
+    public static void registerAllPool() {
+        int[] temp = new int[]{1,0};
+        for (int i = 0; i < 128; i++) {
+            for (int j = 1; j < 16; j++) {
+                String num = String.valueOf(j);
+                if (j < 10) {
+                    num = "0" + num;
+                }
+                Mapper.updatePool("block.note_block." + Mapper.gmMapper(i) +"_" + num,temp);
+            }
+        }
+    }
+
     public static void generateSongJson(String path) {
 
         fileNames = new ArrayList<String>();

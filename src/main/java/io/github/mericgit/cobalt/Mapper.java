@@ -1,6 +1,7 @@
 package io.github.mericgit.cobalt;
 
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -67,6 +68,7 @@ public class Mapper {
     public static ArrayList<Note> calcRR(ArrayList<Note> soundProcess) {
         for (int i =0; i < soundProcess.size(); i++) {
             if (soundProcess.get(i).getDataF1() == 0 && soundProcess.get(i).getVelocity() != 0) {
+                //System.out.println("Sample grab: " + Note.advSample2(soundProcess.get(i)));
                 String eventName = Note.advSample2(soundProcess.get(i)) + "_" + Mapper.rrPoolInterface(Note.advSample2(soundProcess.get(i)), soundProcess.get(i).getTick());
                 soundProcess.get(i).setSample(eventName);
                 for (int j = i; j < soundProcess.size(); j++) {
@@ -104,10 +106,25 @@ public class Mapper {
     }
 
 
-    public static String sampleBuilder(Note note) {
+    public static ArrayList sampleBuilder(ArrayList<Note> soundProcess) {
+        Mapper.initInstrMap(soundProcess);
+        System.out.print(soundProcess);
+        String currentINSTR = "piano";
+        for (int i = 0; i < soundProcess.size(); i++) {
+            if (soundProcess.get(i).getDataF1() == 2) {
+                Mapper.updateInstrMap(soundProcess.get(0));
+                currentINSTR = gmMapper(soundProcess.get(i).getKey());
+                System.out.println("Updated INSTRE (1) to: " + currentINSTR);
+                //System.out.println("Raw: " + soundProcess.get(i).getKey());
+            }
+            else if (soundProcess.get(i).getDataF1() == 0) {
+                System.out.println("Update: " + Mapper.getMidiInstrMap().get(soundProcess.get(i).getBank()));
+                soundProcess.get(i).setSample(gmMapper(Mapper.getMidiInstrMap().get(soundProcess.get(i).getBank())));
+                //System.out.println("Updated INSTRE (2) to: " + currentINSTR);
 
-
-        return "SHEESH";
+            }
+        }
+        return soundProcess;
     }
 
 

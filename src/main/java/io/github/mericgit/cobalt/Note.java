@@ -32,7 +32,7 @@ public class Note {
     }
 
     public static String advSample2(Note note) {
-        String temp = "block.note_block." +getTargetSample() + "_";
+        String temp = "block.note_block." + note.getSample() + "_";
         if (note.getKey() <= 24) {
             return temp + "01";
         }
