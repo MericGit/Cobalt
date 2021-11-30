@@ -118,10 +118,15 @@ public class Mapper {
                 //System.out.println("Raw: " + soundProcess.get(i).getKey());
             }
             else if (soundProcess.get(i).getDataF1() == 0) {
-                System.out.println("Update: " + Mapper.getMidiInstrMap().get(soundProcess.get(i).getBank()));
-                soundProcess.get(i).setSample(gmMapper(Mapper.getMidiInstrMap().get(soundProcess.get(i).getBank())));
-                //System.out.println("Updated INSTRE (2) to: " + currentINSTR);
-
+                if (Mapper.getMidiInstrMap().get(soundProcess.get(i).getBank()) != null) {
+                    System.out.println("Update: " + Mapper.getMidiInstrMap().get(soundProcess.get(i).getBank()));
+                    soundProcess.get(i).setSample(gmMapper(Mapper.getMidiInstrMap().get(soundProcess.get(i).getBank())));
+                    //System.out.println("Updated INSTRE (2) to: " + currentINSTR);
+                }
+                else {
+                    System.out.println("Missing  instr bank");
+                    soundProcess.get(i).setSample("piano");
+                }
             }
         }
         return soundProcess;
