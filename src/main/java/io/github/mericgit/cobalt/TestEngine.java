@@ -27,10 +27,16 @@ public class TestEngine {
         }
         channels = synth.getChannels();
         midiChannel = synth.getChannels()[0];
-        Soundbank soundfont = synth.getDefaultSoundbank();
+        Soundbank soundfont;
         File file = new File("/Users/lawrence.zhang/Downloads/MuseScore_General.sf2");
+
+        Soundbank sbDefault = synth.getDefaultSoundbank();
+        synth.unloadAllInstruments( sbDefault );
+
+        //File file = new File("/Users/lawrence.zhang/Downloads/Sonatina_Symphonic_Orchestra.sf2");
         try {
             soundfont = MidiSystem.getSoundbank(file);
+            synth.loadAllInstruments(soundfont);
         } catch (InvalidMidiDataException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -39,9 +45,7 @@ public class TestEngine {
         currentInstrument = synth.getAvailableInstruments()[0];
         long latency = synth.getLatency();
         System.out.println("latency is: " + latency);
-        //synth.loadAllInstruments(soundfont);
         //synth.loadAllInstruments(synth.getDefaultSoundbank());
-        synth.loadInstrument(currentInstrument);
         midiChannel.programChange(currentInstrument.getPatch().getBank(), currentInstrument.getPatch().getProgram());
     }
 
@@ -74,6 +78,7 @@ public class TestEngine {
                 if(soundProcess.get(0).getVelocity() != 0 && soundProcess.get(0).getDataF1() == 0) {
                     if (Mapper.getMidiInstrMap().get(soundProcess.get(0).getBank()) != null) {
                         currentInstrument = synth.getAvailableInstruments()[Mapper.getMidiInstrMap().get(soundProcess.get(0).getBank())];
+
                     }
                     else {
                         System.out.println("Amoogus moment: Missing Instrument at track ID: " + soundProcess.get(0).getBank());

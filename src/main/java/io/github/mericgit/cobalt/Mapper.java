@@ -91,7 +91,7 @@ public class Mapper {
             if (soundProcess.get(i).getDataF1() == 2) {
                 midiInstrMap.put(soundProcess.get(i).getBank(),soundProcess.get(i).getKey());
             }
-        }
+        }   
         midiInstrMap.entrySet().forEach(entry -> {
             System.out.println("Instr Bank: " + entry.getKey() + " ID: " + entry.getValue() + " " + gmMapper(entry.getValue()));
         });

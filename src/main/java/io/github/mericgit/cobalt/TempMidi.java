@@ -15,7 +15,7 @@ public class TempMidi {
         File directory = new File("./");
         System.out.println(directory.getAbsolutePath());
         Note.setTargetSample("titan_s");
-        MidiUtils.midiToNoteSequence(new File("/Users/lawrence.zhang/Documents/MC Server/plugins/Cobalt/songs/" + "ov.mid"));
+        MidiUtils.midiToNoteSequence(new File("/Users/lawrence.zhang/Documents/MC Server/plugins/Cobalt/songs/" + "highc.mid"));
         Mapper.initInstrMap(MidiUtils.getFinalProcess());
         TestEngine.playSoundProcess(MidiUtils.getFinalProcess());
         System.out.println(MidiUtils.getFinalProcess());
