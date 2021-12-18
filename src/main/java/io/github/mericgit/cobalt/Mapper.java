@@ -93,7 +93,7 @@ public class Mapper {
             }
         }   
         midiInstrMap.entrySet().forEach(entry -> {
-            System.out.println("Instr Bank: " + entry.getKey() + " ID: " + entry.getValue() + " " + gmMapper(entry.getValue()));
+            //System.out.println("Instr Bank: " + entry.getKey() + " ID: " + entry.getValue() + " " + gmMapper(entry.getValue()));
         });
     }
 
@@ -108,23 +108,23 @@ public class Mapper {
 
     public static ArrayList sampleBuilder(ArrayList<Note> soundProcess) {
         Mapper.initInstrMap(soundProcess);
-        System.out.print(soundProcess);
+        //System.out.print(soundProcess);
         String currentINSTR = "piano";
         for (int i = 0; i < soundProcess.size(); i++) {
             if (soundProcess.get(i).getDataF1() == 2) {
                 Mapper.updateInstrMap(soundProcess.get(0));
                 currentINSTR = gmMapper(soundProcess.get(i).getKey());
-                System.out.println("Updated INSTRE (1) to: " + currentINSTR);
+                //System.out.println("Updated INSTRE (1) to: " + currentINSTR);
                 //System.out.println("Raw: " + soundProcess.get(i).getKey());
             }
             else if (soundProcess.get(i).getDataF1() == 0) {
                 if (Mapper.getMidiInstrMap().get(soundProcess.get(i).getBank()) != null) {
-                    System.out.println("Update: " + Mapper.getMidiInstrMap().get(soundProcess.get(i).getBank()));
+                    //System.out.println("Update: " + Mapper.getMidiInstrMap().get(soundProcess.get(i).getBank()));
                     soundProcess.get(i).setSample(gmMapper(Mapper.getMidiInstrMap().get(soundProcess.get(i).getBank())));
                     //System.out.println("Updated INSTRE (2) to: " + currentINSTR);
                 }
                 else {
-                    System.out.println("Missing  instr bank");
+                    //System.out.println("Missing  instr bank");
                     soundProcess.get(i).setSample("piano");
                 }
             }

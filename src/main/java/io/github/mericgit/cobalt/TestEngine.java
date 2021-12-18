@@ -27,21 +27,10 @@ public class TestEngine {
         }
         channels = synth.getChannels();
         midiChannel = synth.getChannels()[0];
-        Soundbank soundfont;
-        File file = new File("/Users/lawrence.zhang/Downloads/MuseScore_General.sf2");
 
-        Soundbank sbDefault = synth.getDefaultSoundbank();
-        synth.unloadAllInstruments( sbDefault );
 
         //File file = new File("/Users/lawrence.zhang/Downloads/Sonatina_Symphonic_Orchestra.sf2");
-        try {
-            soundfont = MidiSystem.getSoundbank(file);
-            synth.loadAllInstruments(soundfont);
-        } catch (InvalidMidiDataException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
         currentInstrument = synth.getAvailableInstruments()[0];
         long latency = synth.getLatency();
         System.out.println("latency is: " + latency);
@@ -72,7 +61,7 @@ public class TestEngine {
         try {
             if (soundProcess.get(0).getDataF1() == 2) {
                 Mapper.updateInstrMap(soundProcess.get(0));
-                System.out.println("Updated instruments for Bank: " + soundProcess.get(0).getBank() + " ID: " + Mapper.getMidiInstrMap().get(soundProcess.get(0).getBank()) + " " + Mapper.gmMapper(Mapper.getMidiInstrMap().get(soundProcess.get(0).getBank())));
+                //System.out.println("Updated instruments for Bank: " + soundProcess.get(0).getBank() + " ID: " + Mapper.getMidiInstrMap().get(soundProcess.get(0).getBank()) + " " + Mapper.gmMapper(Mapper.getMidiInstrMap().get(soundProcess.get(0).getBank())));
             }
             if (soundProcess.get(0).getMcTick() <= 0) {
                 if(soundProcess.get(0).getVelocity() != 0 && soundProcess.get(0).getDataF1() == 0) {
@@ -81,7 +70,7 @@ public class TestEngine {
 
                     }
                     else {
-                        System.out.println("Amoogus moment: Missing Instrument at track ID: " + soundProcess.get(0).getBank());
+                        //System.out.println("Amoogus moment: Missing Instrument at track ID: " + soundProcess.get(0).getBank());
                         currentInstrument = synth.getAvailableInstruments()[0];
                         //System.out.println("No registered INSTR for TRACK: " + soundProcess.get(0).getBank() + "Instr: " + Mapper.gmMapper(soundProcess.get(0).getKey()));
                     }

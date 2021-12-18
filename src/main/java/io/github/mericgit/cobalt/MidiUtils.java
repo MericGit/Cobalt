@@ -83,8 +83,8 @@ public class MidiUtils {
                 }
             }
         }
-        System.out.println("Note Sequence");
-        finalProcess = Mapper.calcRR(Mapper.sampleBuilder(calculateTimeConverter(convertNonDelta(quickSort2(noteSequence)))));
+        //System.out.println("Note Sequence");
+        finalProcess = Mapper.calcRR(Mapper.sampleBuilder(calculateTimeConverter(convertNonDelta(quickSort3(noteSequence)))));
         //finalProcess = Mapper.calcRR(calculateTimeConverter(convertNonDelta(quickSort2(noteSequence))));
         //System.out.println(finalProcess);
         return finalProcess;
@@ -111,50 +111,26 @@ public class MidiUtils {
         return copy;
     }
 
-    public void quickSort(ArrayList<Note> soundProcess, int begin, int end) {
-        if (begin < end) {
-            int partitionIndex = partition(soundProcess, begin, end);
-            quickSort(soundProcess, begin, partitionIndex-1);
-            quickSort(soundProcess, partitionIndex+1, end);
-        }
-    }
-
-    private int partition(ArrayList<Note> soundProcess, int begin, int end) {
-        long pivot = soundProcess.get(soundProcess.size() - 1).getTick();
-        int i = (begin-1);
-        for (int j = begin; j < end; j++) {
-            if (soundProcess.get(j).getTick() <= pivot) {
-                i++;
-                Collections.swap(soundProcess,i,j);
+    private static ArrayList<Note> quickSort3 (ArrayList<Note> noteSequence) {
+        ArrayList<Note> left = new ArrayList<>();
+        ArrayList<Note> right = new ArrayList<>();
+        if (noteSequence.size() > 1) {
+            Note pivot = noteSequence.get(0);
+            for (int i = 1; i < noteSequence.size(); i++) {
+                if (noteSequence.get(i).getTick() < pivot.getTick()) {
+                    left.add(noteSequence.get(i));
+                } else {
+                    right.add(noteSequence.get(i));
+                }
             }
+            left = quickSort3(left);
+            right = quickSort3(right);
+            left.add(pivot);
+            left.addAll(right);
+            return left;
         }
-        Collections.swap(soundProcess,(i+1),soundProcess.size() - 1);
-        return i+1;
+        return noteSequence;
     }
-
-
-    private static ArrayList<Note> quickSort2 (ArrayList < Note > soundProcess)
-    {
-        if (soundProcess.size() <= 1)
-            return soundProcess; // Already sorted
-        ArrayList<Note> sorted = new ArrayList<Note>();
-        ArrayList<Note> lesser = new ArrayList<Note>();
-        ArrayList<Note> greater = new ArrayList<Note>();
-        long pivot = soundProcess.get(soundProcess.size() - 1).getTick();
-        for (int i = 0; i < soundProcess.size() - 1; i++) {
-            if (soundProcess.get(i).getTick() < pivot)
-                lesser.add(soundProcess.get(i));
-            else
-                greater.add(soundProcess.get(i));
-        }
-        lesser = quickSort2(lesser);
-        greater = quickSort2(greater);
-        lesser.add(soundProcess.get(soundProcess.size() - 1));
-        lesser.addAll(greater);
-        sorted = lesser;
-        return sorted;
-    }
-
     private static ArrayList<Note> bubbleSort(ArrayList<Note> soundProcess) {
         int n = soundProcess.size();
         for (int i = 0; i < n-1; i++)
