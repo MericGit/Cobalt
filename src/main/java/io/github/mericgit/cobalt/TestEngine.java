@@ -27,6 +27,7 @@ public class TestEngine {
         }
         channels = synth.getChannels();
         midiChannel = synth.getChannels()[0];
+        //synth.loadAllInstruments(synth.getDefaultSoundbank());
 
 
         //File file = new File("/Users/lawrence.zhang/Downloads/Sonatina_Symphonic_Orchestra.sf2");

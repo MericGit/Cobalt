@@ -30,7 +30,59 @@ public class Note {
         this.channel = channel;
         this.dataF1 = dataF1;
     }
-
+    public static String percMap(Note note) {
+        String temp = "block.note_block.";
+        return temp + switch (note.getKey()) {
+            case 35 -> "acoustic_bass_drum";
+            case 36 -> "bass_drum_1";
+            case 37 -> "side_stick";
+            case 38 -> "acoustic_snare";
+            case 39 -> "hand_clap";
+            case 40 -> "electric_snare";
+            case 41 -> "low_floor_tom";
+            case 42 -> "closed_hi_hat";
+            case 43 -> "high_floor_tom";
+            case 44 -> "pedal_hi_hat";
+            case 45 -> "low_tom";
+            case 46 -> "open_hi_hat";
+            case 47 -> "low_mid_tom";
+            case 48 -> "hi_mid_tom";
+            case 49 -> "crash_cymbal_1";
+            case 50 -> "high_tom";
+            case 51 -> "ride_cymbal_1";
+            case 52 -> "chinese_cymbal";
+            case 53 -> "ride_bell";
+            case 54 -> "tambourine";
+            case 55 -> "splash_cymbal";
+            case 56 -> "cowbell";
+            case 57 -> "crash_cymbal_2";
+            case 58 -> "vibraslap";
+            case 59 -> "ride_cymbal_2";
+            case 60 -> "high_bongo";
+            case 61 -> "low_bongo";
+            case 62 -> "mute_high_conga";
+            case 63 -> "open_high_conga";
+            case 64 -> "low_conga";
+            case 65 -> "high_timbale";
+            case 66 -> "low_timbale";
+            case 67 -> "high_agogo";
+            case 68 -> "low_agogo";
+            case 69 -> "cabasa";
+            case 70 -> "maracas";
+            case 71 -> "short_whistle";
+            case 72 -> "long_whistle";
+            case 73 -> "short_guiro";
+            case 74 -> "long_guiro";
+            case 75 -> "claves";
+            case 76 -> "high_wood_block";
+            case 77 -> "low_wood_block";
+            case 78 -> "mute_cuica";
+            case 79 -> "open_cuica";
+            case 80 -> "mute_triangle";
+            case 81 -> "open_triangle";
+            default -> "unexpected";
+        };
+    }
     public static String advSample2(Note note) {
         String temp = "block.note_block." + note.getSample() + "_";
         if (note.getKey() <= 24) {

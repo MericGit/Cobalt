@@ -84,12 +84,23 @@ public class MidiUtils {
             }
         }
         //System.out.println("Note Sequence");
-        finalProcess = Mapper.calcRR(Mapper.sampleBuilder(calculateTimeConverter(convertNonDelta(quickSort3(noteSequence)))));
+        //Mapper.calcRRandOctave(Mapper.sampleBuilder(calculateTimeConverter(convertNonDelta(quickSort3(noteSequence)))))
+        finalProcess =Mapper.sampleBuilder( (calculateTimeConverter(convertNonDelta(quickSort3(noteSequence)))));
+        //finalProcess = Mapper.calcRRandOctave(Mapper.sampleBuilder(calculateTimeConverter(convertNonDelta(quickSort3(noteSequence)))));
         //finalProcess = Mapper.calcRR(calculateTimeConverter(convertNonDelta(quickSort2(noteSequence))));
         //System.out.println(finalProcess);
         return finalProcess;
     }
 
+    private static ArrayList<Note> soundProcessCleaner(ArrayList<Note> soundProcess) {
+        for (int i = 0; i < soundProcess.size(); i++) {
+            if (!soundProcess.get(i).getSample().contains("block.note_block") && soundProcess.get(i).getDataF1() == 0) {
+                soundProcess.remove(i);
+                i--;
+            }
+        }
+        return soundProcess;
+    }
     private static ArrayList<Note> calculateTimeConverter(ArrayList<Note> soundProcess) {
         float tempo = (float) timeConverter;
         for (int i = 0; i < soundProcess.size(); i++) {
