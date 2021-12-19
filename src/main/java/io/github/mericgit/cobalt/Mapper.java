@@ -74,9 +74,12 @@ public class Mapper {
     public static ArrayList<Note> calcRRandOctave(ArrayList<Note> soundProcess) {
         for (int i =0; i < soundProcess.size(); i++) {
             //soundProcess.get(i).getSample().contains("_0s") &&
-            if (soundProcess.get(i).getDataF1() == 0 && soundProcess.get(i).getVelocity() != 0) {
-                System.out.println("Sample grab: " + Note.advSample2(soundProcess.get(i)));
-                System.out.println("OG" + soundProcess.get(i).getSample() + " | ");
+            if (soundProcess.get(i).getDataF1() == 0 && soundProcess.get(i).getVelocity() != 0 && soundProcess.get(i).getSample().contains("_0s")) {
+                if (soundProcess.get(i).getSample().contains("missing")){
+                    continue;
+                }
+                //System.out.println("Sample grab: " + Note.advSample2(soundProcess.get(i)));
+                //System.out.println("OG" + soundProcess.get(i).getSample() + " | ");
                 String eventName = Note.advSample2(soundProcess.get(i)) + "_" + Mapper.rrPoolInterface(Note.advSample2(soundProcess.get(i)), soundProcess.get(i).getTick());
                 soundProcess.get(i).setSample(eventName);
                 for (int j = i; j < soundProcess.size(); j++) {
@@ -122,10 +125,12 @@ public class Mapper {
         Mapper.initInstrMap(soundProcess);
         //System.out.print(soundProcess);
         String currentINSTR = "piano";
+        int[] channelBasedINSTR = new int[16];
         for (int i = 0; i < soundProcess.size(); i++) {
             if (soundProcess.get(i).getDataF1() == 2) {
                 Mapper.updateInstrMap(soundProcess.get(i));
-                currentINSTR = gmMapper(soundProcess.get(i).getKey());
+                channelBasedINSTR[soundProcess.get(i).getChannel()] = soundProcess.get(i).getKey();
+                currentINSTR = caravanMapper(soundProcess.get(i).getKey());
                 System.out.println("Updated INSTRE (1) to: " + currentINSTR);
                 //System.out.println("Raw: " + soundProcess.get(i).getKey());
             }
@@ -133,7 +138,7 @@ public class Mapper {
                 if (Mapper.getMidiInstrMap().get(soundProcess.get(i).getBank()) != null) {
                     //System.out.println("Update: " + Mapper.getMidiInstrMap().get(soundProcess.get(i).getBank()));
                     if (soundProcess.get(i).getChannel() != 9) {
-                        soundProcess.get(i).setSample(gmMapper(Mapper.getMidiInstrMap().get(soundProcess.get(i).getBank())));
+                        soundProcess.get(i).setSample(caravanMapper(Mapper.getMidiInstrMap().get(soundProcess.get(i).getBank())));
 
                     }
                     else if (soundProcess.get(i).getChannel() == 9) {
@@ -144,14 +149,31 @@ public class Mapper {
 
                 else {
                     //System.out.println("Missing  instr bank");
-                    soundProcess.get(i).setSample("missing_0s");
+                    soundProcess.get(i).setSample(caravanMapper(channelBasedINSTR[soundProcess.get(i).getChannel()]));
                 }
             }
         }
         return soundProcess;
     }
 
-
+    public static String caravanMapper(int bank) {
+        return switch (bank) {
+            case 0, 1, 2, 3, 4, 5 -> "piano_0s";
+            case 9 -> "glockenspiel_0s";
+            case 11 -> "vibraphone_0s";
+            case 14 -> "tubular_bells_0s";
+            case 32,33,34,35,44 -> "acoustic_bass_0s";
+            case 56 -> "trumpet_0s";
+            case 57 -> "trombone_0s";
+            case 59 -> "muted_trumpet_0s";
+            case 64 -> "soprano_sax_0s";
+            case 65 -> "alto_sax_0s";
+            case 66 -> "tenor_sax_0s";
+            case 67 -> "baritone_sax_0s";
+            case 71 -> "clarinet_0s";
+            default -> "";
+        };
+    }
     public static String gmMapper(int bank) {
         return switch (bank) {
             case 0, 1, 2, 3, 4, 5 -> "piano_0s";
