@@ -26,7 +26,7 @@ public class ResourceHandler {
             //Read JSON file
             Object obj = jsonParser.parse(reader);
             JSONArray samplesList = (JSONArray) obj;
-            System.out.println(samplesList);
+            //System.out.println(samplesList);
 
             //Iterate over array
             samplesList.forEach(sample -> parseSampleObject((JSONObject) sample));
@@ -73,14 +73,14 @@ public class ResourceHandler {
 
         JSONArray songsSampleList = new JSONArray();
         for (int i = 0; i < fileNames.size(); i++) {
-            if (fileNames.get(i).contains("_s_")) {
+            if (fileNames.get(i).contains("_sus")) {
                 JSONObject sample = new JSONObject();
                 sample.put("name", fileNames.get(i));
                 sample.put("type", "sus");
                 JSONObject sampleObject = new JSONObject();
                 sampleObject.put("sample", sample);
                 songsSampleList.add(sampleObject);
-            } else if (fileNames.get(i).contains("_r_")) {
+            } else if (fileNames.get(i).contains("_rel")) {
                 JSONObject sample = new JSONObject();
                 sample.put("name", fileNames.get(i));
                 sample.put("type", "rel");
@@ -118,12 +118,12 @@ public class ResourceHandler {
                     eventNames.add("block.note_block." + file.getName().substring(0, file.getName().lastIndexOf('.')));
                 }
             }
-            System.out.println(fileNames);
-            System.out.println(eventNames);
+            //System.out.println(fileNames);
+            //System.out.println(eventNames);
 
             JSONObject soundEventsMaster = new JSONObject();
             for (int i = 0; i < fileNames.size(); i++) {
-                if (fileNames.get(i).contains("_s_")) {
+                if (fileNames.get(i).contains("_sus")) {
                     for (int j = 1; j < 16; j++) {
                         JSONObject soundEvent = new JSONObject();
                         JSONArray sounds = new JSONArray();

@@ -74,7 +74,7 @@ public class Mapper {
     public static ArrayList<Note> calcRRandOctave(ArrayList<Note> soundProcess) {
         for (int i =0; i < soundProcess.size(); i++) {
             //soundProcess.get(i).getSample().contains("_0s") &&
-            if (soundProcess.get(i).getDataF1() == 0 && soundProcess.get(i).getVelocity() != 0 && soundProcess.get(i).getSample().contains("_0s")) {
+            if (soundProcess.get(i).getDataF1() == 0 && soundProcess.get(i).getVelocity() != 0 && soundProcess.get(i).getSample().contains("_sus")) {
                 if (soundProcess.get(i).getSample().contains("missing")){
                     continue;
                 }
@@ -90,7 +90,7 @@ public class Mapper {
                     }
                 }
             }
-            else if (!soundProcess.get(i).getSample().contains("_0s") && soundProcess.get(i).getDataF1() == 0 && soundProcess.get(i).getVelocity() != 0 && soundProcess.get(i).getChannel() ==9) {
+            else if (!soundProcess.get(i).getSample().contains("_sus") && soundProcess.get(i).getDataF1() == 0 && soundProcess.get(i).getVelocity() != 0 && soundProcess.get(i).getChannel() ==9) {
                 String eventName = Note.percMap(soundProcess.get(i));
                 soundProcess.get(i).setSample(eventName);
             }
@@ -130,7 +130,7 @@ public class Mapper {
             if (soundProcess.get(i).getDataF1() == 2) {
                 Mapper.updateInstrMap(soundProcess.get(i));
                 channelBasedINSTR[soundProcess.get(i).getChannel()] = soundProcess.get(i).getKey();
-                currentINSTR = caravanMapper(soundProcess.get(i).getKey());
+                currentINSTR = gmMapper(soundProcess.get(i).getKey());
                 System.out.println("Updated INSTRE (1) to: " + currentINSTR);
                 //System.out.println("Raw: " + soundProcess.get(i).getKey());
             }
@@ -138,7 +138,7 @@ public class Mapper {
                 if (Mapper.getMidiInstrMap().get(soundProcess.get(i).getBank()) != null) {
                     //System.out.println("Update: " + Mapper.getMidiInstrMap().get(soundProcess.get(i).getBank()));
                     if (soundProcess.get(i).getChannel() != 9) {
-                        soundProcess.get(i).setSample(caravanMapper(Mapper.getMidiInstrMap().get(soundProcess.get(i).getBank())));
+                        soundProcess.get(i).setSample(gmMapper(Mapper.getMidiInstrMap().get(soundProcess.get(i).getBank())));
 
                     }
                     else if (soundProcess.get(i).getChannel() == 9) {
@@ -149,7 +149,7 @@ public class Mapper {
 
                 else {
                     //System.out.println("Missing  instr bank");
-                    soundProcess.get(i).setSample(caravanMapper(channelBasedINSTR[soundProcess.get(i).getChannel()]));
+                    soundProcess.get(i).setSample(gmMapper(channelBasedINSTR[soundProcess.get(i).getChannel()]));
                 }
             }
         }
@@ -176,7 +176,7 @@ public class Mapper {
     }
     public static String gmMapper(int bank) {
         return switch (bank) {
-            case 0, 1, 2, 3, 4, 5 -> "piano_0s";
+            case 0, 1, 2, 3, 4, 5 -> "titan_sus";
             case 6 -> "harpsichord_0s";
             case 7 -> "clavinet_0s";
             case 8 -> "celesta_0s";
@@ -240,7 +240,7 @@ public class Mapper {
             case 70 -> "bassoon_0s";
             case 71 -> "clarinet_0s";
             case 72 -> "piccolo_0s";
-            case 73 -> "flute_0s";
+            case 73 -> "flute_sus";
             case 74 -> "recorder_0s";
             case 75 -> "pan_flute_0s";
             case 76 -> "blown_bottle_0s";

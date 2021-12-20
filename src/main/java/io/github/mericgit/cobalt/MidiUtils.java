@@ -86,17 +86,16 @@ public class MidiUtils {
         //System.out.println("Note Sequence");
         //Mapper.calcRRandOctave(Mapper.sampleBuilder(calculateTimeConverter(convertNonDelta(quickSort3(noteSequence)))))
         //finalProcess =Mapper.sampleBuilder( (calculateTimeConverter(convertNonDelta(quickSort3(noteSequence)))));
+        finalProcess = Note.calcArtic(soundProcessCleaner(Mapper.calcRRandOctave(Mapper.sampleBuilder(calculateTimeConverter(convertNonDelta(quickSort3(noteSequence)))))));
+        //finalProcess = soundProcessCleaner(Mapper.calcRRandOctave(Mapper.sampleBuilder(calculateTimeConverter(convertNonDelta(quickSort3(noteSequence))))));
         //finalProcess = Mapper.calcRRandOctave(Mapper.sampleBuilder(calculateTimeConverter(convertNonDelta(quickSort3(noteSequence)))));
-        finalProcess = Mapper.calcRRandOctave(Mapper.sampleBuilder(calculateTimeConverter(convertNonDelta(quickSort3(noteSequence)))));
-
-
         //finalProcess = Mapper.calcRR(calculateTimeConverter(convertNonDelta(quickSort2(noteSequence))));
         //System.out.println(finalProcess);
         return finalProcess;
     }
 
     private static ArrayList<Note> soundProcessCleaner(ArrayList<Note> soundProcess) {
-        soundProcess.removeIf(note -> note.getSample().contains("missing"));
+        soundProcess.removeIf(note -> !note.getSample().contains("block.note_block") || note.getDataF1() != 0);
         return soundProcess;
     }
     private static ArrayList<Note> calculateTimeConverter(ArrayList<Note> soundProcess) {

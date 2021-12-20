@@ -118,8 +118,11 @@ public class Note {
         else if (note.getKey() <= 94) {
             return  temp + "11";
         }
-        else if (note.getKey() <= 127) {
+        else if (note.getKey() <= 101) {
             return  temp + "12";
+        }
+        else if (note.getKey() <=108) {
+            return temp + "13";
         }
         return temp + "01";
     }
@@ -136,13 +139,14 @@ public class Note {
         return (float) Math.pow(2,((double) (-1 * (root - note.getKey())) / 12));
     }
 
-    public static String calcArtic(Note note) {
-        float duration = note.getDuration();
-        if (duration <= 250 && note.getBank() > 5) {
-            return "_s";
-        } else {
-            return "_a";
+    public static ArrayList<Note> calcArtic(ArrayList<Note> soundProcess) {
+        for (int i = 0; i < soundProcess.size(); i++) {
+            float duration = soundProcess.get(i).getDuration();
+            if (duration < 150 && soundProcess.get(i).getDataF1() == 0 && soundProcess.get(i).getVelocity() != 0) {
+                soundProcess.get(i).setSample(soundProcess.get(i).getSample().substring(0,soundProcess.get(i).getSample().lastIndexOf("_")).replaceFirst("_sus_","_stac_"));
+            }
         }
+        return soundProcess;
     }
 
     @Override

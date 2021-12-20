@@ -13,7 +13,7 @@ public class PlaySoundProcess implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player) {
-            String filepath = "C:\\Users\\dongd\\Downloads\\Temp\\songTest.json";
+            String filepath = "C:\\Users\\dongd\\Documents\\MC Server\\plugins\\Cobalt\\Resources\\songTest.json";
             System.out.println("This ran");
             ResourceHandler.registerFiles(filepath);
             System.out.println("Same here");
@@ -22,7 +22,6 @@ public class PlaySoundProcess implements CommandExecutor {
             String decodedPath = URLDecoder.decode(path, StandardCharsets.UTF_8);
             Player player = (Player) sender;
             String file = args[0];
-            Note.setTargetSample(args[1]);
             System.out.println(file);
             player.sendMessage(ChatColor.GOLD + "Running! " + ChatColor.AQUA + " Found file: " + ChatColor.GRAY + file);
             try {
