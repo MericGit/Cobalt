@@ -33,7 +33,7 @@ public class Engine {
             }
             else if (soundProcess.get(0).getVelocity() == 0 && soundProcess.get(0).getDataF1() == 0 && !soundProcess.get(0).getSample().contains("stac")) {
                 String sample = soundProcess.get(0).getSample().substring(0, soundProcess.get(0).getSample().lastIndexOf('_')).replaceFirst("_sus_","_rel_");
-                player.playSound(player.getLocation(),sample, ( (float) 1), Note.advFreq(soundProcess.get(0)));
+                player.playSound(player.getLocation(),sample, ( 0.5F), Note.advFreq(soundProcess.get(0)));
                 player.stopSound(soundProcess.get(0).getSample());
                 player.sendMessage(ChatColor.GOLD + " Current tick: " + ChatColor.WHITE + soundProcess.get(0).getTick() + ChatColor.RED + " Stopping note: " + ChatColor.AQUA + soundProcess.get(0).getKey() + " At sample " + soundProcess.get(0).getSample()  + " At Volume " + ( (float) soundProcess.get(0).getVelocity() / 127) + " Accuracy: " + soundProcess.get(0).getMcTick());
             }

@@ -42,7 +42,7 @@ public class Mapper {
         });
     }
     public static int rrPoolInterface(String sample, long tick) {
-        int[] temp = rrPool.get(sample);
+         int[] temp = rrPool.get(sample);
         //System.out.println("SAMPLE PASSED IN IS: ");
         //System.out.println("DIFF IS: " + String.valueOf((tick * timeConv) - (temp[1] * timeConv)));
         //System.out.println("timeConv is: " + timeConv);
@@ -207,18 +207,18 @@ public class Mapper {
             case 37 -> "slap_bass_2_0s";
             case 38 -> "synth_bass_1_0s";
             case 39 -> "synth_bass_2_0s";
-            case 40 -> "violin_0s";
-            case 41 -> "viola_0s";
-            case 42 -> "cello_0s";
-            case 43 -> "contrabass_0s";
-            case 44 -> "tremolo_strings_0s";
+            case 40 -> "bstr_sus";
+            case 41 -> "bstr_sus";
+            case 42 -> "bstr_sus";
+            case 43 -> "bstr_sus";
+            case 44 -> "bstr_sus";
             case 45 -> "pizzicato_strings_0s";
             case 46 -> "orchestral_harp_0s";
             case 47 -> "timpani_0s";
-            case 48 -> "string_ensemble_1_0s";
-            case 49 -> "string_ensemble_2_0s";
-            case 50 -> "synth_strings_1_0s";
-            case 51 -> "synth_strings_2_0s";
+            case 48 -> "bstr_sus";
+            case 49 -> "bstr_sus";
+            case 50 -> "bstr_sus";
+            case 51 -> "bstr_sus";
             case 52 -> "choir_aahs_0s";
             case 53 -> "voice_oohs_0s";
             case 54 -> "synth_choir_0s";
