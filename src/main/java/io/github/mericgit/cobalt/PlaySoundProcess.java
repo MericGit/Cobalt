@@ -13,13 +13,14 @@ public class PlaySoundProcess implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player) {
-            String filepath = "C:\\Users\\dongd\\Documents\\MC Server\\plugins\\Cobalt\\Resources\\songTest.json";
+            String path = Cobalt.getPlugin().getDataFolder().getAbsolutePath();
+            String decodedPath = URLDecoder.decode(path, StandardCharsets.UTF_8);
+            String filepath = path + "/Resources/" + "songTest.json";
             System.out.println("This ran");
             ResourceHandler.registerFiles(filepath);
             System.out.println("Same here");
             Mapper.RRPoolToString();
-            String path = Cobalt.getPlugin().getDataFolder().getAbsolutePath();
-            String decodedPath = URLDecoder.decode(path, StandardCharsets.UTF_8);
+
             Player player = (Player) sender;
             String file = args[0];
             System.out.println(file);

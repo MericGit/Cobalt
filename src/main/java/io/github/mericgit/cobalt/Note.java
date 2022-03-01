@@ -142,7 +142,7 @@ public class Note {
     public static ArrayList<Note> calcArtic(ArrayList<Note> soundProcess) {
         for (int i = 0; i < soundProcess.size(); i++) {
             float duration = soundProcess.get(i).getDuration();
-            if (duration < 200 && soundProcess.get(i).getDataF1() == 0 && soundProcess.get(i).getVelocity() != 0) {
+            if (duration < 220 && soundProcess.get(i).getDataF1() == 0 && soundProcess.get(i).getVelocity() != 0) {
                 soundProcess.get(i).setSample(soundProcess.get(i).getSample().substring(0,soundProcess.get(i).getSample().lastIndexOf("_")).replaceFirst("_sus_","_stac_"));
             }
         }
