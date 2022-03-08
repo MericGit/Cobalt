@@ -86,7 +86,7 @@ public class MidiUtils {
         //System.out.println("Note Sequence");
         //Mapper.calcRRandOctave(Mapper.sampleBuilder(calculateTimeConverter(convertNonDelta(quickSort3(noteSequence)))))
         //finalProcess =Mapper.sampleBuilder( (calculateTimeConverter(convertNonDelta(quickSort3(noteSequence)))));
-        finalProcess = Note.calcArtic(soundProcessCleaner(Mapper.calcRRandOctave(Mapper.sampleBuilder(calculateTimeConverter(convertNonDelta(quickSort3(noteSequence)))))));
+        finalProcess = (soundProcessCleaner(Mapper.calcRRandOctave(Mapper.sampleBuilder(calculateTimeConverter(convertNonDelta(quickSort3(noteSequence)))))));
         //finalProcess = soundProcessCleaner(Mapper.calcRRandOctave(Mapper.sampleBuilder(calculateTimeConverter(convertNonDelta(quickSort3(noteSequence))))));
         //finalProcess = Mapper.calcRRandOctave(Mapper.sampleBuilder(calculateTimeConverter(convertNonDelta(quickSort3(noteSequence)))));
         //finalProcess = Mapper.calcRR(calculateTimeConverter(convertNonDelta(quickSort2(noteSequence))));

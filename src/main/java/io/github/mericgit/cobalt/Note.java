@@ -17,6 +17,7 @@ public class Note {
     private static String targetSample;
     private float dataF1;
     private float duration;
+    private float relVol;
     private static final HashMap<String, int[]> rrPool =new HashMap<String, int[]>();
 
     public Note(long tick, int key, int velocity, int bank, long mcTick, String sample, float freq, int channel,float duration, float dataF1) {
@@ -29,6 +30,7 @@ public class Note {
         this.freq = freq;
         this.channel = channel;
         this.dataF1 = dataF1;
+        this.relVol = 0;
     }
     public static String percMap(Note note) {
         String temp = "block.note_block.";
@@ -142,7 +144,7 @@ public class Note {
     public static ArrayList<Note> calcArtic(ArrayList<Note> soundProcess) {
         for (int i = 0; i < soundProcess.size(); i++) {
             float duration = soundProcess.get(i).getDuration();
-            if (duration < 220 && soundProcess.get(i).getDataF1() == 0 && soundProcess.get(i).getVelocity() != 0) {
+            if (duration < 1 && soundProcess.get(i).getDataF1() == 0 && soundProcess.get(i).getVelocity() != 0) {
                 soundProcess.get(i).setSample(soundProcess.get(i).getSample().substring(0,soundProcess.get(i).getSample().lastIndexOf("_")).replaceFirst("_sus_","_stac_"));
             }
         }
@@ -251,6 +253,14 @@ public class Note {
 
     public void setFreq(float freq) {
         this.freq = freq;
+    }
+
+    public float getRelVol() {
+        return relVol;
+    }
+
+    public void setRelVol(float relVol) {
+        this.relVol = relVol;
     }
 }
 

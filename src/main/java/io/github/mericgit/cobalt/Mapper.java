@@ -86,6 +86,14 @@ public class Mapper {
                     if (soundProcess.get(j).getKey() == soundProcess.get(i).getKey() && soundProcess.get(j).getVelocity() == 0 && soundProcess.get(j).getBank() == soundProcess.get(i).getBank()) {
                         soundProcess.get(j).setSample(eventName);
                         soundProcess.get(i).setDuration((soundProcess.get(j).getTick() * timeConv) - (soundProcess.get(i).getTick() * timeConv));
+                        //soundProcess.get(j).setRelVol(0.6f * (    (float) soundProcess.get(i).getVelocity() / 127) / ((soundProcess.get(i).getDuration() / 1000)  * 2f));
+                        soundProcess.get(j).setRelVol(calcVolDecay(((float) soundProcess.get(i).getVelocity() / 127),soundProcess.get(i).getDuration(),soundProcess.get(i).getSample()));
+                        if (soundProcess.get(i).getDuration() < 220) {
+                            soundProcess.get(i).setSample(soundProcess.get(i).getSample().substring(0,soundProcess.get(i).getSample().lastIndexOf("_")).replaceFirst("_sus_","_stac_"));
+                            soundProcess.get(j).setSample(soundProcess.get(i).getSample().substring(0,soundProcess.get(i).getSample().lastIndexOf("_")).replaceFirst("_sus_","_stac_"));
+                        }
+
+                                                      //Vol Mod    //Initial Volume                                  //Volume Drop Ratio
                         break;
                     }
                 }
@@ -99,6 +107,18 @@ public class Mapper {
             }
         }
         return soundProcess;
+    }
+//Piano decay rate 0.033
+    private static float calcVolDecay(float iVol,float duration, String instr) {
+        float decayRate = 0;
+        if (instr.contains("noir")){
+            decayRate = 0.033f;
+        }
+        float decayAmt = duration * decayRate;
+        if(decayAmt > 100) {
+            decayAmt = 100;
+        }
+            return (iVol) * ((100f-decayAmt)/100);
     }
 
     public static void initInstrMap(ArrayList<Note> soundProcess) {
@@ -176,7 +196,7 @@ public class Mapper {
     }
     public static String gmMapper(int bank) {
         return switch (bank) {
-            case 0, 1, 2, 3, 4, 5 -> "titan_sus";
+            case 0, 1, 2, 3, 4, 5 -> "noir_sus";    //titan_sus
             case 6 -> "harpsichord_0s";
             case 7 -> "clavinet_0s";
             case 8 -> "celesta_0s";

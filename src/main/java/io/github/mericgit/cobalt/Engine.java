@@ -11,7 +11,7 @@ public class Engine {
     public static void playSoundProcess(Player player, ArrayList<Note> soundProcess) {
         ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
         Mapper.updateRRTimeConv(MidiUtils.getTempo(),MidiUtils.getPPQ());
-        System.out.println(MidiUtils.getFinalProcess());
+        //System.out.println(MidiUtils.getFinalProcess());
         executor.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
@@ -28,14 +28,16 @@ public class Engine {
     private static void playSound(Player player, ArrayList<Note> soundProcess) {
         if (soundProcess.get(0).getMcTick() <= 0 ) {
             if (soundProcess.get(0).getVelocity() != 0 && soundProcess.get(0).getDataF1() == 0 && !soundProcess.get(0).getSample().equals("TBD")) {
-                player.sendMessage(ChatColor.GOLD + " Current tick: " + ChatColor.WHITE + soundProcess.get(0).getTick() + ChatColor.GREEN + " Playing note: " + ChatColor.AQUA + soundProcess.get(0).getKey() + " At sample " + soundProcess.get(0).getSample() + " At Volume " + ( (float) soundProcess.get(0).getVelocity() / 127) + " Accuracy: " + soundProcess.get(0).getMcTick());
+                player.sendMessage(ChatColor.GOLD + " Current tick: " + ChatColor.WHITE + soundProcess.get(0).getTick() + ChatColor.GREEN + " Playing note: " + ChatColor.AQUA + soundProcess.get(0).getKey() + " At sample " + soundProcess.get(0).getSample() + " At Volume " + ( (float) soundProcess.get(0).getVelocity() / 127) + " Duration: " + soundProcess.get(0).getDuration());
                 player.playSound(player.getLocation(),soundProcess.get(0).getSample(), ( (float) soundProcess.get(0).getVelocity() / 127), Note.advFreq(soundProcess.get(0)));
+
             }
             else if (soundProcess.get(0).getVelocity() == 0 && soundProcess.get(0).getDataF1() == 0 && !soundProcess.get(0).getSample().contains("stac")) {
                 String sample = soundProcess.get(0).getSample().substring(0, soundProcess.get(0).getSample().lastIndexOf('_')).replaceFirst("_sus_","_rel_");
-                player.playSound(player.getLocation(),sample, ( 0.5F), Note.advFreq(soundProcess.get(0)));
+                player.playSound(player.getLocation(),sample, (soundProcess.get(0).getRelVol()), Note.advFreq(soundProcess.get(0)));
                 player.stopSound(soundProcess.get(0).getSample());
-                player.sendMessage(ChatColor.GOLD + " Current tick: " + ChatColor.WHITE + soundProcess.get(0).getTick() + ChatColor.RED + " Stopping note: " + ChatColor.AQUA + soundProcess.get(0).getKey() + " At sample " + soundProcess.get(0).getSample()  + " At Volume " + ( (float) soundProcess.get(0).getVelocity() / 127) + " Accuracy: " + soundProcess.get(0).getMcTick());
+                System.out.println("Playing release sample: " + sample + " Vol: " + soundProcess.get(0).getRelVol());
+                player.sendMessage(ChatColor.GOLD + " Current tick: " + ChatColor.WHITE + soundProcess.get(0).getTick() + ChatColor.RED + " Stopping note: " + ChatColor.AQUA + soundProcess.get(0).getKey() + " At sample " + soundProcess.get(0).getSample()  + " At Volume " + ( soundProcess.get(0).getRelVol()) + " Duration: " + soundProcess.get(0).getDuration());
             }
             soundProcess.remove(0);
         }
