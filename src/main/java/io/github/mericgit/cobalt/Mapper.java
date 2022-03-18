@@ -88,7 +88,7 @@ public class Mapper {
                         soundProcess.get(i).setDuration((soundProcess.get(j).getTick() * timeConv) - (soundProcess.get(i).getTick() * timeConv));
                         //soundProcess.get(j).setRelVol(0.6f * (    (float) soundProcess.get(i).getVelocity() / 127) / ((soundProcess.get(i).getDuration() / 1000)  * 2f));
                         soundProcess.get(j).setRelVol(calcVolDecay(((float) soundProcess.get(i).getVelocity() / 127),soundProcess.get(i).getDuration(),soundProcess.get(i).getSample()));
-                        if (soundProcess.get(i).getDuration() < 220) {
+                        if (soundProcess.get(i).getDuration() < 300) {
                             soundProcess.get(i).setSample(soundProcess.get(i).getSample().substring(0,soundProcess.get(i).getSample().lastIndexOf("_")).replaceFirst("_sus_","_stac_"));
                             soundProcess.get(j).setSample(soundProcess.get(i).getSample().substring(0,soundProcess.get(i).getSample().lastIndexOf("_")).replaceFirst("_sus_","_stac_"));
                         }

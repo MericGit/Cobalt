@@ -32,7 +32,7 @@ public class Engine {
                 player.playSound(player.getLocation(),soundProcess.get(0).getSample(), ( (float) soundProcess.get(0).getVelocity() / 127), Note.advFreq(soundProcess.get(0)));
 
             }
-            else if (soundProcess.get(0).getVelocity() == 0 && soundProcess.get(0).getDataF1() == 0 && !soundProcess.get(0).getSample().contains("stac")) {
+            else if (soundProcess.get(0).getVelocity() == 0 && soundProcess.get(0).getDataF1() == 0 && !soundProcess.get(0).getSample().contains("stac") && soundProcess.get(0).getSample().contains("sus")) {
                 String sample = soundProcess.get(0).getSample().substring(0, soundProcess.get(0).getSample().lastIndexOf('_')).replaceFirst("_sus_","_rel_");
                 player.playSound(player.getLocation(),sample, (soundProcess.get(0).getRelVol()), Note.advFreq(soundProcess.get(0)));
                 player.stopSound(soundProcess.get(0).getSample());
