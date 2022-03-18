@@ -35,8 +35,8 @@ public class Note {
     public static String percMap(Note note) {
         String temp = "block.note_block.";
         return temp + switch (note.getKey()) {
-            case 35 -> "bass_drum"; //"acoustic_bass_drum";
-            case 36 -> "bass_drum"; //"bass_drum_1";
+            case 35 -> "bass_drum_1"; //"acoustic_bass_drum"; //"acoustic_bass_drum";
+            case 36 -> "bass_drum_1"; //"bass_drum_1";
             case 37 -> "side_stick";
             case 38 -> "acoustic_snare";
             case 39 -> "hand_clap";
@@ -57,7 +57,7 @@ public class Note {
             case 54 -> "tambourine";
             case 55 -> "splash_cymbal";
             case 56 -> "cowbell";
-            case 57 -> "crash_cymbal_2";
+            case 57 ->  "crash_cymbal_1"; //"crash_cymbal_2";
             case 58 -> "vibraslap";
             case 59 -> "ride_cymbal_2";
             case 60 -> "high_bongo";

@@ -88,7 +88,7 @@ public class Mapper {
                         soundProcess.get(i).setDuration((soundProcess.get(j).getTick() * timeConv) - (soundProcess.get(i).getTick() * timeConv));
                         //soundProcess.get(j).setRelVol(0.6f * (    (float) soundProcess.get(i).getVelocity() / 127) / ((soundProcess.get(i).getDuration() / 1000)  * 2f));
                         soundProcess.get(j).setRelVol(calcVolDecay(((float) soundProcess.get(i).getVelocity() / 127),soundProcess.get(i).getDuration(),soundProcess.get(i).getSample()));
-                        if (soundProcess.get(i).getDuration() < 300) {
+                        if (soundProcess.get(i).getDuration() < 250) {
                             soundProcess.get(i).setSample(soundProcess.get(i).getSample().substring(0,soundProcess.get(i).getSample().lastIndexOf("_")).replaceFirst("_sus_","_stac_"));
                             soundProcess.get(j).setSample(soundProcess.get(i).getSample().substring(0,soundProcess.get(i).getSample().lastIndexOf("_")).replaceFirst("_sus_","_stac_"));
                         }
@@ -204,7 +204,7 @@ public class Mapper {
             case 10 -> "music_box_0s";
             case 11 -> "vibraphone_0s";
             case 12 -> "marimba_0s";
-            case 13 -> "xylophone_0s";
+            case 13 -> "noir_sus"; //"xylophone_0s";
             case 14 -> "tubular_bells_0s";
             case 15 -> "dulcimer_0s";
             case 16, 17, 18, 19, 20 -> "organ_0s";
@@ -213,19 +213,19 @@ public class Mapper {
             case 23 -> "tango_accordion_0s";
             case 24 -> "acoustic_guitar_nylon_0s";
             case 25 -> "acoustic_guitar_steel_0s";
-            case 26 -> "electric_guitar_jazz_0s";
-            case 27 -> "electric_guitar_clean_0s";
-            case 28 -> "electric_guitar_muted_0s";
-            case 29 -> "overdriven_guitar_0s";
-            case 30 -> "distortion_guitar_0s";
-            case 31 -> "guitar_harmonics_0s";
-            case 32 -> "acoustic_bass_0s";
-            case 33 -> "electric_bass_finger_0s";
-            case 34 -> "electric_bass_pick_0s";
-            case 35 -> "fretless_bass_0s";
-            case 36 -> "slap_bass_1_0s";
-            case 37 -> "slap_bass_2_0s";
-            case 38 -> "synth_bass_1_0s";
+            case 26 -> "noir_sus"; //"electric_guitar_jazz_0s";
+            case 27 -> "noir_sus"; //"electric_guitar_clean_0s";
+            case 28 -> "noir_sus"; //"electric_guitar_muted_0s";
+            case 29 -> "noir_sus"; //"overdriven_guitar_0s";
+            case 30 -> "noir_sus"; //"distortion_guitar_0s";
+            case 31 ->  "noir_sus"; //"guitar_harmonics_0s";
+            case 32 -> "noir_sus"; //"acoustic_bass_0s";
+            case 33 -> "noir_sus"; //"electric_bass_finger_0s";
+            case 34 -> "noir_sus"; //"electric_bass_pick_0s";
+            case 35 -> "noir_sus"; //"fretless_bass_0s";
+            case 36 -> "noir_sus"; //"slap_bass_1_0s";
+            case 37 -> "noir_sus"; //"slap_bass_2_0s";
+            case 38 -> "noir_sus"; //"synth_bass_1_0s";
             case 39 -> "synth_bass_2_0s";
             case 40 -> "bstr_sus";
             case 41 -> "bstr_sus";
