@@ -42,6 +42,13 @@ public class Mapper {
         });
     }
     public static int rrPoolInterface(String sample, long tick) {
+        //*************************************************
+
+
+        //System.out.println(sample);    <----- MASTER DEBUG LINE FOR RR POOL  (USE WHEN TEMP ARRAY IS NULL)
+
+
+        //************************************************
          int[] temp = rrPool.get(sample);
         //System.out.println("SAMPLE PASSED IN IS: ");
         //System.out.println("DIFF IS: " + String.valueOf((tick * timeConv) - (temp[1] * timeConv)));
@@ -74,13 +81,16 @@ public class Mapper {
     public static ArrayList<Note> calcRRandOctave(ArrayList<Note> soundProcess) {
         for (int i =0; i < soundProcess.size(); i++) {
             //soundProcess.get(i).getSample().contains("_0s") &&
-            if (soundProcess.get(i).getDataF1() == 0 && soundProcess.get(i).getVelocity() != 0 && soundProcess.get(i).getSample().contains("_sus")) {
+            if (soundProcess.get(i).getDataF1() == 0 && soundProcess.get(i).getVelocity() != 0 && soundProcess.get(i).getSample().contains("_sus") || soundProcess.get(i).getSample().contains("_perc") || soundProcess.get(i).getSample().contains("pizz")) {
                 if (soundProcess.get(i).getSample().contains("missing")){
                     continue;
                 }
                 //System.out.println("Sample grab: " + Note.advSample2(soundProcess.get(i)));
                 //System.out.println("OG" + soundProcess.get(i).getSample() + " | ");
-                String eventName = Note.advSample2(soundProcess.get(i)) + "_" + Mapper.rrPoolInterface(Note.advSample2(soundProcess.get(i)), soundProcess.get(i).getTick());
+                String eventName = Note.advSample2(soundProcess.get(i));
+                if (soundProcess.get(i).getSample().contains("_sus")) {
+                  eventName = eventName + "_" + Mapper.rrPoolInterface(Note.advSample2(soundProcess.get(i)), soundProcess.get(i).getTick());
+                }
                 soundProcess.get(i).setSample(eventName);
                 for (int j = i; j < soundProcess.size(); j++) {
                     if (soundProcess.get(j).getKey() == soundProcess.get(i).getKey() && soundProcess.get(j).getVelocity() == 0 && soundProcess.get(j).getBank() == soundProcess.get(i).getBank()) {
@@ -88,7 +98,7 @@ public class Mapper {
                         soundProcess.get(i).setDuration((soundProcess.get(j).getTick() * timeConv) - (soundProcess.get(i).getTick() * timeConv));
                         //soundProcess.get(j).setRelVol(0.6f * (    (float) soundProcess.get(i).getVelocity() / 127) / ((soundProcess.get(i).getDuration() / 1000)  * 2f));
                         soundProcess.get(j).setRelVol(calcVolDecay(((float) soundProcess.get(i).getVelocity() / 127),soundProcess.get(i).getDuration(),soundProcess.get(i).getSample()));
-                        if (soundProcess.get(i).getDuration() < 250) {
+                        if (soundProcess.get(i).getDuration() < 250 && soundProcess.get(i).getSample().contains("_sus")) {
                             soundProcess.get(i).setSample(soundProcess.get(i).getSample().substring(0,soundProcess.get(i).getSample().lastIndexOf("_")).replaceFirst("_sus_","_stac_"));
                             soundProcess.get(j).setSample(soundProcess.get(i).getSample().substring(0,soundProcess.get(i).getSample().lastIndexOf("_")).replaceFirst("_sus_","_stac_"));
                         }
@@ -124,7 +134,7 @@ public class Mapper {
     public static void initInstrMap(ArrayList<Note> soundProcess) {
         for (int i = soundProcess.size() - 1; i >= 0; i--) {
             if (soundProcess.get(i).getDataF1() == 2) {
-                midiInstrMap.put(soundProcess.get(i).getBank(),soundProcess.get(i).getKey());
+                //midiInstrMap.put(soundProcess.get(i).getBank(),soundProcess.get(i).getKey());
             }
         }   
         midiInstrMap.entrySet().forEach(entry -> {
@@ -140,6 +150,27 @@ public class Mapper {
         return midiInstrMap;
     }
 
+    public static ArrayList specialChannelInstrumentMapper(ArrayList<Note> soundProcess) {
+        ArrayList pizzChannels = new ArrayList();
+        for (int i = 0; i < soundProcess.size(); i++) {
+            if (soundProcess.get(i).getDataF1() == 2 && soundProcess.get(i).getKey() == 45) {
+                pizzChannels.add(soundProcess.get(i).getChannel());
+            }
+            else if (soundProcess.get(i).getDataF1() == 0) {
+                if (pizzChannels.contains(soundProcess.get(i).getChannel()) && soundProcess.get(i).getSample().contains("bstr")) {
+                    if (soundProcess.get(i).getSample().contains("_sus")) {
+                        soundProcess.get(i).setSample(soundProcess.get(i).getSample().replaceFirst("bstr_sus","bstr_pizz").substring(0,soundProcess.get(i).getSample().lastIndexOf("_") + 1));
+                    }
+                    else if (soundProcess.get(i).getSample().contains("_stac")) {
+                        soundProcess.get(i).setSample(soundProcess.get(i).getSample().replaceFirst("bstr_stac","bstr_pizz"));
+
+                    }
+                }
+            }
+        }
+        return soundProcess;
+    }
+
 
     public static ArrayList sampleBuilder(ArrayList<Note> soundProcess) {
         Mapper.initInstrMap(soundProcess);
@@ -151,22 +182,22 @@ public class Mapper {
                 Mapper.updateInstrMap(soundProcess.get(i));
                 channelBasedINSTR[soundProcess.get(i).getChannel()] = soundProcess.get(i).getKey();
                 currentINSTR = gmMapper(soundProcess.get(i).getKey());
-                System.out.println("Updated INSTRE (1) to: " + currentINSTR);
+                System.out.println("Updated Channel: " + soundProcess.get(i).getChannel() + " " + currentINSTR);
                 //System.out.println("Raw: " + soundProcess.get(i).getKey());
             }
+
             else if (soundProcess.get(i).getDataF1() == 0) {
                 if (Mapper.getMidiInstrMap().get(soundProcess.get(i).getBank()) != null) {
                     //System.out.println("Update: " + Mapper.getMidiInstrMap().get(soundProcess.get(i).getBank()));
                     if (soundProcess.get(i).getChannel() != 9) {
                         soundProcess.get(i).setSample(gmMapper(Mapper.getMidiInstrMap().get(soundProcess.get(i).getBank())));
-
                     }
                     else if (soundProcess.get(i).getChannel() == 9) {
                         soundProcess.get(i).setSample(Note.percMap(soundProcess.get(i)));
+                        //System.out.println("Perc: " + soundProcess.get(i).getSample());
                     }
                     //System.out.println("Updated INSTRE (2) to: " + currentINSTR);
                 }
-
                 else {
                     //System.out.println("Missing  instr bank");
                     soundProcess.get(i).setSample(gmMapper(channelBasedINSTR[soundProcess.get(i).getChannel()]));
@@ -199,20 +230,20 @@ public class Mapper {
             case 0, 1, 2, 3, 4, 5 -> "noir_sus";    //titan_sus
             case 6 -> "harpsichord_0s";
             case 7 -> "clavinet_0s";
-            case 8 -> "celesta_0s";
-            case 9 -> "glockenspiel_0s";
+            case 8 -> "noir_sus";//"celesta_0s";
+            case 9 -> "glock_perc"; //"glockenspiel_0s";
             case 10 -> "music_box_0s";
-            case 11 -> "vibraphone_0s";
-            case 12 -> "marimba_0s";
-            case 13 -> "noir_sus"; //"xylophone_0s";
-            case 14 -> "tubular_bells_0s";
+            case 11 -> "vib_perc"; //"vibraphone_0s";
+            case 12 -> "marim_perc"; //"marimba_0s";
+            case 13 -> "xylo_perc"; //"xylophone_0s";
+            case 14 -> "tubular_perc"; //"tubular_bells_0s";
             case 15 -> "dulcimer_0s";
             case 16, 17, 18, 19, 20 -> "organ_0s";
             case 21 -> "accordion_0s";
             case 22 -> "harmonica_0s";
             case 23 -> "tango_accordion_0s";
             case 24 -> "acoustic_guitar_nylon_0s";
-            case 25 -> "acoustic_guitar_steel_0s";
+            case 25 -> "noir_sus"; //"acoustic_guitar_steel_0s";
             case 26 -> "noir_sus"; //"electric_guitar_jazz_0s";
             case 27 -> "noir_sus"; //"electric_guitar_clean_0s";
             case 28 -> "noir_sus"; //"electric_guitar_muted_0s";
@@ -232,40 +263,40 @@ public class Mapper {
             case 42 -> "bstr_sus";
             case 43 -> "bstr_sus";
             case 44 -> "bstr_sus";
-            case 45 -> "pizzicato_strings_0s";
-            case 46 -> "orchestral_harp_0s";
-            case 47 -> "timpani_0s";
+            case 45 -> "bstr_pizz"; //"pizzicato_strings_0s";
+            case 46 -> "harp_perc"; //"orchestral_harp_0s";
+            case 47 -> "timpani_perc"; //"timpani_0s";
             case 48 -> "bstr_sus";
             case 49 -> "bstr_sus";
             case 50 -> "bstr_sus";
             case 51 -> "bstr_sus";
-            case 52 -> "choir_aahs_0s";
-            case 53 -> "voice_oohs_0s";
-            case 54 -> "synth_choir_0s";
+            case 52 -> "wood_sus"; //"choir_aahs_0s";
+            case 53 -> "wood_sus"; //"voice_oohs_0s";
+            case 54 -> "wood_sus"; //"synth_choir_0s";
             case 55 -> "orchestra_hit_0s";
-            case 56 -> "trumpet_0s";
-            case 57 -> "trombone_0s";
-            case 58 -> "tuba_0s";
-            case 59 -> "muted_trumpet_0s";
-            case 60 -> "french_horn_0s";
-            case 61 -> "brass_section_0s";
-            case 62 -> "synth_brass_1_0s";
-            case 63 -> "synth_brass_2_0s";
-            case 64 -> "soprano_sax_0s";
-            case 65 -> "alto_sax_0s";
-            case 66 -> "tenor_sax_0s";
-            case 67 -> "baritone_sax_0s";
-            case 68 -> "oboe_0s";
-            case 69 -> "english_horn_0s";
-            case 70 -> "bassoon_0s";
-            case 71 -> "clarinet_0s";
-            case 72 -> "piccolo_0s";
-            case 73 -> "flute_sus";
-            case 74 -> "recorder_0s";
-            case 75 -> "pan_flute_0s";
+            case 56 -> "brass_sus"; //"trumpet_0s";
+            case 57 -> "brass_sus"; //"trombone_0s";
+            case 58 -> "brass_sus"; //"tuba_0s";
+            case 59 -> "brass_sus"; //"muted_trumpet_0s";
+            case 60 -> "brass_sus"; //"french_horn_0s";
+            case 61 -> "brass_sus"; //"brass_section_0s";
+            case 62 -> "brass_sus"; //"synth_brass_1_0s";
+            case 63 -> "brass_sus"; //"synth_brass_2_0s";
+            case 64 -> "sax_sus";//"soprano_sax_0s";
+            case 65 -> "soprano-missing";//"alto_sax_0s";
+            case 66 -> "sax_sus";//"tenor_sax_0s";
+            case 67 -> "sax_sus";//"baritone_sax_0s";
+            case 68 -> "wood_sus"; //"oboe_0s";
+            case 69 -> "wood_sus"; //"english_horn_0s";
+            case 70 -> "wood_sus"; //"bassoon_0s";
+            case 71 -> "wood_sus"; //"clarinet_0s";
+            case 72 -> "wood_sus"; //"piccolo_0s";
+            case 73 -> "wood_sus"; //"flute_sus";
+            case 74 -> "wood_sus"; //"recorder_0s";
+            case 75 -> "wood_sus"; //"pan_flute_0s";
             case 76 -> "blown_bottle_0s";
             case 77 -> "shakuhachi_0s";
-            case 78 -> "whistle_0s";
+            case 78 -> "wood_sus"; //"whistle_0s";
             case 79 -> "ocarina_0s";
             case 80 -> "lead_1_square_0s";
             case 81 -> "lead_2_sawtooth_0s";
@@ -296,7 +327,7 @@ public class Mapper {
             case 106 -> "shamisen_0s";
             case 107 -> "koto_0s";
             case 108 -> "kalimba_0s";
-            case 109 -> "bagpipe_0s";
+            case 109 -> "pipes_sus"; //"wood_sus"; //"bagpipe_0s";
             case 110 -> "fiddle_0s";
             case 111 -> "shanai_0s";
             case 112 -> "tinkle_bell_0s";

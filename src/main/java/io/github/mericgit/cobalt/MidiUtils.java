@@ -61,7 +61,9 @@ public class MidiUtils {
                     currentTick = event.getTick();
                     ShortMessage sm = (ShortMessage) message;
                     if (sm.getCommand() ==PROGRAM_CHANGE) {
-                        noteSequence.add(new Note(currentTick+1,sm.getData1(),0,trackNumber,0,"PROGRAM_CHANGE",0,0,0, 2));
+                        System.out.println("Program Change: " + sm.getData1());
+                        System.out.println("Current tick: " + currentTick);
+                        noteSequence.add(new Note(currentTick+1,sm.getData1(),0,trackNumber,0,"PROGRAM_CHANGE",0,sm.getChannel(),0, 2));
                     }
                     if (sm.getCommand() == NOTE_ON && sm.getData2() != 0) {
                         int key = sm.getData1();
@@ -86,7 +88,7 @@ public class MidiUtils {
         //System.out.println("Note Sequence");
         //Mapper.calcRRandOctave(Mapper.sampleBuilder(calculateTimeConverter(convertNonDelta(quickSort3(noteSequence)))))
         //finalProcess =Mapper.sampleBuilder( (calculateTimeConverter(convertNonDelta(quickSort3(noteSequence)))));
-        finalProcess = (soundProcessCleaner(Mapper.calcRRandOctave(Mapper.sampleBuilder(calculateTimeConverter(convertNonDelta(quickSort3(noteSequence)))))));
+        finalProcess = (Mapper.specialChannelInstrumentMapper(soundProcessCleaner(Mapper.calcRRandOctave(Mapper.sampleBuilder(calculateTimeConverter(convertNonDelta(quickSort3(noteSequence)))))))) ;
         //finalProcess = soundProcessCleaner(Mapper.calcRRandOctave(Mapper.sampleBuilder(calculateTimeConverter(convertNonDelta(quickSort3(noteSequence))))));
         //finalProcess = Mapper.calcRRandOctave(Mapper.sampleBuilder(calculateTimeConverter(convertNonDelta(quickSort3(noteSequence)))));
         //finalProcess = Mapper.calcRR(calculateTimeConverter(convertNonDelta(quickSort2(noteSequence))));
@@ -95,7 +97,7 @@ public class MidiUtils {
     }
 
     private static ArrayList<Note> soundProcessCleaner(ArrayList<Note> soundProcess) {
-        soundProcess.removeIf(note -> !note.getSample().contains("block.note_block") || note.getDataF1() != 0);
+        soundProcess.removeIf(note -> !note.getSample().contains("block.note_block") && note.getDataF1() != 2);
         return soundProcess;
     }
     private static ArrayList<Note> calculateTimeConverter(ArrayList<Note> soundProcess) {

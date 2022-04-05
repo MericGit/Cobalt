@@ -3,7 +3,7 @@ package io.github.mericgit.cobalt;
 
 import java.io.File;
 
-public class TempMidi {
+public class TempMidi_Windows {
 
     public static void main(String[] args) throws Exception {
         ResourceHandler.generateRPack("C:\\Users\\dongd\\AppData\\Roaming\\.minecraft\\resourcepacks\\Cobalt-Lunar\\assets\\minecraft\\sounds\\block\\note_block");
@@ -15,7 +15,7 @@ public class TempMidi {
         File directory = new File("./");
         System.out.println(directory.getAbsolutePath());
         Note.setTargetSample("titan_s");
-        MidiUtils.midiToNoteSequence(new File("C:\\Users\\dongd\\Documents\\MC Server\\plugins\\Cobalt\\songs\\" + "xeno.mid"));
+        //MidiUtils.midiToNoteSequence(new File("C:\\Users\\dongd\\Documents\\MC Server\\plugins\\Cobalt\\songs\\" + "oceanview.mid"));
         Mapper.initInstrMap(MidiUtils.getFinalProcess());
         TestEngine.playSoundProcess(MidiUtils.getFinalProcess());
         //System.out.println(MidiUtils.getFinalProcess());

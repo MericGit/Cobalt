@@ -36,7 +36,7 @@ public class Engine {
                 String sample = soundProcess.get(0).getSample().substring(0, soundProcess.get(0).getSample().lastIndexOf('_')).replaceFirst("_sus_","_rel_");
                 player.playSound(player.getLocation(),sample, (soundProcess.get(0).getRelVol()), Note.advFreq(soundProcess.get(0)));
                 player.stopSound(soundProcess.get(0).getSample());
-                System.out.println("Playing release sample: " + sample + " Vol: " + soundProcess.get(0).getRelVol());
+                //System.out.println("Playing release sample: " + sample + " Vol: " + soundProcess.get(0).getRelVol());
                 player.sendMessage(ChatColor.GOLD + " Current tick: " + ChatColor.WHITE + soundProcess.get(0).getTick() + ChatColor.RED + " Stopping note: " + ChatColor.AQUA + soundProcess.get(0).getKey() + " At sample " + soundProcess.get(0).getSample()  + " At Volume " + ( soundProcess.get(0).getRelVol()) + " Duration: " + soundProcess.get(0).getDuration());
             }
             soundProcess.remove(0);

@@ -52,7 +52,7 @@ public class Note {
             case 49 -> "crash_cymbal_1";
             case 50 -> "high_tom";
             case 51 -> "ride_cymbal_1";
-            case 52 -> "chinese_cymbal";
+            case 52 -> "crash_cymbal_1"; //"chinese_cymbal";
             case 53 -> "ride_bell";
             case 54 -> "tambourine";
             case 55 -> "splash_cymbal";

@@ -62,7 +62,7 @@ public class TestEngine {
         try {
             if (soundProcess.get(0).getDataF1() == 2) {
                 Mapper.updateInstrMap(soundProcess.get(0));
-                //System.out.println("Updated instruments for Bank: " + soundProcess.get(0).getBank() + " ID: " + Mapper.getMidiInstrMap().get(soundProcess.get(0).getBank()) + " " + Mapper.gmMapper(Mapper.getMidiInstrMap().get(soundProcess.get(0).getBank())));
+                System.out.println("Updated instruments for Channel: " + soundProcess.get(0).getChannel() + " ID: " + Mapper.getMidiInstrMap().get(soundProcess.get(0).getBank()) + " " + Mapper.gmMapper(Mapper.getMidiInstrMap().get(soundProcess.get(0).getBank())));
             }
             if (soundProcess.get(0).getMcTick() <= 0) {
                 if(soundProcess.get(0).getVelocity() != 0 && soundProcess.get(0).getDataF1() == 0) {
