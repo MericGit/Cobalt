@@ -1,7 +1,7 @@
 # Cobalt
 a WIP Paper plugin to automatically convert MIDI files to "Sound Processes" for MC playback. 
 
-
+Demo: https://youtu.be/LB0g-bd4I3A
 
 Planned Features:
 Automatically map samples to MIDI information, supporting:
